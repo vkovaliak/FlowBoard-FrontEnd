@@ -10,9 +10,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.Configure<ApiOptions>(
-    builder.Configuration.GetSection(ApiOptions.SectionName));
-
-builder.Services.AddFrontendServices();
+builder.Services.AddFrontendServices(builder.Configuration);
 
 await builder.Build().RunAsync();
