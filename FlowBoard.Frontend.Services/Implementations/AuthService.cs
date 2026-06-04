@@ -31,11 +31,13 @@ public class AuthService : IAuthService
     public async Task<bool> RegisterAsync(UserRegisterDto dto)
     {
         var response = await _authApi.RegisterAsync(dto);
+
         if (response.IsSuccessStatusCode && response.Content != null)
         {
             await _tokenService.SaveTokensAsync(response.Content);
             return true;
         }
+        
         return false;
     }
 }

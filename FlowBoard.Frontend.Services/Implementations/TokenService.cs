@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using FlowBoard.Frontend.Domain.Constants;
 using FlowBoard.Frontend.Domain.DTOs.Auth;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Services.Http;
@@ -18,31 +19,31 @@ public class TokenService : ITokenService
 
     public async Task SaveTokensAsync(TokenDto tokenDto)
     {
-        await _localStorage.SetItemAsync("access_token", tokenDto.AccessToken);
-        await _localStorage.SetItemAsync("refresh_token", tokenDto.RefreshToken);
+        await _localStorage.SetItemAsync(TokenStorageKeys.AccessToken, tokenDto.AccessToken);
+        await _localStorage.SetItemAsync(TokenStorageKeys.RefreshToken, tokenDto.RefreshToken);
         
-        await _localStorage.SetItemAsync("access_token_expires", tokenDto.AccessTokenExpirationTime);
-        await _localStorage.SetItemAsync("refresh_token_expires", tokenDto.RefreshTokenExpirationTime);
+        await _localStorage.SetItemAsync(TokenStorageKeys.AccessTokenExpires, tokenDto.AccessTokenExpirationTime);
+        await _localStorage.SetItemAsync(TokenStorageKeys.RefreshTokenExpires, tokenDto.RefreshTokenExpirationTime);
     }
 
     public async Task<string?> GetAccessTokenAsync()
     {
-        return await _localStorage.GetItemAsync<string>("access_token");
+        return await _localStorage.GetItemAsync<string>(TokenStorageKeys.AccessToken);
     }
 
     public async Task<string?> GetRefreshTokenAsync()
     {
-        return await _localStorage.GetItemAsync<string>("refresh_token");
+        return await _localStorage.GetItemAsync<string>(TokenStorageKeys.RefreshToken);
     }
 
     public async Task<DateTime?> GetAccessTokenExpirationAsync()
     {
-        return await _localStorage.GetItemAsync<DateTime>("access_token_expires");
+        return await _localStorage.GetItemAsync<DateTime>(TokenStorageKeys.AccessTokenExpires);
     }
 
     public async Task<DateTime?> GetRefreshTokenExpirationAsync()
     {
-        return await _localStorage.GetItemAsync<DateTime>("refresh_token_expires");
+        return await _localStorage.GetItemAsync<DateTime>(TokenStorageKeys.RefreshTokenExpires);
     }
 
     public async Task<bool> RefreshTokenAsync()
