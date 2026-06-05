@@ -11,15 +11,14 @@ public partial class Login
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     
-    private MudForm form = null!;
-    private string? password;
-    private string? email;
+    private string Password { get; set; } = string.Empty;
+    private string Email { get; set; } = string.Empty;
 
     private async Task HandleLogin()
     {        
         var loginDto = new UserLoginDto(
-            Email: email ?? string.Empty,
-            Password: password ?? string.Empty
+            Email: Email,
+            Password: Password
         );
         
         var result = await AuthService.LoginAsync(loginDto);

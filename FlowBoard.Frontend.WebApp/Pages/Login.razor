@@ -8,20 +8,20 @@
             Login
         </MudText>
 
-        <MudForm @ref="form">
+        <MudForm>
 
             <MudTextField Label="Email"
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
                           InputType=@InputType.Email
-                          @bind-Value=email />
+                          @bind-Value=@Email />
 
             <MudTextField Label="Password"
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
                           InputType=@InputType.Password
                           Class="mt-3"
-                          @bind-Value=password />
+                          @bind-Value=@Password />
 
             <MudButton Variant=@Variant.Filled
                        Color=@Color.Primary
