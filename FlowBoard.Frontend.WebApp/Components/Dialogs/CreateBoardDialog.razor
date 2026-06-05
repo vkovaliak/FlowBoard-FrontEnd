@@ -1,0 +1,51 @@
+@using FlowBoard.Frontend.Domain.Models.Boards
+
+<MudDialog>
+
+    <TitleContent>
+
+        <MudText Typo=@Typo.h6>Create New Board</MudText>
+        
+    </TitleContent>
+
+    <DialogContent>
+
+        <MudForm>
+
+            <MudTextField Label="Board Name"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          @bind-Value=@Model.Name />
+
+            <MudRadioGroup T="bool" @bind-Value=@Model.IsPublic 
+                           Class="mt-4 d-flex flex-column">
+
+                <MudRadio Value=@false 
+                          Color=@Color.Primary>
+                          Private
+                </MudRadio>
+
+                <MudRadio Value=@true 
+                          Color=@Color.Primary>
+                          Public
+                </MudRadio>
+
+            </MudRadioGroup>
+
+        </MudForm>
+
+    </DialogContent>
+
+    <DialogActions>
+
+        <MudButton OnClick=@Cancel>Cancel</MudButton>
+
+        <MudButton Color=@Color.Primary 
+                   Variant=@Variant.Filled 
+                   OnClick=@Submit>
+                   Create
+        </MudButton>
+
+    </DialogActions>
+
+</MudDialog>
