@@ -1,4 +1,5 @@
 @page "/login"
+@layout AuthLayout
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
 
@@ -14,14 +15,14 @@
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
                           InputType=@InputType.Email
-                          @bind-Value=@Email />
+                          @bind-Value=@Model.Email />
 
             <MudTextField Label="Password"
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
                           InputType=@InputType.Password
                           Class="mt-3"
-                          @bind-Value=@Password />
+                          @bind-Value=@Model.Password />
 
             <MudButton Variant=@Variant.Filled
                        Color=@Color.Primary
