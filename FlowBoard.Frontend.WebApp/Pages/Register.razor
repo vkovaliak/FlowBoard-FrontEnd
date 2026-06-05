@@ -1,4 +1,4 @@
-@page "/login"
+@page "/register"
 @layout AuthLayout
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
@@ -6,7 +6,7 @@
     <MudPaper Elevation="6" Class="pa-6">
 
         <MudText Typo=@Typo.h4 Class="mb-4">
-            Login
+            Register
         </MudText>
 
         <MudForm>
@@ -28,8 +28,8 @@
                        Color=@Color.Primary
                        FullWidth="true"
                        Class="mt-5"
-                       OnClick=@HandleLogin>
-                       Login
+                       OnClick=@HandleRegister>
+                       Register
             </MudButton>
 
         </MudForm>
@@ -37,13 +37,13 @@
     </MudPaper>
 
     <MudText Typo=@Typo.body2 Class="mt-4 align-center">
-        Don't have an account ?
+        Already have an account? 
 
-        <MudLink Href="register" 
+        <MudLink Href="login" 
                  Typo=@Typo.body2 
                  Color=@Color.Primary 
                  Class="font-weight-bold">
-                 Create Account
+                 Log in
         </MudLink>
         
     </MudText>
