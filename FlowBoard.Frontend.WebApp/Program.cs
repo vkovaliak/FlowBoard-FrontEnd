@@ -2,8 +2,7 @@ using FlowBoard.Frontend.WebApp;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.Web;
 using FlowBoard.Frontend.Services.Extensions;
-using FlowBoard.Frontend.Services.Configurations;
-
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -11,5 +10,6 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddFrontendServices(builder.Configuration);
+builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

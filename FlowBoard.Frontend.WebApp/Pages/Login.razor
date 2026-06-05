@@ -1,0 +1,38 @@
+@page "/login"
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
+
+    <MudPaper Elevation="6" Class="pa-6">
+
+        <MudText Typo=@Typo.h4 Class="mb-4">
+            Login
+        </MudText>
+
+        <MudForm>
+
+            <MudTextField Label="Email"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@InputType.Email
+                          @bind-Value=@Email />
+
+            <MudTextField Label="Password"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@InputType.Password
+                          Class="mt-3"
+                          @bind-Value=@Password />
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       FullWidth="true"
+                       Class="mt-5"
+                       OnClick=@HandleLogin>
+                       Login
+            </MudButton>
+
+        </MudForm>
+
+    </MudPaper>
+
+</MudContainer>

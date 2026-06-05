@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
             .Get<ApiOptions>() ?? throw new Exception("ApiOptions missing in configuration");
 
         services.AddRefitClient<IAuthApi>()
-            .AddHttpMessageHandler<AuthHeaderHandler>()
+            //.AddHttpMessageHandler<AuthHeaderHandler>()
             .ConfigureHttpClient(client =>
             {
                 client.BaseAddress = new Uri(apiOptions.BaseUrl);
