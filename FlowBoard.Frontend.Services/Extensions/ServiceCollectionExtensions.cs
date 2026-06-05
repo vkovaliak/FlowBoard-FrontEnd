@@ -8,6 +8,8 @@ using FlowBoard.Frontend.Services.Handlers;
 using Microsoft.Extensions.Options;
 using FlowBoard.Frontend.Services.Configurations;
 using Microsoft.Extensions.Configuration;
+using FlowBoard.Frontend.Services.Providers;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace FlowBoard.Frontend.Services.Extensions;
 
@@ -18,11 +20,16 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
 
+        services.AddScoped<AuthenticationStateProvider>(provider => 
+            provider.GetRequiredService<CustomAuthStateProvider>());
+        
         services.AddTransient<AuthHeaderHandler>();
 
         services.AddBlazoredLocalStorage();
+        services.AddAuthorizationCore();
 
         var apiOptions = configuration
             .GetSection(ApiOptions.SectionName)
