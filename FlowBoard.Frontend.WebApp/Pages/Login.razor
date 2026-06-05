@@ -1,67 +1,38 @@
 @page "/login"
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
-@inject ISnackbar Snackbar
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
+
     <MudPaper Elevation="6" Class="pa-6">
 
-        <MudText Typo="Typo.h4" Class="mb-4">
+        <MudText Typo=@Typo.h4 Class="mb-4">
             Login
         </MudText>
 
         <MudForm @ref="form">
 
-            <MudTextField T="string"
-                          Label="Email"
-                          Variant="Variant.Outlined"
-                          Margin="Margin.Dense"
-                          @bind-Value="email" />
+            <MudTextField Label="Email"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@InputType.Email
+                          @bind-Value=email />
 
-            <MudTextField T="string"
-                          Label="Password"
-                          Variant="Variant.Outlined"
-                          Margin="Margin.Dense"
-                          InputType="InputType.Password"
+            <MudTextField Label="Password"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@InputType.Password
                           Class="mt-3"
-                          @bind-Value="password" />
+                          @bind-Value=password />
 
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
                        FullWidth="true"
                        Class="mt-5"
-                       OnClick="HandleLogin">
+                       OnClick=@HandleLogin>
                        Login
             </MudButton>
 
         </MudForm>
 
     </MudPaper>
+
 </MudContainer>
-
-@code {
-    private MudForm form = null!;
-    private string? password;
-    private string? email;
-    private async Task HandleLogin()
-    {        
-        var loginDto = new UserLoginDto(
-            Email: email ?? string.Empty,
-            Password: password ?? string.Empty
-        );
-        
-        var result = await AuthService.LoginAsync(loginDto);
-
-        if (result)
-        {
-            Snackbar.Add("Login success!", Severity.Success);
-
-            NavigationManager.NavigateTo("/home");
-
-        }
-        else
-        {
-            Snackbar.Add("Login failed", Severity.Error);
-        }
-    }
-}
