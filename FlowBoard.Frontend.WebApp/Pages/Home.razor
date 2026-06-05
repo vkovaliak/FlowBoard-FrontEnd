@@ -1,9 +1,65 @@
 ﻿@page "/"
-@attribute [Authorize]
-
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8">
 
-Welcome to your new app.
+    <MudText Typo=@Typo.h4 Class="mb-6">
+        My Boards
+    </MudText>
+
+    <MudButton Variant=@Variant.Filled
+               Color=@Color.Primary
+               OnClick=@OpenCreateBoardDialog>
+               Create Board
+    </MudButton>
+
+    <br>
+    <br>
+    
+    @if (_boards == null || !_boards.Any())
+    {
+        <MudAlert Severity=@Severity.Info 
+                  Variant=@Variant.Outlined>
+                  You don't have any boards yet. Create your first one!
+        </MudAlert>
+    }
+    else
+    {
+        <MudGrid>
+
+            @foreach (var board in _boards)
+            {
+                <MudItem xs="12" sm="6" md="4">
+
+                    <MudPaper Elevation="4" 
+                              Class="pa-4 hoverable-card" 
+                              Style="cursor: pointer; min-height: 120px;">
+
+                        <MudText Typo=@Typo.h6 
+                                 Class="font-weight-bold">
+                                 @board.Name
+                        </MudText>
+                        
+                        <MudChip T="string" 
+                                    Color=@(board.IsPublic 
+                                        ? Color.Primary : Color.Secondary) 
+                                    Size=@Size.Small>
+                                    @(board.IsPublic ? "Public" : "Private")
+                        </MudChip>
+                        
+                        <MudSpacer />
+                        
+                        <MudText Typo=@Typo.caption 
+                                 Color=@Color.Secondary>
+                                 Created: @board.CreatedAt.ToShortDateString()
+                        </MudText>
+
+                    </MudPaper>
+
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+</MudContainer>
