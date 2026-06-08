@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBoardService, BoardService>();
+        services.AddScoped<ICardService, CardService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
@@ -44,6 +45,13 @@ public static class ServiceCollectionExtensions
             });
         
         services.AddRefitClient<IBoardApi>()
+            .AddHttpMessageHandler<AuthHeaderHandler>()
+            .ConfigureHttpClient(client =>
+            {
+                client.BaseAddress = new Uri (apiOptions.BaseUrl);
+            });
+        
+        services.AddRefitClient<ICardApi>()
             .AddHttpMessageHandler<AuthHeaderHandler>()
             .ConfigureHttpClient(client =>
             {

@@ -74,8 +74,12 @@
                 @foreach (var list in _board.Lists.OrderBy(l => l.Position))
                 {                    
                     <TaskList List=@list
+                              BoardId=@_board.Id
                               OnRenameList=@HandleRenameListAsync
-                              OnDeleteList=@HandleDeleteListAsync/> 
+                              OnDeleteList=@HandleDeleteListAsync
+                              OnCreateCard=@HandleCreateCardAsync
+                              OnUpdateCard=@HandleUpdateCardAsync 
+                              OnDeleteCard=@HandleDeleteCardAsync /> 
                 }
                 
                 <MudPaper Elevation="0" 

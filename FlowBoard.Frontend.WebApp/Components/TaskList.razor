@@ -1,4 +1,4 @@
-@using FlowBoard.Frontend.Domain.DTOs.Boards;
+@using FlowBoard.Frontend.Domain.DTOs.Cards
 
 <MudPaper Elevation="3" 
         Class="pa-3 d-flex flex-column" 
@@ -72,11 +72,38 @@
             @foreach (var card in List.Cards.OrderBy(c => c.Position))
             {
                 <MudPaper Elevation="1" Class="pa-3 bg-white" 
-                            Style="border-radius: 4px; cursor: pointer;">
+                          Style="border-radius: 8px; position: relative;">
 
-                    <MudText Typo=@Typo.body2 Class="font-weight-bold">
-                        @card.Name
-                    </MudText>
+                    <MudStack Row=@true Justify=@Justify.SpaceBetween 
+                              AlignItems=@AlignItems.Start
+                              Class="mb-1">
+
+                        <MudText Typo=@Typo.body2 Class="font-weight-bold"
+                                 Style="word-break: break-word;">
+                                 @card.Name
+                        </MudText>
+
+                        <MudMenu Icon=@Icons.Material.Filled.MoreVert 
+                            Size=@Size.Small
+                            Dense=@true
+                            AnchorOrigin=@Origin.BottomRight
+                            TransformOrigin=@Origin.TopRight
+                            Style="margin-top: -8px; margin-right: -8px;">
+                        
+                            <MudMenuItem Icon=@Icons.Material.Filled.Edit 
+                                        OnClick=@(() => OpenCardDetailsAsync(card))>
+                                        Edit
+                            </MudMenuItem>
+                        
+                            <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                                        IconColor=@Color.Error
+                                        OnClick=@(() => DeleteCardClickAsync(card))>
+                                        Delete
+                            </MudMenuItem>
+
+                        </MudMenu>
+            
+                    </MudStack>
 
                     @if (!string.IsNullOrWhiteSpace(card.Description))
                     {
@@ -91,12 +118,49 @@
 
     </MudStack>
 
-    <MudButton StartIcon=@Icons.Material.Filled.Add
-                Color=@Color.Default
-                FullWidth=@true 
-                Class="justify-start mt-2 pa-2 flex-grow-0"
-                Style="text-transform: none; color: #5e6c84;">
-                Add a card
-    </MudButton>
+        @if (!_isCreatingCard)
+        {
+            <MudButton StartIcon=@Icons.Material.Filled.Add
+                       Color=@Color.Default
+                       FullWidth=@true 
+                       Class="justify-start pa-2"
+                       Style="text-transform: none; color: #5e6c84;"
+                       OnClick=@ToggleCreateCardForm>
+                       Add a card
+            </MudButton>
+        }
+        else
+        {
+            <MudStack Spacing="2" Class="pa-1">
+                <MudTextField @bind-Value=@_cardForm.Name
+                              Placeholder="Enter card title..." 
+                              Variant=@Variant.Outlined 
+                              Margin=@Margin.Dense
+                              Autofocus=@true
+                              Class="bg-white" />
+
+                <MudTextField @bind-Value=@_cardForm.Description
+                              Placeholder="Enter description (optional)..." 
+                              Variant=@Variant.Outlined 
+                              Margin=@Margin.Dense
+                              Lines="2"
+                              Class="bg-white" />
+
+                <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                    <MudButton Variant=@Variant.Filled 
+                               Color=@Color.Primary 
+                               Size=@Size.Small
+                               Style="text-transform: none;"
+                               OnClick=@SubmitCreateCardAsync>
+                               Add card
+                    </MudButton>
+
+                    <MudIconButton Icon=@Icons.Material.Filled.Close
+                                   Color=@Color.Default 
+                                   Size=@Size.Small 
+                                   OnClick=@ToggleCreateCardForm />
+                </MudStack>
+            </MudStack>
+        }
 
 </MudPaper>
