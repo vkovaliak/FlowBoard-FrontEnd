@@ -25,6 +25,18 @@ public class BoardService : IBoardService
         return [];
     }
 
+    public async Task<BoardDetailsDto?> GetDetailsAsync(Guid boardId)
+    {
+        var response = await _boardApi.GetDetailsAsync(boardId);
+
+        if (response.IsSuccessStatusCode && response.Content != null)
+        {
+            return response.Content;
+        }
+
+        return null;
+    }
+
     public async Task<bool> CreateAsync(CreateBoardDto board)
     {
         var response = await _boardApi.CreateAsync(board);

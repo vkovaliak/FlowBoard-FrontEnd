@@ -1,0 +1,144 @@
+@page "/boards/{Id:guid}"
+@using FlowBoard.Frontend.Domain.DTOs.Boards
+
+<MudContainer MaxWidth=@MaxWidth.ExtraLarge
+              Class="mt-6">
+    
+    @if (_isNotFound)
+    {
+        <MudAlert Severity=@Severity.Error 
+                  Variant=@Variant.Outlined
+                  Class="my-4">
+                  Board could not be loaded. Please return to the home page.
+        </MudAlert>
+
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   Href="/">
+                   Go Home
+        </MudButton>
+    }
+    else if (_board == null)
+    {
+        <MudStack AlignItems=@AlignItems.Center
+                  Class="my-12">
+
+            <MudProgressCircular Color=@Color.Primary 
+                                 Size=@Size.Large 
+                                 Indeterminate=@true />
+
+            <MudText Typo=@Typo.body1>
+                    Loading board details...
+            </MudText>
+
+        </MudStack>
+    }
+    else
+    {
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center
+                  Class="mb-6">
+
+            <MudIconButton Icon=@Icons.Material.Filled.ArrowBack 
+                           Href="/" 
+                           Color=@Color.Default />
+
+            <MudText Typo=@Typo.h4
+                     Class="font-weight-bold">
+                     @_board.Name
+            </MudText>
+            
+            <MudChip T="string" 
+                     Color=@(_board.IsPublic ? Color.Primary : Color.Secondary)
+                     Size=@Size.Small 
+                     Class="ml-2">
+                    @(_board.IsPublic ? "Public" : "Private")
+            </MudChip>
+
+        </MudStack>
+
+        <MudStack Row=@true 
+                  Spacing="4" 
+                  AlignItems=@AlignItems.Start
+                  Class="flex-nowrap"
+                  Style="width: 100%; height: calc(100vh - 140px); 
+                         overflow-x: auto; padding-bottom: 8px;">
+        
+            @foreach (var list in _board.Lists.OrderBy(l => l.Position))
+            {                    
+                <MudPaper Elevation="3" 
+                        Class="pa-3 d-flex flex-column" 
+                        Style="flex: 1; min-width: 23%; 
+                               background-color: #f4f5f7; 
+                               border-radius: 8px;">
+                    
+                    <MudStack Row="true" Justify=@Justify.SpaceBetween
+                              AlignItems=@AlignItems.Center
+                              Class="mb-3 flex-grow-0">
+
+                        <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1">
+                            @list.Name
+                        </MudText>
+
+                        <MudIconButton Icon=@Icons.Material.Filled.MoreHoriz 
+                                       Size=@Size.Small />
+
+                    </MudStack>
+
+                    <MudStack Spacing="2" Class="flex-grow-1" 
+                              Style="overflow-y: auto; max-height: 60vh;">
+                        
+                        @if (list.Cards != null && list.Cards.Any())
+                        {
+                            @foreach (var card in list.Cards.OrderBy(c => c.Position))
+                            {
+                                <MudPaper Elevation="1" Class="pa-3 bg-white" 
+                                          Style="border-radius: 4px; cursor: pointer;">
+
+                                    <MudText Typo=@Typo.body2 Class="font-weight-bold">
+                                        @card.Name
+                                    </MudText>
+
+                                    @if (!string.IsNullOrWhiteSpace(card.Description))
+                                    {
+                                        <MudText Typo=@Typo.caption Color=@Color.Secondary
+                                                 Class="text-truncate d-block mt-1">
+                                                 @card.Description
+                                        </MudText>
+                                    }
+                                </MudPaper>
+                            }
+                        }
+
+                    </MudStack>
+
+                    <MudButton StartIcon=@Icons.Material.Filled.Add
+                               Color=@Color.Default
+                               FullWidth=@true 
+                               Class="justify-start mt-2 pa-2 flex-grow-0"
+                               Style="text-transform: none; color: #5e6c84;">
+                               Add a card
+                    </MudButton>
+
+                </MudPaper>
+            }
+            
+            <MudPaper Elevation="0" 
+                    Style="width: 250px; min-width: 250px; 
+                           background-color: rgba(0,0,0,0.05); 
+                           border-radius: 8px; height: max-content;"
+                    Class="pa-2 flex-grow-0 flex-shrink-0">
+
+                <MudButton StartIcon=@Icons.Material.Filled.Add
+                        Color=@Color.Default
+                        FullWidth=@true
+                        Style="text-transform: none;">
+                        Add another list
+                </MudButton>
+
+            </MudPaper>
+        
+        </MudStack>
+    }
+
+</MudContainer>
