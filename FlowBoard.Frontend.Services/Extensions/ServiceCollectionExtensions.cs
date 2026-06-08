@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBoardService, BoardService>();
+        services.AddScoped<IListService, ListService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
 
@@ -48,6 +49,14 @@ public static class ServiceCollectionExtensions
             {
                 client.BaseAddress = new Uri (apiOptions.BaseUrl);
             });
+
+        services.AddRefitClient<IListApi>()
+            .AddHttpMessageHandler<AuthHeaderHandler>()
+            .ConfigureHttpClient(client =>
+            {
+                client.BaseAddress = new Uri (apiOptions.BaseUrl);
+            });
+
 
         return services;
     }

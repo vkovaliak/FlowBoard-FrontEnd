@@ -49,7 +49,7 @@
                      @_board.Name
             </MudText>
             
-            <MudChip T="string" 
+            <MudChip T=@string
                      Color=@(_board.IsPublic ? Color.Primary : Color.Secondary)
                      Size=@Size.Small 
                      Class="ml-2">
@@ -58,34 +58,76 @@
 
         </MudStack>
 
-        <MudStack Row=@true 
-                  Spacing="4" 
-                  AlignItems=@AlignItems.Start
-                  Class="flex-nowrap"
-                  Style="width: 100%; height: calc(100vh - 140px); 
-                         overflow-x: auto; padding-bottom: 8px;">
-        
-            @foreach (var list in _board.Lists.OrderBy(l => l.Position))
-            {                    
-                <TaskList List="@list" /> 
-            }
+        <MudPaper Elevation="2" 
+                  Square=@false
+                  Outlined=@false
+                  Class="pa-4 mud-theme-dark-lighten-2 overflow-x-auto"
+                  Style="width: 100%; height: calc(100vh - 220px); 
+                         min-height: 400px;">
+
+            <MudStack Row=@true 
+                    Spacing="4" 
+                    AlignItems=@AlignItems.Start
+                    Class="flex-nowrap overflow-x-auto pb-4"
+                    Style="height: 100%; width: 100%;">
             
-            <MudPaper Elevation="0" 
-                    Style="width: 250px; min-width: 250px; 
-                           background-color: rgba(0,0,0,0.05); 
-                           border-radius: 8px; height: max-content;"
-                    Class="pa-2 flex-grow-0 flex-shrink-0">
+                @foreach (var list in _board.Lists.OrderBy(l => l.Position))
+                {                    
+                    <TaskList List="@list" /> 
+                }
+                
+                <MudPaper Elevation="0" 
+                        Style="width: 250px; min-width: 250px; 
+                            background-color: rgba(0,0,0,0.05); 
+                            border-radius: 8px; height: max-content;"
+                        Class="pa-2 flex-grow-0 flex-shrink-0">
 
-                <MudButton StartIcon=@Icons.Material.Filled.Add
-                        Color=@Color.Default
-                        FullWidth=@true
-                        Style="text-transform: none;">
-                        Add another list
-                </MudButton>
+                    @if (!_isCreatingList)
+                    {
+                        <MudButton StartIcon=@Icons.Material.Filled.Add
+                                Color=@Color.Default
+                                FullWidth=@true
+                                Style="text-transform: none;"
+                                OnClick=@ToggleCreateListForm>
+                                Add another list
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudStack Spacing="2">
+                            
+                            <MudTextField @bind-Value=@_newListName
+                                        Placeholder="Enter list title..." 
+                                        Variant=@Variant.Outlined 
+                                        Margin=@Margin.Dense
+                                        Autofocus=@true
+                                        Class="bg-white"
+                                        Style="border-radius: 4px;" />
 
-            </MudPaper>
-        
-        </MudStack>
+                            <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                                
+                                <MudButton Variant=@Variant.Filled 
+                                        Color=@Color.Primary 
+                                        Size=@Size.Small
+                                        Style="text-transform: none;"
+                                        OnClick=@(() => CreateListAsync(_board.Id))>
+                                        Add list
+                                </MudButton>
+
+                                <MudIconButton Icon=@Icons.Material.Filled.Close
+                                            Color=Color.Default 
+                                            Size=@Size.Small 
+                                            OnClick=@ToggleCreateListForm />
+                            </MudStack>
+
+                        </MudStack>
+                    }
+
+                </MudPaper>
+            
+            </MudStack>
+
+        </MudPaper>
     }
 
 </MudContainer>
