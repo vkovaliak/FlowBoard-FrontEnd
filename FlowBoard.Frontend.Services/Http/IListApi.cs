@@ -7,4 +7,10 @@ public interface IListApi
 {
     [Post("/api/lists")]
     Task<ApiResponse<Guid>> CreateAsync([Body] CreateListDto dto);
+
+    [Put("/api/lists/{boardId}/list/{listId}")]
+    Task<ApiResponse<bool>> UpdateAsync(Guid boardId, Guid listId, [Body] UpdateListDto dto);
+
+    [Delete("/api/lists/{boardId}/list/{listId}")]
+    Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid listId);
 }

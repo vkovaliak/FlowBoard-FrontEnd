@@ -9,13 +9,58 @@
     <MudStack Row="true" Justify=@Justify.SpaceBetween
                 AlignItems=@AlignItems.Center
                 Class="mb-3 flex-grow-0">
+        @if (!_isEditingName)
+        {
+            <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1">
+                @List.Name
+            </MudText>
 
-        <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1">
-            @List.Name
-        </MudText>
+            <MudMenu Icon=@Icons.Material.Filled.MoreHoriz 
+                     Size=@Size.Small 
+                     Dense=@true 
+                     AnchorOrigin=@Origin.BottomRight 
+                     TransformOrigin=@Origin.TopRight>
 
-        <MudIconButton Icon=@Icons.Material.Filled.MoreHoriz 
-                        Size=@Size.Small />
+                <MudMenuItem Icon=@Icons.Material.Filled.Edit 
+                             OnClick=@StartRename>
+                             Rename
+                </MudMenuItem>
+
+                <MudMenuItem Icon=@Icons.Material.Filled.Delete 
+                             IconColor=@Color.Error 
+                             OnClick=@DeleteListClickAsync>
+                             Delete
+                </MudMenuItem>
+                
+            </MudMenu>
+        }
+        else
+        {
+            <MudStack Spacing="2" Class="flex-grow-1 mr-1">
+                <MudTextField @bind-Value=@_editedName
+                            Variant=@Variant.Outlined
+                            Margin=@Margin.Dense
+                            Autofocus=@true
+                            Class="bg-white flex-grow-1 mr-1"
+                            Style="font-weight: 600;"
+                            OnBlur=@SaveRenameAsync />
+
+                <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                    <MudButton Variant=@Variant.Filled 
+                               Color=@Color.Primary 
+                               Size=@Size.Small
+                               Style="text-transform: none;"
+                               OnClick=@SaveRenameAsync>
+                               Save
+                    </MudButton>
+
+                    <MudIconButton Icon=@Icons.Material.Filled.Close
+                                   Color=@Color.Default 
+                                   Size=@Size.Small 
+                                   OnClick=@CancelRename />
+                </MudStack>
+            </MudStack>
+        }
 
     </MudStack>
 

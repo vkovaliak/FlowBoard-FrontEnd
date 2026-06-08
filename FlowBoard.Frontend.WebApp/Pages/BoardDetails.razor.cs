@@ -13,12 +13,12 @@ public partial class BoardDetails
 
     [Inject] 
     public IBoardService BoardService { get; set; } = default!;
-
     [Inject]
     public IListService ListService { get; set; } = default!;
-
     [Inject] 
     public ISnackbar Snackbar { get; set; } = default!;
+    [Inject]
+    public IDialogService DialogService { get; set; } = default!;
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
@@ -70,4 +70,54 @@ public partial class BoardDetails
             Snackbar.Add("Failed to create list", Severity.Error);
         }
     }
+
+    private async Task HandleRenameListAsync(
+        (Guid ListId, string NewName) args)
+    {
+        if (string.IsNullOrWhiteSpace(args.NewName))
+        {
+            Snackbar.Add("List name cannot be empty", Severity.Warning);
+            return;
+        }
+
+        var updateDto = new UpdateListDto(Name: args.NewName);
+
+        var success = await ListService.UpdateAsync(Id, args.ListId, updateDto);
+
+        if (success)
+        {
+            Snackbar.Add("List renamed successfully!", Severity.Success); 
+            _board = await BoardService.GetDetailsAsync(Id);
+        }
+        else
+        {
+            Snackbar.Add("Failed to rename list", Severity.Error);
+        }
+    }
+    
+    private async Task HandleDeleteListAsync(
+        (Guid ListId, string ListName) args)
+    {
+        bool? result = await DialogService.ShowMessageBoxAsync(
+            "Delete List", 
+            $"Are you sure you want to delete list '{args.ListName}' and all of its cards?", 
+            yesText: "Delete", 
+            cancelText: "Cancel");
+
+        if (result == true)
+        {
+            var success = await ListService.DeleteAsync(Id, args.ListId);
+
+            if (success)
+            {
+                Snackbar.Add($"List '{args.ListName}' deleted", Severity.Success);
+                _board = await BoardService.GetDetailsAsync(Id);
+            }
+            else
+            {
+                Snackbar.Add("Failed to delete list", Severity.Error);
+            }
+        }
+    }
+    
 }
