@@ -24,4 +24,28 @@ public class ListService : IListService
 
         return false;
     }
+
+    public async Task<bool> UpdateAsync(Guid boardId, Guid listId, UpdateListDto list)
+    {
+        var response = await _listApi.UpdateAsync(boardId, listId, list);
+
+        if (response.IsSuccessStatusCode && response.Content != false)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> DeleteAsync(Guid boardId, Guid listId)
+    {
+        var response = await _listApi.DeleteAsync(boardId, listId);
+
+        if (response.IsSuccessStatusCode && response.Content != false)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
