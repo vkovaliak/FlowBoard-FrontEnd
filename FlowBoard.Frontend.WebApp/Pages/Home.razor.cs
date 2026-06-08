@@ -69,11 +69,10 @@ public partial class Home
             else 
             {
                 var updateDto = new UpdateBoardDto(
-                    BoardId: currentBoard.Id, 
                     Name: model.Name, IsPublic: 
                     model.IsPublic);
 
-                isSuccess = await BoardService.UpdateAsync(updateDto);
+                isSuccess = await BoardService.UpdateAsync(currentBoard.Id, updateDto);
                 successMessage = "Board updated successfully!";
                 errorMessage = "Failed to update board";
             }
@@ -100,9 +99,7 @@ public partial class Home
 
         if (result == true)
         {   
-            var deleteDto = new DeleteBoardDto(BoardId: board.Id);
-
-            var isDeleted = await BoardService.DeleteAsync(deleteDto);
+            var isDeleted = await BoardService.DeleteAsync(board.Id);
 
             if (isDeleted)
             {

@@ -37,9 +37,9 @@ public class BoardService : IBoardService
         return false;
     }
 
-    public async Task<bool> UpdateAsync(UpdateBoardDto board)
+    public async Task<bool> UpdateAsync(Guid boardId, UpdateBoardDto board)
     {
-        var response = await _boardApi.UpdateAsync(board);
+        var response = await _boardApi.UpdateAsync(boardId, board);
 
         if (response.IsSuccessStatusCode && response.Content != false)
         {
@@ -49,9 +49,9 @@ public class BoardService : IBoardService
         return false;
     }
 
-    public async Task<bool> DeleteAsync(DeleteBoardDto board)
+    public async Task<bool> DeleteAsync(Guid boardId)
     {
-        var response = await _boardApi.DeleteAsync(board);
+        var response = await _boardApi.DeleteAsync(boardId);
 
         if (response.IsSuccessStatusCode && response.Content != false)
         {
