@@ -22,39 +22,94 @@ public partial class Home
         _boards = await BoardService.GetMyBoardsAsync();
     }
 
-    private async Task OpenCreateBoardDialog()
+    private Task OpenCreateBoardDialog() 
+        => ManageBoardDialogAsync(null);
+
+    private Task OpenEditBoardDialog(BoardDto board) 
+        => ManageBoardDialogAsync(board);
+
+    private async Task ManageBoardDialogAsync(BoardDto? currentBoard)
     {
-        var options = new DialogOptions { 
-            CloseOnEscapeKey = true, FullWidth = true,
+        var options = new DialogOptions 
+        { 
+            CloseOnEscapeKey = true, 
+            FullWidth = true,
             MaxWidth = MaxWidth.ExtraSmall 
         };
-        
-        var dialog = await DialogService.ShowAsync<CreateBoardDialog>(
-            string.Empty, options);
 
+        var parameters = new DialogParameters<CreateBoardDialog>();
+        if (currentBoard is not null)
+        {
+            parameters.Add(x => x.CurrentBoard, currentBoard);
+        }
+
+        var dialog = await DialogService.ShowAsync<CreateBoardDialog>(
+            string.Empty, parameters, options);
         var dialogResult = await dialog.Result;
 
         if (dialogResult is { 
-                Canceled: false, 
-                Data: CreateBoardModel createdBoardModel 
+            Canceled: false, 
+            Data: CreateBoardModel model 
             })
         {
-            var board = new CreateBoardDto(
-                Name: createdBoardModel.Name,
-                IsPublic: createdBoardModel.IsPublic
-            );
+            bool isSuccess;
+            string successMessage;
+            string errorMessage;
 
-            var result = await BoardService.CreateAsync(board);
-
-            if (result)
+            if (currentBoard is null)
             {
-                Snackbar.Add("Board created!", Severity.Success);
+                var createDto = new CreateBoardDto(
+                    Name: model.Name, 
+                    IsPublic: model.IsPublic);
+
+                isSuccess = await BoardService.CreateAsync(createDto);
+                successMessage = "Board created!";
+                errorMessage = "Board failed to create";
+            }
+            else 
+            {
+                var updateDto = new UpdateBoardDto(
+                    Name: model.Name, IsPublic: 
+                    model.IsPublic);
+
+                isSuccess = await BoardService.UpdateAsync(currentBoard.Id, updateDto);
+                successMessage = "Board updated successfully!";
+                errorMessage = "Failed to update board";
+            }
+
+            if (isSuccess)
+            {
+                Snackbar.Add(successMessage, Severity.Success);
                 _boards = await BoardService.GetMyBoardsAsync();
             }
             else
             {
-                Snackbar.Add("Board failed to create", Severity.Error);
-            }   
+                Snackbar.Add(errorMessage, Severity.Error);
+            }
+        }
+    }
+
+    private async Task OpenDeleteConfirmation(BoardDto board)
+    {
+        bool? result = await DialogService.ShowMessageBoxAsync(
+            "Delete Board", 
+            $"Are you sure you want to delete board '{board.Name}'?", 
+            yesText: "Delete", 
+            cancelText: "Cancel");
+
+        if (result == true)
+        {   
+            var isDeleted = await BoardService.DeleteAsync(board.Id);
+
+            if (isDeleted)
+            {
+                Snackbar.Add($"Board '{board.Name}' deleted", Severity.Success);
+                _boards = await BoardService.GetMyBoardsAsync();
+            }
+            else
+            {
+                Snackbar.Add("Failed to delete board", Severity.Error);
+            }
         }
     }
 }

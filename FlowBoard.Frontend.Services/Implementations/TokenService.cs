@@ -24,6 +24,8 @@ public class TokenService : ITokenService
         
         await _localStorage.SetItemAsync(TokenStorageKeys.AccessTokenExpires, tokenDto.AccessTokenExpirationTime);
         await _localStorage.SetItemAsync(TokenStorageKeys.RefreshTokenExpires, tokenDto.RefreshTokenExpirationTime);
+
+        await _localStorage.SetItemAsync(TokenStorageKeys.AccessTokenCreatedAt, DateTime.UtcNow);
     }
 
     public async Task<string?> GetAccessTokenAsync()
@@ -44,6 +46,11 @@ public class TokenService : ITokenService
     public async Task<DateTime?> GetRefreshTokenExpirationAsync()
     {
         return await _localStorage.GetItemAsync<DateTime>(TokenStorageKeys.RefreshTokenExpires);
+    }
+
+    public async Task<DateTime?> GetAccessTokenCreatedAtAsync()
+    {
+        return await _localStorage.GetItemAsync<DateTime>(TokenStorageKeys.AccessTokenCreatedAt);
     }
 
     public async Task<bool> RefreshTokenAsync()
@@ -72,15 +79,16 @@ public class TokenService : ITokenService
     public async Task RefreshIfNeededAsync()
     {
         var expiresAt = await GetAccessTokenExpirationAsync();
+        var createdAt = await GetAccessTokenCreatedAtAsync();
 
-        if (expiresAt is null)
+        if (expiresAt is null || createdAt is null)
             return;
+
+        var totalLifetime = expiresAt.Value - createdAt.Value;
 
         var now = DateTime.UtcNow;
 
-        var totalLifetime = expiresAt.Value - now;
-
-        var halfPoint = expiresAt.Value - TimeSpan.FromTicks(totalLifetime.Ticks / 2);
+        var halfPoint = createdAt.Value + TimeSpan.FromTicks(totalLifetime.Ticks / 2);
 
         if (now >= halfPoint)
         {

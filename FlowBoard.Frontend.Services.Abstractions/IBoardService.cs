@@ -6,4 +6,6 @@ public interface IBoardService
 {
     Task<IEnumerable<BoardDto>> GetMyBoardsAsync();
     Task<bool> CreateAsync(CreateBoardDto dto);
+    Task<bool> UpdateAsync(Guid boardId, UpdateBoardDto dto);
+    Task<bool> DeleteAsync(Guid boardId);
 }

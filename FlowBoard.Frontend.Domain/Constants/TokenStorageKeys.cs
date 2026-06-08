@@ -7,4 +7,6 @@ public static class TokenStorageKeys
 
     public const string AccessTokenExpires = "access_token_expires";
     public const string RefreshTokenExpires = "refresh_token_expires";
+    
+    public const string AccessTokenCreatedAt = "access_token_created_at";
 }
