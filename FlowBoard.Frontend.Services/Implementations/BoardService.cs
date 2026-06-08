@@ -36,4 +36,28 @@ public class BoardService : IBoardService
 
         return false;
     }
+
+    public async Task<bool> UpdateAsync(UpdateBoardDto board)
+    {
+        var response = await _boardApi.UpdateAsync(board);
+
+        if (response.IsSuccessStatusCode && response.Content != false)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> DeleteAsync(DeleteBoardDto board)
+    {
+        var response = await _boardApi.DeleteAsync(board);
+
+        if (response.IsSuccessStatusCode && response.Content != false)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

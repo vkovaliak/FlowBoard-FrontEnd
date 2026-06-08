@@ -78,11 +78,9 @@ public class TokenService : ITokenService
 
         var now = DateTime.UtcNow;
 
-        var totalLifetime = expiresAt.Value - now;
+        var remainingTime = expiresAt.Value - now;
 
-        var halfPoint = expiresAt.Value - TimeSpan.FromTicks(totalLifetime.Ticks / 2);
-
-        if (now >= halfPoint)
+        if (remainingTime <= TimeSpan.FromMinutes(30))
         {
             await RefreshTokenAsync();
         }
