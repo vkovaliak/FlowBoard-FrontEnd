@@ -34,7 +34,8 @@
 
                     <MudPaper Elevation="4" 
                               Class="pa-4 hoverable-card" 
-                              Style="cursor: pointer; min-height: 120px;">
+                              Style="cursor: pointer; min-height: 120px;"
+                              @onclick=@(() => NavigateToBoard(board.Id))>
                         
                         <MudStack Justify=@Justify.SpaceBetween Style="min-height: 110px;">
 

@@ -14,6 +14,7 @@ public partial class Home
     [Inject] public IBoardService BoardService { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
 
     private IEnumerable<BoardDto>? _boards;
 
@@ -69,8 +70,8 @@ public partial class Home
             else 
             {
                 var updateDto = new UpdateBoardDto(
-                    Name: model.Name, IsPublic: 
-                    model.IsPublic);
+                    Name: model.Name, 
+                    IsPublic: model.IsPublic);
 
                 isSuccess = await BoardService.UpdateAsync(currentBoard.Id, updateDto);
                 successMessage = "Board updated successfully!";
@@ -111,5 +112,10 @@ public partial class Home
                 Snackbar.Add("Failed to delete board", Severity.Error);
             }
         }
+    }
+
+    private void NavigateToBoard(Guid boardId)
+    {
+        NavigationManager.NavigateTo($"/boards/{boardId}");
     }
 }

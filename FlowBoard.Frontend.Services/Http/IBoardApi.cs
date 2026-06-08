@@ -8,6 +8,9 @@ public interface IBoardApi
     [Get("/api/boards")]
     Task<ApiResponse<IEnumerable<BoardDto>>> GetMyBoardsAsync();
 
+    [Get("/api/boards/{id}")]
+    Task<ApiResponse<BoardDetailsDto>> GetDetailsAsync(Guid id);
+
     [Post("/api/boards")]
     Task<ApiResponse<Guid>> CreateAsync([Body] CreateBoardDto dto);
 
