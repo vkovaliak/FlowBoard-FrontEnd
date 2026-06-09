@@ -3,9 +3,12 @@ using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using MudBlazor;
 using FlowBoard.Frontend.Domain.DTOs.Lists;
+using FlowBoard.Frontend.Domain.DTOs.Cards;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlowBoard.Frontend.WebApp.Pages;
 
+[Authorize]
 public partial class BoardDetails
 {
     [Parameter] 
@@ -13,6 +16,8 @@ public partial class BoardDetails
 
     [Inject] 
     public IBoardService BoardService { get; set; } = default!;
+    [Inject]
+    public ICardService CardService { get; set; } = default!;
     [Inject]
     public IListService ListService { get; set; } = default!;
     [Inject] 
@@ -116,6 +121,64 @@ public partial class BoardDetails
             else
             {
                 Snackbar.Add("Failed to delete list", Severity.Error);
+            }
+        }
+    }
+
+    private async Task HandleCreateCardAsync(CreateCardDto dto)
+    {
+        var success = await CardService.CreateAsync(dto);
+
+        if (success)
+        {
+            Snackbar.Add("Card added!", Severity.Success);
+            _board = await BoardService.GetDetailsAsync(Id);
+        }
+        else
+        {
+            Snackbar.Add("Failed to add card", Severity.Error);
+        }
+    }
+
+    private async Task HandleUpdateCardAsync(
+        (Guid ListId, Guid CardId, UpdateCardDto Dto) args)
+    {
+        var success = await CardService.UpdateAsync(
+            Id, args.ListId, args.CardId, args.Dto);
+
+        if (success)
+        {
+            Snackbar.Add("Card updated successfully!", Severity.Success);
+            _board = await BoardService.GetDetailsAsync(Id);
+        }
+        else
+        {
+            Snackbar.Add("Failed to update card", Severity.Error);
+        }
+    }
+
+    private async Task HandleDeleteCardAsync(
+        (Guid ListId, Guid CardId, string CardName) args)
+    {
+        bool? result = await DialogService.ShowMessageBoxAsync(
+            "Delete Card", 
+            $"Are you sure you want to delete card '{args.CardName}'?", 
+            yesText: "Delete", 
+            cancelText: "Cancel");
+
+        if (result == true)
+        {
+            var success = await CardService.DeleteAsync(
+                Id, args.ListId, args.CardId);
+
+            if (success)
+            {
+                Snackbar.Add($"Card '{args.CardName}' deleted", Severity.Success);
+                _board = await BoardService.GetDetailsAsync(Id);
+            }
+            else
+            {
+                Snackbar.Add("Failed to delete card", Severity.Error);
             }
         }
     }
