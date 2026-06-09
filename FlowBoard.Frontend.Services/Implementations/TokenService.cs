@@ -95,4 +95,10 @@ public class TokenService : ITokenService
             await RefreshTokenAsync();
         }
     }
+
+    public async Task RemoveTokensAsync()
+    {
+        await _localStorage.ClearAsync();
+
+    }
 }
