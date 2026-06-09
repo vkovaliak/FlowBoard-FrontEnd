@@ -7,11 +7,11 @@
     @if (!_isCreatingList)
     {
         <MudButton StartIcon=@Icons.Material.Filled.Add
-                Color=@Color.Default
-                FullWidth=@true
-                Style="text-transform: none;"
-                OnClick=@ToggleForm>
-                Add another list
+                   Color=@Color.Default
+                   FullWidth=@true
+                   Style="text-transform: none;"
+                   OnClick=@ToggleForm>
+            Add another list
         </MudButton>
     }
     else
@@ -33,7 +33,7 @@
                         Size=@Size.Small
                         Style="text-transform: none;"
                         OnClick=@SubmitFormAsync>
-                        Add list
+                    Add list
                 </MudButton>
 
                 <MudIconButton Icon=@Icons.Material.Filled.Close

@@ -8,14 +8,14 @@
 
     <MudText Typo=@Typo.h4
                 Class="font-weight-bold">
-                @BoardName
+        @BoardName
     </MudText>
     
     <MudChip T=@string
                 Color=@(IsPublic ? Color.Primary : Color.Secondary)
                 Size=@Size.Small 
                 Class="ml-2">
-            @(IsPublic ? "Public" : "Private")
+        @(IsPublic ? "Public" : "Private")
     </MudChip>
 
     <MudButton Variant=@Variant.Outlined
@@ -23,7 +23,7 @@
                StartIcon=@Icons.Material.Filled.PersonAdd
                Style="text-transform: none;"
                OnClick=@(() => OnInviteClick.InvokeAsync())>
-               Invite
+        Invite
     </MudButton>
 
 </MudStack>

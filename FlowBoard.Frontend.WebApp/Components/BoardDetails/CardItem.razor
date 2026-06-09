@@ -7,7 +7,7 @@
 
         <MudText Typo=@Typo.body2 Class="font-weight-bold"
                     Style="word-break: break-word;">
-                    @Card.Name
+            @Card.Name
         </MudText>
 
         <MudMenu Icon=@Icons.Material.Filled.MoreVert 
@@ -19,13 +19,13 @@
         
             <MudMenuItem Icon=@Icons.Material.Filled.Edit 
                         OnClick=@(() => OnEdit.InvokeAsync(Card))>
-                        Edit
+                Edit
             </MudMenuItem>
         
             <MudMenuItem Icon=@Icons.Material.Filled.Delete
                         IconColor=@Color.Error
                         OnClick=@(() => OnDelete.InvokeAsync(Card))>
-                        Delete
+                Delete
             </MudMenuItem>
 
         </MudMenu>
@@ -36,7 +36,7 @@
     {
         <MudText Typo=@Typo.caption Color=@Color.Secondary
                     Class="text-truncate d-block mt-1">
-                    @Card.Description
+            @Card.Description
         </MudText>
     }
 </MudPaper>
