@@ -14,4 +14,6 @@ public interface ITokenService
 
     Task<bool> RefreshTokenAsync();
     Task RefreshIfNeededAsync();
+
+    Task RemoveTokensAsync();
 }

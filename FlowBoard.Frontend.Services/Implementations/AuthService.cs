@@ -47,4 +47,21 @@ public class AuthService : IAuthService
         
         return false;
     }
+
+    public async Task<bool> LogoutAsync()
+    {
+        var refreshToken = await _tokenService.GetRefreshTokenAsync();
+        if(refreshToken == null)
+        {
+            return false;
+        }
+        var request = new RefreshTokenDto(refreshToken);
+        await _authApi.LogoutAsync(request);
+
+        await _tokenService.RemoveTokensAsync();
+        _authStateProvider.NotifyUserLogout();
+        
+        return true;
+
+    }
 }

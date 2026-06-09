@@ -13,4 +13,7 @@ public interface IAuthApi
 
     [Post("/api/auth/refresh")]
     Task<ApiResponse<TokenDto>> RefreshTokenAsync([Body] RefreshTokenDto request);
+
+    [Post("/api/auth/logout")]
+    Task<ApiResponse<bool>> LogoutAsync([Body] RefreshTokenDto request);
 }

@@ -55,4 +55,10 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         
         NotifyAuthenticationStateChanged(state);
     }
+
+    public void NotifyUserLogout()
+    {
+        var state = Task.FromResult(new AuthenticationState(_anonymous));
+        NotifyAuthenticationStateChanged(state);
+    }
 }
