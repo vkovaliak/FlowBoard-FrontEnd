@@ -24,12 +24,12 @@
 
                 <MudRadio Value=@false 
                           Color=@Color.Primary>
-                          Private
+                    Private
                 </MudRadio>
 
                 <MudRadio Value=@true 
                           Color=@Color.Primary>
-                          Public
+                    Public
                 </MudRadio>
 
             </MudRadioGroup>
@@ -45,7 +45,7 @@
         <MudButton Color=@Color.Primary 
                    Variant=@Variant.Filled 
                    OnClick=@Submit>
-                   @(IsEditMode ? "Save Changes" : "Create")
+            @(IsEditMode ? "Save Changes" : "Create")
         </MudButton>
 
     </DialogActions>

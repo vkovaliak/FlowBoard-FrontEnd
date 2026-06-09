@@ -11,7 +11,7 @@
     <MudButton Variant=@Variant.Filled
                Color=@Color.Primary
                OnClick=@OpenCreateBoardDialog>
-               Create Board
+        Create Board
     </MudButton>
 
     <br>
@@ -21,7 +21,7 @@
     {
         <MudAlert Severity=@Severity.Info 
                   Variant=@Variant.Outlined>
-                  You don't have any boards yet. Create your first one!
+            You don't have any boards yet. Create your first one!
         </MudAlert>
     }
     else
@@ -44,7 +44,7 @@
 
                                 <MudText Typo=@Typo.h6 
                                         Class="font-weight-bold">
-                                        @board.Name
+                                    @board.Name
                                 </MudText>
 
                                 <MudStack Row=@true Spacing="1" AlignItems=@AlignItems.Center>
@@ -69,14 +69,14 @@
                                             Color=@(board.IsPublic 
                                                 ? Color.Primary : Color.Secondary) 
                                             Size=@Size.Small>
-                                            @(board.IsPublic ? "Public" : "Private")
+                                    @(board.IsPublic ? "Public" : "Private")
                                 </MudChip>
                         
                                 <MudSpacer />
                                 
                                 <MudText Typo=@Typo.caption 
                                         Color=@Color.Secondary>
-                                        Created: @board.CreatedAt.ToShortDateString()
+                                    Created: @board.CreatedAt.ToShortDateString()
                                 </MudText>
 
                             </MudStack>

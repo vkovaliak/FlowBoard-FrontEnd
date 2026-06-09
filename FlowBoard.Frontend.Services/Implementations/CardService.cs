@@ -17,35 +17,23 @@ public class CardService : ICardService
     {
         var response = await _cardApi.CreateAsync(list);
 
-        if (response.IsSuccessStatusCode && response.Content != Guid.Empty)
-        {
-            return true;
-        }
-
-        return false;
+        return response.IsSuccessStatusCode 
+            && response.Content != Guid.Empty;
     }
 
     public async Task<bool> UpdateAsync(Guid boardId, Guid listId, Guid cardId, UpdateCardDto list)
     {
         var response = await _cardApi.UpdateAsync(boardId, listId, cardId, list);
 
-        if (response.IsSuccessStatusCode && response.Content != false)
-        {
-            return true;
-        }
-
-        return false;
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
     }
 
     public async Task<bool> DeleteAsync(Guid boardId, Guid listId, Guid cardId)
     {
         var response = await _cardApi.DeleteAsync(boardId, listId, cardId);
 
-        if (response.IsSuccessStatusCode && response.Content != false)
-        {
-            return true;
-        }
-
-        return false;
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
     }
 }

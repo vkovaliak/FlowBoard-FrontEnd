@@ -1,0 +1,29 @@
+<MudStack Row=@true 
+            AlignItems=@AlignItems.Center
+            Class="mb-6">
+
+    <MudIconButton Icon=@Icons.Material.Filled.ArrowBack 
+                    Href="/" 
+                    Color=@Color.Default />
+
+    <MudText Typo=@Typo.h4
+                Class="font-weight-bold">
+        @BoardName
+    </MudText>
+    
+    <MudChip T=@string
+                Color=@(IsPublic ? Color.Primary : Color.Secondary)
+                Size=@Size.Small 
+                Class="ml-2">
+        @(IsPublic ? "Public" : "Private")
+    </MudChip>
+
+    <MudButton Variant=@Variant.Outlined
+               Color=@Color.Primary
+               StartIcon=@Icons.Material.Filled.PersonAdd
+               Style="text-transform: none;"
+               OnClick=@(() => OnInviteClick.InvokeAsync())>
+        Invite
+    </MudButton>
+
+</MudStack>

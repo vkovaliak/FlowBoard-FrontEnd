@@ -1,0 +1,48 @@
+<MudPaper Elevation="0" 
+        Style="width: 250px; min-width: 250px; 
+            background-color: rgba(0,0,0,0.05); 
+            border-radius: 8px; height: max-content;"
+        Class="pa-2 flex-grow-0 flex-shrink-0">
+
+    @if (!_isCreatingList)
+    {
+        <MudButton StartIcon=@Icons.Material.Filled.Add
+                   Color=@Color.Default
+                   FullWidth=@true
+                   Style="text-transform: none;"
+                   OnClick=@ToggleForm>
+            Add another list
+        </MudButton>
+    }
+    else
+    {
+        <MudStack Spacing="2">
+            
+            <MudTextField @bind-Value=@_newListName
+                        Placeholder="Enter list title..." 
+                        Variant=@Variant.Outlined 
+                        Margin=@Margin.Dense
+                        Autofocus=@true
+                        Class="bg-white"
+                        Style="border-radius: 4px;" />
+
+            <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                
+                <MudButton Variant=@Variant.Filled 
+                        Color=@Color.Primary 
+                        Size=@Size.Small
+                        Style="text-transform: none;"
+                        OnClick=@SubmitFormAsync>
+                    Add list
+                </MudButton>
+
+                <MudIconButton Icon=@Icons.Material.Filled.Close
+                            Color=Color.Default 
+                            Size=@Size.Small 
+                            OnClick=@ToggleForm />
+            </MudStack>
+
+        </MudStack>
+    }
+
+</MudPaper>

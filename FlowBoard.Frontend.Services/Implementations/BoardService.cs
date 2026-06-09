@@ -17,59 +17,47 @@ public class BoardService : IBoardService
     {
         var response = await _boardApi.GetMyBoardsAsync();
 
-        if (response.IsSuccessStatusCode && response.Content != null )
-        {
-            return response.Content;
-        }
-
-        return [];
+        return response.IsSuccessStatusCode 
+            && response.Content != null ? response.Content : [];
     }
 
     public async Task<BoardDetailsDto?> GetDetailsAsync(Guid boardId)
     {
         var response = await _boardApi.GetDetailsAsync(boardId);
 
-        if (response.IsSuccessStatusCode && response.Content != null)
-        {
-            return response.Content;
-        }
-
-        return null;
+        return response.IsSuccessStatusCode 
+            ? response.Content : null;
     }
 
     public async Task<bool> CreateAsync(CreateBoardDto board)
     {
         var response = await _boardApi.CreateAsync(board);
 
-        if (response.IsSuccessStatusCode && response.Content != Guid.Empty)
-        {
-            return true;
-        }
-
-        return false;
+        return response.IsSuccessStatusCode 
+            && response.Content != Guid.Empty;
     }
 
     public async Task<bool> UpdateAsync(Guid boardId, UpdateBoardDto board)
     {
         var response = await _boardApi.UpdateAsync(boardId, board);
 
-        if (response.IsSuccessStatusCode && response.Content != false)
-        {
-            return true;
-        }
-
-        return false;
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
     }
 
     public async Task<bool> DeleteAsync(Guid boardId)
     {
         var response = await _boardApi.DeleteAsync(boardId);
 
-        if (response.IsSuccessStatusCode && response.Content != false)
-        {
-            return true;
-        }
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
 
-        return false;
+    public async Task<bool> InviteMemberAsync(Guid boardId, InviteMemberDto dto)
+    {
+        var response = await _boardApi.InviteMemberAsync(boardId, dto);
+
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
     }
 }

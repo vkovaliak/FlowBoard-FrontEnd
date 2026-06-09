@@ -5,6 +5,7 @@ using MudBlazor;
 using FlowBoard.Frontend.Domain.DTOs.Lists;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using Microsoft.AspNetCore.Authorization;
+using FlowBoard.Frontend.WebApp.Components.Dialogs;
 
 namespace FlowBoard.Frontend.WebApp.Pages;
 
@@ -28,18 +29,14 @@ public partial class BoardDetails
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
 
-    private bool _isCreatingList = false;
-    private string _newListName = string.Empty;
-
-    private void ToggleCreateListForm()
+    private async Task RefreshBoardAsync()
     {
-        _isCreatingList = !_isCreatingList;
-        _newListName = string.Empty;
+        _board = await BoardService.GetDetailsAsync(Id);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _board = await BoardService.GetDetailsAsync(Id);
+        await RefreshBoardAsync();
 
         if (_board is null)
         {
@@ -48,27 +45,24 @@ public partial class BoardDetails
         }
     }
 
-    private async Task CreateListAsync(Guid boardId)
+    private async Task CreateListAsync(string listName)
     {
-        if (string.IsNullOrWhiteSpace(_newListName))
+        if (string.IsNullOrWhiteSpace(listName))
         {
             Snackbar.Add("List name cannot be empty", Severity.Warning);
             return;
         }
         
         var newList = new CreateListDto(
-            BoardId: boardId,
-            Name: _newListName);
+            BoardId: Id,
+            Name: listName);
 
         var success = await ListService.CreateAsync(newList);
 
         if (success)
         {
             Snackbar.Add("List created successfully!", Severity.Success);
-            
-            _board = await BoardService.GetDetailsAsync(Id); 
-            
-            ToggleCreateListForm();
+            await RefreshBoardAsync();
         }
         else
         {
@@ -92,7 +86,7 @@ public partial class BoardDetails
         if (success)
         {
             Snackbar.Add("List renamed successfully!", Severity.Success); 
-            _board = await BoardService.GetDetailsAsync(Id);
+            await RefreshBoardAsync();
         }
         else
         {
@@ -116,7 +110,7 @@ public partial class BoardDetails
             if (success)
             {
                 Snackbar.Add($"List '{args.ListName}' deleted", Severity.Success);
-                _board = await BoardService.GetDetailsAsync(Id);
+                await RefreshBoardAsync();
             }
             else
             {
@@ -132,7 +126,7 @@ public partial class BoardDetails
         if (success)
         {
             Snackbar.Add("Card added!", Severity.Success);
-            _board = await BoardService.GetDetailsAsync(Id);
+            await RefreshBoardAsync();
         }
         else
         {
@@ -149,7 +143,7 @@ public partial class BoardDetails
         if (success)
         {
             Snackbar.Add("Card updated successfully!", Severity.Success);
-            _board = await BoardService.GetDetailsAsync(Id);
+            await RefreshBoardAsync();
         }
         else
         {
@@ -182,5 +176,39 @@ public partial class BoardDetails
             }
         }
     }
-    
+
+    private async Task OpenInviteDialogAsync()
+    {
+        var options = new DialogOptions 
+        { 
+            CloseOnEscapeKey = true, 
+            MaxWidth = MaxWidth.Small, 
+            FullWidth = true 
+        };
+
+        var dialog = await DialogService.ShowAsync<
+            InviteMemberDialog>("Invite Member", options);
+        var result = await dialog.Result;
+
+        if (!result!.Canceled && result.Data is string email)
+        {
+            await HandleInviteMemberAsync(email);
+        }
+    }    
+
+    private async Task HandleInviteMemberAsync(string email)
+    {
+        var inviteDto = new InviteMemberDto(Email: email);
+        var result = await BoardService.InviteMemberAsync(Id, inviteDto);
+
+        if (result)
+        {
+            Snackbar.Add($"User {email} successfully invited!", Severity.Success);
+            await RefreshBoardAsync();
+        }
+        else
+        {
+            Snackbar.Add("Failed to invite user.", Severity.Error);
+        }
+    }
 }
