@@ -5,7 +5,7 @@ using FlowBoard.Frontend.WebApp.Components.Dialogs;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FlowBoard.Frontend.WebApp.Components;
+namespace FlowBoard.Frontend.WebApp.Components.BoardDetails;
 
 public partial class TaskList
 {
@@ -13,20 +13,22 @@ public partial class TaskList
     
     [Parameter]
     public ListDto List { get; set; } = default!;
-
     [Parameter] 
     public Guid BoardId { get; set; }
 
     [Parameter] 
     public EventCallback<(Guid ListId, string NewName)> OnRenameList { get; set; }
+
     [Parameter] 
     public EventCallback<(Guid ListId, string ListName)> OnDeleteList { get; set; }
 
     [Parameter] 
     public EventCallback<CreateCardDto> OnCreateCard { get; set; }
+
     [Parameter] 
     public EventCallback<(Guid ListId, Guid CardId, UpdateCardDto Dto)> 
         OnUpdateCard { get; set; }
+        
     [Parameter] 
     public EventCallback<(Guid ListId, Guid CardId, string CardName)> 
         OnDeleteCard { get; set; }

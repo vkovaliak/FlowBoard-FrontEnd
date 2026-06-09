@@ -72,4 +72,16 @@ public class BoardService : IBoardService
 
         return false;
     }
+
+    public async Task<bool> InviteMemberAsync(Guid boardId, InviteMemberDto dto)
+    {
+        var response = await _boardApi.InviteMemberAsync(boardId, dto);
+
+        if (response.IsSuccessStatusCode && response.Content != false)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

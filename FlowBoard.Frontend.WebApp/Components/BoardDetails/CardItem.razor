@@ -1,0 +1,42 @@
+<MudPaper Elevation="1" Class="pa-3 bg-white" 
+            Style="border-radius: 8px; position: relative;">
+
+    <MudStack Row=@true Justify=@Justify.SpaceBetween 
+                AlignItems=@AlignItems.Start
+                Class="mb-1">
+
+        <MudText Typo=@Typo.body2 Class="font-weight-bold"
+                    Style="word-break: break-word;">
+                    @Card.Name
+        </MudText>
+
+        <MudMenu Icon=@Icons.Material.Filled.MoreVert 
+            Size=@Size.Small
+            Dense=@true
+            AnchorOrigin=@Origin.BottomRight
+            TransformOrigin=@Origin.TopRight
+            Style="margin-top: -8px; margin-right: -8px;">
+        
+            <MudMenuItem Icon=@Icons.Material.Filled.Edit 
+                        OnClick=@(() => OnEdit.InvokeAsync(Card))>
+                        Edit
+            </MudMenuItem>
+        
+            <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                        IconColor=@Color.Error
+                        OnClick=@(() => OnDelete.InvokeAsync(Card))>
+                        Delete
+            </MudMenuItem>
+
+        </MudMenu>
+
+    </MudStack>
+
+    @if (!string.IsNullOrWhiteSpace(Card.Description))
+    {
+        <MudText Typo=@Typo.caption Color=@Color.Secondary
+                    Class="text-truncate d-block mt-1">
+                    @Card.Description
+        </MudText>
+    }
+</MudPaper>
