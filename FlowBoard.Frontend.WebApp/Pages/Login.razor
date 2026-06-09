@@ -9,30 +9,38 @@
             Login
         </MudText>
 
-        <MudForm>
+        <EditForm Model="@Model">
 
-            <MudTextField Label="Email"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          InputType=@InputType.Email
-                          @bind-Value=@Model.Email />
+            <DataAnnotationsValidator />
 
-            <MudTextField Label="Password"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          InputType=@InputType.Password
-                          Class="mt-3"
-                          @bind-Value=@Model.Password />
+            <MudForm>
 
-            <MudButton Variant=@Variant.Filled
-                       Color=@Color.Primary
-                       FullWidth="true"
-                       Class="mt-5"
-                       OnClick=@HandleLogin>
-                Login
-            </MudButton>
+                <MudTextField Label="Email"
+                            Variant=@Variant.Outlined
+                            Margin=@Margin.Dense
+                            InputType=@InputType.Email
+                            @bind-Value=@Model.Email 
+                            For=@(() => Model.Email)/>
 
-        </MudForm>
+                <MudTextField Label="Password"
+                            Variant=@Variant.Outlined
+                            Margin=@Margin.Dense
+                            InputType=@InputType.Password
+                            Class="mt-3"
+                            @bind-Value=@Model.Password 
+                            For=@(() => Model.Password)/>
+
+                <MudButton Variant=@Variant.Filled
+                        Color=@Color.Primary
+                        FullWidth=@true
+                        Class="mt-5"
+                        OnClick=@HandleLogin>
+                    Login
+                </MudButton>
+
+            </MudForm>
+
+        </EditForm>
 
     </MudPaper>
 

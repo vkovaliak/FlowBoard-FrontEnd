@@ -93,36 +93,47 @@
         }
         else
         {
-            <MudStack Spacing="2" Class="pa-1">
-                <MudTextField @bind-Value=@_cardForm.Name
-                              Placeholder="Enter card title..." 
-                              Variant=@Variant.Outlined 
-                              Margin=@Margin.Dense
-                              Autofocus=@true
-                              Class="bg-white" />
+            <EditForm Model="@_cardForm">
 
-                <MudTextField @bind-Value=@_cardForm.Description
-                              Placeholder="Enter description (optional)..." 
-                              Variant=@Variant.Outlined 
-                              Margin=@Margin.Dense
-                              Lines="2"
-                              Class="bg-white" />
+                <DataAnnotationsValidator />
 
-                <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
-                    <MudButton Variant=@Variant.Filled 
-                               Color=@Color.Primary 
-                               Size=@Size.Small
-                               Style="text-transform: none;"
-                               OnClick=@SubmitCreateCardAsync>
-                               Add card
-                    </MudButton>
+                <MudStack Spacing="2" Class="pa-1">
 
-                    <MudIconButton Icon=@Icons.Material.Filled.Close
-                                   Color=@Color.Default 
-                                   Size=@Size.Small 
-                                   OnClick=@ToggleCreateCardForm />
+                    <MudTextField @bind-Value=@_cardForm.Name
+                                Placeholder="Enter card title..." 
+                                Variant=@Variant.Outlined 
+                                Margin=@Margin.Dense
+                                Autofocus=@true
+                                Class="bg-white" 
+                                For=@(() => _cardForm.Name) />
+
+                    <MudTextField @bind-Value=@_cardForm.Description
+                                Placeholder="Enter description (optional)..." 
+                                Variant=@Variant.Outlined 
+                                Margin=@Margin.Dense
+                                Lines="2"
+                                Class="bg-white" 
+                                For=@(() => _cardForm.Description) />
+
+                    <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                    
+                        <MudButton Variant=@Variant.Filled 
+                                Color=@Color.Primary 
+                                Size=@Size.Small
+                                Style="text-transform: none;"
+                                OnClick=@SubmitCreateCardAsync>
+                            Add card
+                        </MudButton>
+
+                        <MudIconButton Icon=@Icons.Material.Filled.Close
+                                    Color=@Color.Default 
+                                    Size=@Size.Small 
+                                    OnClick=@ToggleCreateCardForm />
+                    </MudStack>
+
                 </MudStack>
-            </MudStack>
+            
+            </EditForm>
         }
 
 </MudPaper>
