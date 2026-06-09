@@ -43,28 +43,20 @@ public static class ServiceCollectionExtensions
             {
                 client.BaseAddress = new Uri(apiOptions.BaseUrl);
             });
-        
-        services.AddRefitClient<IBoardApi>()
-            .AddHttpMessageHandler<AuthHeaderHandler>()
-            .ConfigureHttpClient(client =>
-            {
-                client.BaseAddress = new Uri (apiOptions.BaseUrl);
-            });
-        
-        services.AddRefitClient<ICardApi>()
-            .AddHttpMessageHandler<AuthHeaderHandler>()
-            .ConfigureHttpClient(client =>
-            {
-                client.BaseAddress = new Uri (apiOptions.BaseUrl);
-            });
 
-        services.AddRefitClient<IListApi>()
-            .AddHttpMessageHandler<AuthHeaderHandler>()
-            .ConfigureHttpClient(client =>
-            {
-                client.BaseAddress = new Uri (apiOptions.BaseUrl);
-            });
-
+        void AddAuthenticatedRefitClient<T>() where T : class
+        {
+            services.AddRefitClient<T>()
+                .AddHttpMessageHandler<AuthHeaderHandler>()
+                .ConfigureHttpClient(client =>
+                {
+                    client.BaseAddress = new Uri (apiOptions.BaseUrl);
+                });
+        }
+        
+        AddAuthenticatedRefitClient<IBoardApi>();
+        AddAuthenticatedRefitClient<ICardApi>();
+        AddAuthenticatedRefitClient<IListApi>();
 
         return services;
     }
