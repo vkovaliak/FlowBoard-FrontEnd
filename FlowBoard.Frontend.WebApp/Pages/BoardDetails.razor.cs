@@ -211,4 +211,23 @@ public partial class BoardDetails
             Snackbar.Add("Failed to invite user.", Severity.Error);
         }
     }
+
+    private async Task HandleListDropped(MudItemDropInfo<ListDto> drop)
+    {
+        var dto = new MoveListDto(
+            NewPosition: drop.IndexInZone
+        );
+
+        var success = await ListService.MoveAsync(
+            Id,
+            drop.Item!.Id,
+            dto);
+
+        if (!success)
+        {
+            Snackbar.Add("Failed to move list", Severity.Error);
+
+            await RefreshBoardAsync();
+        }
+    }
 }

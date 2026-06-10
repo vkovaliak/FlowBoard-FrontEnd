@@ -36,4 +36,12 @@ public class ListService : IListService
         return response.IsSuccessStatusCode 
             && response.Content != false;
     }
+
+    public async Task<bool> MoveAsync(Guid boardId, Guid listId, MoveListDto list)
+    {
+        var response = await _listApi.MoveAsync(boardId, listId, list);
+
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
 }

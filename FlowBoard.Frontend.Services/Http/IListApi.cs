@@ -13,4 +13,7 @@ public interface IListApi
 
     [Delete("/api/lists/{boardId}/list/{listId}")]
     Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid listId);
+
+    [Put("/api/lists/{boardId}/list/{listId}/move")]
+    Task<ApiResponse<bool>> MoveAsync(Guid boardId, Guid listId, [Body] MoveListDto dto);
 }

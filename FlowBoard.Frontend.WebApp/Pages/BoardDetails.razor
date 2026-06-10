@@ -1,5 +1,6 @@
 @page "/boards/{Id:guid}"
 @using FlowBoard.Frontend.Domain.DTOs.Boards
+@using FlowBoard.Frontend.Domain.DTOs.Lists
 @using FlowBoard.Frontend.WebApp.Components
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails
 
@@ -27,27 +28,37 @@
                   Style="width: 100%; height: calc(100vh - 220px); 
                          min-height: 400px;">
 
-            <MudStack Row=@true 
-                    Spacing="4" 
-                    AlignItems=@AlignItems.Start
-                    Class="flex-nowrap overflow-x-auto pb-4"
-                    Style="height: 100%; width: 100%;">
-            
-                @foreach (var list in _board.Lists.OrderBy(l => l.Position))
-                {                    
-                    <TaskList List=@list
+            <MudDropContainer T=@ListDto
+                              Items=@_board.Lists.OrderBy(x => x.Position).ToList()
+                              ItemsSelector=@((item, dropzone) => dropzone == "lists")
+                              ItemDropped=@HandleListDropped
+                              Class="d-flex flex-row flex-nowrap gap-4">
+
+                <ChildContent>
+
+                    <MudDropZone T=@ListDto
+                                 Identifier="lists"
+                                 AllowReorder=@true
+                                 Class="d-flex flex-row flex-nowrap gap-4" />
+
+                    <CreateListButtons BoardId=@_board.Id
+                                       OnListCreate=@CreateListAsync />
+
+                </ChildContent>
+
+                <ItemRenderer>
+
+                    <TaskList List=@context
                               BoardId=@_board.Id
                               OnRenameList=@HandleRenameListAsync
                               OnDeleteList=@HandleDeleteListAsync
                               OnCreateCard=@HandleCreateCardAsync
-                              OnUpdateCard=@HandleUpdateCardAsync 
-                              OnDeleteCard=@HandleDeleteCardAsync /> 
-                }
-                
-                <CreateListButtons BoardId=@_board.Id 
-                                   OnListCreate=@CreateListAsync />
-            
-            </MudStack>
+                              OnUpdateCard=@HandleUpdateCardAsync
+                              OnDeleteCard=@HandleDeleteCardAsync />
+
+                </ItemRenderer>
+
+            </MudDropContainer>
 
         </MudPaper>
     }
