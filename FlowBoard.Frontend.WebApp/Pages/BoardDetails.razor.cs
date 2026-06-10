@@ -241,4 +241,22 @@ public partial class BoardDetails
         
         await RefreshBoardAsync(); 
     }
+
+    [JSInvokable]
+    public async Task HandleCardMovedJS(string cardId, string toListId, int newIndex)
+    {
+        var guidCardId = Guid.Parse(cardId);
+        var guidToListId = Guid.Parse(toListId);
+        
+        var dto = new MoveCardDto(NewListId: guidToListId, NewPosition: newIndex);
+
+        var success = await CardService.MoveAsync(Id, guidCardId, dto);
+
+        if (!success)
+        {
+            Snackbar.Add("Failed to save card position", Severity.Error);
+        }
+
+        await RefreshBoardAsync();
+    }
 }

@@ -21,9 +21,9 @@ public class CardService : ICardService
             && response.Content != Guid.Empty;
     }
 
-    public async Task<bool> UpdateAsync(Guid boardId, Guid listId, Guid cardId, UpdateCardDto list)
+    public async Task<bool> UpdateAsync(Guid boardId, Guid listId, Guid cardId, UpdateCardDto card)
     {
-        var response = await _cardApi.UpdateAsync(boardId, listId, cardId, list);
+        var response = await _cardApi.UpdateAsync(boardId, listId, cardId, card);
 
         return response.IsSuccessStatusCode 
             && response.Content != false;
@@ -32,6 +32,14 @@ public class CardService : ICardService
     public async Task<bool> DeleteAsync(Guid boardId, Guid listId, Guid cardId)
     {
         var response = await _cardApi.DeleteAsync(boardId, listId, cardId);
+
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
+
+    public async Task<bool> MoveAsync(Guid boardId, Guid cardId, MoveCardDto card)
+    {
+        var response = await _cardApi.MoveAsync(boardId, cardId, card);
 
         return response.IsSuccessStatusCode 
             && response.Content != false;
