@@ -17,20 +17,28 @@
 
     <DialogContent>
 
-        <MudStack Spacing="3">
+        <EditForm Model="@_model">
+            
+            <DataAnnotationsValidator />
 
-            <MudTextField @bind-Value=@_model.Name
-                          Label="Card Name" 
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          Required=@true
-                          RequiredError="Card name cannot be empty" />
+            <MudStack Spacing="3">
 
-            <MudTextField @bind-Value=@_model.Description 
-                          Label="Description" 
-                          Variant=@Variant.Outlined
-                          Lines="3" />
-        </MudStack>
+                <MudTextField @bind-Value=@_model.Name
+                            Label="Card Name" 
+                            Variant=@Variant.Outlined
+                            Margin=@Margin.Dense
+                            Required=@true
+                            RequiredError="Card name cannot be empty" 
+                            For=@(() => _model.Name) />
+
+                <MudTextField @bind-Value=@_model.Description 
+                            Label="Description" 
+                            Variant=@Variant.Outlined
+                            Lines="3" 
+                            For=@(() => _model.Description) />
+            </MudStack>
+        
+        </EditForm>
 
     </DialogContent>
 
@@ -41,7 +49,8 @@
             Cancel
         </MudButton>
 
-        <MudButton Color=@Color.Primary 
+        <MudButton Color=@Color.Primary
+                   ButtonType=@ButtonType.Submit
                    Variant=@Variant.Filled 
                    OnClick=@SaveAsync>
             Save

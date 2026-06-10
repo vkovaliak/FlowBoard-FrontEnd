@@ -12,29 +12,32 @@
 
     <DialogContent>
 
-        <MudForm>
+        <EditForm Model="@Model">
+
+            <DataAnnotationsValidator />
 
             <MudTextField Label="Board Name"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          @bind-Value=@Model.Name />
+                        Variant=@Variant.Outlined
+                        Margin=@Margin.Dense
+                        @bind-Value=@Model.Name 
+                        For=@(() => Model.Name) />
 
             <MudRadioGroup T="bool" @bind-Value=@Model.IsPublic 
-                           Class="mt-4 d-flex flex-column">
+                        Class="mt-4 d-flex flex-column">
 
                 <MudRadio Value=@false 
-                          Color=@Color.Primary>
+                        Color=@Color.Primary>
                     Private
                 </MudRadio>
 
                 <MudRadio Value=@true 
-                          Color=@Color.Primary>
+                        Color=@Color.Primary>
                     Public
                 </MudRadio>
 
             </MudRadioGroup>
 
-        </MudForm>
+        </EditForm>
 
     </DialogContent>
 
@@ -43,6 +46,7 @@
         <MudButton OnClick=@Cancel>Cancel</MudButton>
 
         <MudButton Color=@Color.Primary 
+                   ButtonType=@ButtonType.Submit
                    Variant=@Variant.Filled 
                    OnClick=@Submit>
             @(IsEditMode ? "Save Changes" : "Create")
