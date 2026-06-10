@@ -12,29 +12,57 @@
                 Style="cursor: grab; user-select: none;">
         @if (!_isEditingName)
         {
-            <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1"
-                     Style="cursor: grab;">
-                @List.Name
-            </MudText>
+            <MudStack Row=@true AlignItems=@AlignItems.Center 
+                      Spacing="2"
+                      Class="flex-grow-1">
 
-            <MudMenu Icon=@Icons.Material.Filled.MoreHoriz 
-                     Size=@Size.Small 
-                     Dense=@true 
-                     AnchorOrigin=@Origin.BottomRight 
-                     TransformOrigin=@Origin.TopRight>
+                <MudText Typo=@Typo.h6 Class="font-weight-bold px-1"
+                        Style="cursor: grab;">
+                    @List.Name
+                </MudText>
 
-                <MudMenuItem Icon=@Icons.Material.Filled.Edit 
-                             OnClick=@StartRename>
-                    Rename
-                </MudMenuItem>
+                <MudChip T=@string
+                         Variant=@Variant.Filled
+                         Color=@Color.Default
+                         Size=@Size.Small
+                         Disabled=@true
+                         Style="background-color: #091e4214; 4
+                                color: #42526e; font-weight: 600; 
+                                min-width: 20px; height: 20px; 
+                                border-radius: 4px; padding: 0 6px; margin: 0;">
+                    @(List.Cards?.Count)
+                </MudChip>
+            
+            </MudStack>
 
-                <MudMenuItem Icon=@Icons.Material.Filled.Delete 
-                             IconColor=@Color.Error 
-                             OnClick=@DeleteListClickAsync>
-                    Delete
-                </MudMenuItem>
-                
-            </MudMenu>
+            <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="0">
+
+                <MudIconButton Icon=@Icons.Material.Filled.Add
+                               Size=@Size.Small
+                               Color=@Color.Default
+                               OnClick=@ToggleCreateCardForm
+                               Style="color: #42526e; padding: 4px;" />
+
+                <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                        Size=@Size.Small 
+                        Dense=@true 
+                        AnchorOrigin=@Origin.BottomRight 
+                        TransformOrigin=@Origin.TopRight>
+
+                    <MudMenuItem Icon=@Icons.Material.Filled.Edit 
+                                OnClick=@StartRename>
+                        Rename
+                    </MudMenuItem>
+
+                    <MudMenuItem Icon=@Icons.Material.Filled.Delete 
+                                IconColor=@Color.Error 
+                                OnClick=@DeleteListClickAsync>
+                        Delete
+                    </MudMenuItem>
+                    
+                </MudMenu>
+            
+            </MudStack>
         }
         else
         {
@@ -112,14 +140,6 @@
                                 Autofocus=@true
                                 Class="bg-white" 
                                 For=@(() => _cardForm.Name) />
-
-                    <MudTextField @bind-Value=@_cardForm.Description
-                                Placeholder="Enter description (optional)..." 
-                                Variant=@Variant.Outlined 
-                                Margin=@Margin.Dense
-                                Lines="2"
-                                Class="bg-white" 
-                                For=@(() => _cardForm.Description) />
 
                     <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
                     
