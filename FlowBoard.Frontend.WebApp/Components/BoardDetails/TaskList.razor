@@ -8,10 +8,12 @@
     
     <MudStack Row="true" Justify=@Justify.SpaceBetween
                 AlignItems=@AlignItems.Center
-                Class="mb-3 flex-grow-0">
+                Class="mb-3 flex-grow-0 list-drag-handle"
+                Style="cursor: grab; user-select: none;">
         @if (!_isEditingName)
         {
-            <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1">
+            <MudText Typo=@Typo.subtitle1 Class="font-weight-bold px-1"
+                     Style="cursor: grab;">
                 @List.Name
             </MudText>
 

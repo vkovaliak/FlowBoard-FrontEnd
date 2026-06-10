@@ -1,6 +1,5 @@
 @page "/boards/{Id:guid}"
 @using FlowBoard.Frontend.Domain.DTOs.Boards
-@using FlowBoard.Frontend.Domain.DTOs.Lists
 @using FlowBoard.Frontend.WebApp.Components
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails
 
@@ -28,38 +27,31 @@
                   Style="width: 100%; height: calc(100vh - 220px); 
                          min-height: 400px;">
 
-            <MudDropContainer T=@ListDto
-                              Items=@_board.Lists.OrderBy(x => x.Position).ToList()
-                              ItemsSelector=@((item, dropzone) => dropzone == "lists")
-                              ItemDropped=@HandleListDropped
-                              Class="d-flex flex-row flex-nowrap gap-4">
+            <div class="d-flex flex-row flex-nowrap board-lists-container" 
+                 style="gap: 24px; height: 100%; align-items: flex-start;">
+            
+                @foreach (var list in _board.Lists.OrderBy(l => l.Position))
+                {
+                    <div class="list-draggable-item" 
+                         data-list-id="@list.Id" 
+                         style="280px; min-width: 280px; height: max-content; 
+                                display: flex;">      
 
-                <ChildContent>
-
-                    <MudDropZone T=@ListDto
-                                 Identifier="lists"
-                                 AllowReorder=@true
-                                 Class="d-flex flex-row flex-nowrap gap-4" />
-
-                    <CreateListButtons BoardId=@_board.Id
-                                       OnListCreate=@CreateListAsync />
-
-                </ChildContent>
-
-                <ItemRenderer>
-
-                    <TaskList List=@context
-                              BoardId=@_board.Id
-                              OnRenameList=@HandleRenameListAsync
-                              OnDeleteList=@HandleDeleteListAsync
-                              OnCreateCard=@HandleCreateCardAsync
-                              OnUpdateCard=@HandleUpdateCardAsync
-                              OnDeleteCard=@HandleDeleteCardAsync />
-
-                </ItemRenderer>
-
-            </MudDropContainer>
-
+                        <TaskList List=@list
+                                BoardId=@_board.Id
+                                OnRenameList=@HandleRenameListAsync
+                                OnDeleteList=@HandleDeleteListAsync
+                                OnCreateCard=@HandleCreateCardAsync
+                                OnUpdateCard=@HandleUpdateCardAsync 
+                                OnDeleteCard=@HandleDeleteCardAsync /> 
+                    </div>
+                }
+                <div class="flex-shrink-0" style="width: 280px;">
+                    <CreateListButtons BoardId=@_board.Id 
+                                    OnListCreate=@CreateListAsync />
+                </div>
+            </div>
+            
         </MudPaper>
     }
 

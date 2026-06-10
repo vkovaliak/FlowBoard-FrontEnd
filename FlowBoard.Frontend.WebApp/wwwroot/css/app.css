@@ -114,6 +114,9 @@ code {
     text-align: start;
 }
 
-.mud-drop-item {
-    min-width: 320px;
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #ebecf0 !important;
+    border: 2px dashed #b0b5be !important;
+    border-radius: 8px;
 }
