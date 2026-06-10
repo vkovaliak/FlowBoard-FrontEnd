@@ -6,6 +6,7 @@ using FlowBoard.Frontend.Domain.DTOs.Lists;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using Microsoft.AspNetCore.Authorization;
 using FlowBoard.Frontend.WebApp.Components.Dialogs;
+using Microsoft.JSInterop;
 
 namespace FlowBoard.Frontend.WebApp.Pages;
 
@@ -25,9 +26,22 @@ public partial class BoardDetails
     public ISnackbar Snackbar { get; set; } = default!;
     [Inject]
     public IDialogService DialogService { get; set; } = default!;
+    [Inject] 
+    public IJSRuntime JsRuntime { get; set; } = default!;
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
+
+    private DotNetObjectReference<BoardDetails>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_board != null)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JsRuntime.InvokeVoidAsync("initKanbanSortable", _objRef);
+        }
+    }
 
     private async Task RefreshBoardAsync()
     {
@@ -210,5 +224,21 @@ public partial class BoardDetails
         {
             Snackbar.Add("Failed to invite user.", Severity.Error);
         }
+    }
+
+    [JSInvokable]
+    public async Task HandleListMovedJS(string listId, int newIndex)
+    {
+        var guidListId = Guid.Parse(listId);
+        var dto = new MoveListDto(NewPosition: newIndex);
+        
+        var success = await ListService.MoveAsync(Id, guidListId, dto);
+        
+        if (!success)
+        {
+            Snackbar.Add("Failed to save list position", Severity.Error);
+        }
+        
+        await RefreshBoardAsync(); 
     }
 }

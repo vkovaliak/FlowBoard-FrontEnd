@@ -27,28 +27,31 @@
                   Style="width: 100%; height: calc(100vh - 220px); 
                          min-height: 400px;">
 
-            <MudStack Row=@true 
-                    Spacing="4" 
-                    AlignItems=@AlignItems.Start
-                    Class="flex-nowrap overflow-x-auto pb-4"
-                    Style="height: 100%; width: 100%;">
+            <div class="d-flex flex-row flex-nowrap board-lists-container" 
+                 style="gap: 24px; height: 100%; align-items: flex-start;">
             
                 @foreach (var list in _board.Lists.OrderBy(l => l.Position))
-                {                    
-                    <TaskList List=@list
-                              BoardId=@_board.Id
-                              OnRenameList=@HandleRenameListAsync
-                              OnDeleteList=@HandleDeleteListAsync
-                              OnCreateCard=@HandleCreateCardAsync
-                              OnUpdateCard=@HandleUpdateCardAsync 
-                              OnDeleteCard=@HandleDeleteCardAsync /> 
-                }
-                
-                <CreateListButtons BoardId=@_board.Id 
-                                   OnListCreate=@CreateListAsync />
-            
-            </MudStack>
+                {
+                    <div class="list-draggable-item" 
+                         data-list-id="@list.Id" 
+                         style="280px; min-width: 280px; height: max-content; 
+                                display: flex;">      
 
+                        <TaskList List=@list
+                                BoardId=@_board.Id
+                                OnRenameList=@HandleRenameListAsync
+                                OnDeleteList=@HandleDeleteListAsync
+                                OnCreateCard=@HandleCreateCardAsync
+                                OnUpdateCard=@HandleUpdateCardAsync 
+                                OnDeleteCard=@HandleDeleteCardAsync /> 
+                    </div>
+                }
+                <div class="flex-shrink-0" style="width: 280px;">
+                    <CreateListButtons BoardId=@_board.Id 
+                                    OnListCreate=@CreateListAsync />
+                </div>
+            </div>
+            
         </MudPaper>
     }
 
