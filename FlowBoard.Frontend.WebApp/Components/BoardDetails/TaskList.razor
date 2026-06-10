@@ -66,17 +66,21 @@
 
     </MudStack>
 
-    <MudStack Spacing="2" Class="flex-grow-1" 
-                Style="overflow-y: auto; max-height: 60vh;">
+    <MudStack Spacing="2" 
+              Class="flex-grow-1 cards-drop-zone" 
+              Style="overflow-y: auto; max-height: 60vh; min-height: 40px;"
+              data-list-id=@List.Id>
         
         @if (List.Cards != null && List.Cards.Any())
         {
             @foreach (var card in List.Cards.OrderBy(c => c.Position))
             {
-                <CardItem Card=@card 
-                          OnDelete=@DeleteCardClickAsync 
-                          OnEdit=@OpenCardDetailsAsync>
-                </CardItem>
+                <div data-card-id="@card.Id" style="width: 100%;">
+                    <CardItem Card=@card 
+                            OnDelete=@DeleteCardClickAsync 
+                            OnEdit=@OpenCardDetailsAsync>
+                    </CardItem>
+                </div>
             }
         }
 

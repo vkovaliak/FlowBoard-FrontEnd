@@ -13,4 +13,7 @@ public interface ICardApi
 
     [Delete("/api/cards/{boardId}/list/{listId}/card/{cardId}")]
     Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid listId, Guid cardId);
+
+    [Put("/api/cards/{boardId}/card/{cardId}/move")]
+    Task<ApiResponse<bool>> MoveAsync(Guid boardId, Guid cardId, [Body] MoveCardDto dto);
 }
