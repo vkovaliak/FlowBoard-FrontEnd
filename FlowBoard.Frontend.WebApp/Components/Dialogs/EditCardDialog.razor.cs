@@ -30,6 +30,20 @@ public partial class EditCardDialog : ComponentBase
     private string _newCommentMessage = string.Empty;
     private bool _isLoadingComments = false;
 
+    private bool _isEditingDescription = false;
+    private string _originalDescription = string.Empty;
+
+    private void EnableDescriptionEditing()
+    {
+        _originalDescription = _model.Description ?? string.Empty;
+        _isEditingDescription = true;
+    }
+
+    private void CancelDescriptionEditing()
+    {
+        _isEditingDescription = false;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _model.Name = CurrentName;
@@ -75,4 +89,12 @@ public partial class EditCardDialog : ComponentBase
             await LoadCommentsAsync();
         }
     }
+
+    private readonly Dictionary<string, object> _editorConfig = new()
+    {
+        { "height", 180 },
+        { "menubar", false },
+        { "plugins", "lists link" },
+        { "toolbar", "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist" }
+    };
 }
