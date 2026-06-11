@@ -31,11 +31,59 @@
                             RequiredError="Card name cannot be empty" 
                             For=@(() => _model.Name) />
 
-                <MudTextField @bind-Value=@_model.Description 
-                            Label="Description" 
-                            Variant=@Variant.Outlined
-                            Lines="3" 
-                            For=@(() => _model.Description) />
+                <MudStack Spacing="1">
+
+                    <MudText Typo=@Typo.caption
+                             Color=@Color.Secondary 
+                             Class="ml-1">
+                        Description
+                    </MudText>
+
+                    @if (!_isEditingDescription)
+                    {
+                        <MudPaper Outlined=@true
+                                  Class="pa-3" 
+                                  Style="cursor: pointer; min-height: 80px; 
+                                         border-color: var(--mud-palette-lines-inputs);"
+                                  @onclick=@EnableDescriptionEditing>
+
+                            @if (string.IsNullOrWhiteSpace(_model.Description))
+                            {
+                                <MudText Typo=@Typo.body2 
+                                         Color=@Color.Secondary 
+                                         Style="font-style: italic;">
+                                    Add a more detailed description (Click to format text)...
+                                </MudText>
+                            }
+                            else
+                            {
+                                <MudText Typo=@Typo.body2>
+                                    @((MarkupString)_model.Description)
+                                </MudText>
+                            }
+                        </MudPaper>
+                    }
+                    else
+                    {
+                        <Editor ApiKey="ril1s7tjuhstzun5vtt9z4mxgpe0fpoxjohfi3vumix7zf2v"
+                                @bind-Value=@_model.Description
+                                Field=@(() => _model.Description)
+                                Conf="@_editorConfig" />
+
+                        <MudStack Row=@true 
+                                  Justify=@Justify.FlexEnd 
+                                  Class="mt-1">
+
+                            <MudButton Variant=@Variant.Text 
+                                       Color=@Color.Secondary 
+                                       Size=@Size.Small
+                                       OnClick=@CancelDescriptionEditing>
+                                Close Editor
+                            </MudButton>
+                        </MudStack>
+                    }
+
+                </MudStack>
                 
                 <MudDivider Class="my-2" />
 
