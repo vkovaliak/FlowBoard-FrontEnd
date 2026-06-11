@@ -1,5 +1,6 @@
 <MudPaper Elevation="1" Class="pa-3 bg-white" 
-            Style="border-radius: 8px; position: relative;">
+          Style="border-radius: 8px; position: relative; cursor: pointer;"
+          @onclick=@(() => OnEdit.InvokeAsync(Card))>
 
     <MudStack Row=@true Justify=@Justify.SpaceBetween 
                 AlignItems=@AlignItems.Start
@@ -10,33 +11,43 @@
             @Card.Name
         </MudText>
 
-        <MudMenu Icon=@Icons.Material.Filled.MoreVert 
-            Size=@Size.Small
-            Dense=@true
-            AnchorOrigin=@Origin.BottomRight
-            TransformOrigin=@Origin.TopRight
-            Style="margin-top: -8px; margin-right: -8px;">
-        
-            <MudMenuItem Icon=@Icons.Material.Filled.Edit 
-                        OnClick=@(() => OnEdit.InvokeAsync(Card))>
-                Edit
-            </MudMenuItem>
-        
-            <MudMenuItem Icon=@Icons.Material.Filled.Delete
-                        IconColor=@Color.Error
-                        OnClick=@(() => OnDelete.InvokeAsync(Card))>
-                Delete
-            </MudMenuItem>
+        <div @onclick:stopPropagation="true">
 
-        </MudMenu>
+            <MudMenu Icon=@Icons.Material.Filled.MoreVert 
+                     Size=@Size.Small
+                     Dense=@true
+                     AnchorOrigin=@Origin.BottomRight
+                     TransformOrigin=@Origin.TopRight
+                     Style="margin-top: -8px; margin-right: -8px;">
+                
+                <MudMenuItem Icon=@Icons.Material.Filled.OpenInFull 
+                            OnClick=@(() => OnEdit.InvokeAsync(Card))>
+                    Open
+                </MudMenuItem>
+            
+                <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                            IconColor=@Color.Error
+                            OnClick=@(() => OnDelete.InvokeAsync(Card))>
+                    Delete
+                </MudMenuItem>
+
+            </MudMenu>
+            
+        </div>
 
     </MudStack>
 
     @if (!string.IsNullOrWhiteSpace(Card.Description))
     {
-        <MudText Typo=@Typo.caption Color=@Color.Secondary
-                    Class="text-truncate d-block mt-1">
-            @Card.Description
-        </MudText>
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center 
+                  Spacing="1" 
+                  Class="mt-2 text-muted">
+
+            <MudIcon Icon=@Icons.Material.Filled.Notes 
+                     Size=@Size.Small 
+                     Style="color: #42526e;" />
+
+        </MudStack>
     }
 </MudPaper>
