@@ -36,6 +36,82 @@
                             Variant=@Variant.Outlined
                             Lines="3" 
                             For=@(() => _model.Description) />
+                
+                <MudDivider Class="my-2" />
+
+                <MudText Typo=@Typo.subtitle1 
+                         Class="font-weight-bold">
+                    Comments
+                </MudText>
+
+                <MudStack Row=@true 
+                          AlignItems=@AlignItems.Center 
+                          Spacing="2">
+
+                    <MudTextField @bind-Value=@_newCommentMessage
+                                  Label="Write a message..."
+                                  Variant=@Variant.Outlined
+                                  Margin=@Margin.Dense
+                                  Lines="2" />
+
+                    <MudButton Variant=@Variant.Filled
+                               Color=@Color.Primary
+                               OnClick=@SendCommentAsync
+                               Disabled=@string.IsNullOrWhiteSpace(_newCommentMessage)>
+                        Add
+                    </MudButton>
+
+                </MudStack>
+
+                <MudStack Spacing="2" 
+                          Style="max-height: 200px; overflow-y: auto;" 
+                          Class="mt-2">
+
+                    @if (_isLoadingComments)
+                    {
+                        <MudProgressCircular Color=@Color.Primary 
+                                             Indeterminate=@true 
+                                             Size=@Size.Small />
+                    }
+                    else if (!_comments.Any())
+                    {
+                        <MudText Typo=@Typo.body2 
+                                 Color=@Color.Secondary>
+                            No comments yet.
+                        </MudText>
+                    }
+                    else
+                    {
+                        @foreach (var comment in _comments)
+                        {
+                            <MudPaper Class="pa-2 bg-light" 
+                                      Outlined=@true>
+
+                                <MudStack Row=@true 
+                                          Justify=@Justify.SpaceBetween>
+
+                                    <MudText Typo=@Typo.caption 
+                                             Class="font-weight-bold">
+                                        @comment.Email
+                                    </MudText>
+
+                                    <MudText Typo=@Typo.caption 
+                                             Color=@Color.Secondary>
+                                        @comment.CreatedAt.ToString("g")
+                                    </MudText>
+
+                                </MudStack>
+
+                                <MudText Typo=@Typo.body2 
+                                         Class="mt-1">
+                                    @comment.Message
+                                </MudText>
+                                
+                            </MudPaper>
+                        }
+                    }
+                </MudStack>
+
             </MudStack>
         
         </EditForm>

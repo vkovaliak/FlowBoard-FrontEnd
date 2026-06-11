@@ -92,6 +92,7 @@ public partial class TaskList
     {
         var parameters = new DialogParameters<EditCardDialog>
         {
+            { x => x.CardId, card.Id },
             { x => x.CurrentName, card.Name },
             { x => x.CurrentDescription, card.Description }
         };

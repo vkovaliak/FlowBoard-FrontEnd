@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<ICardService, CardService>();
+        services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
@@ -56,6 +57,7 @@ public static class ServiceCollectionExtensions
         
         AddAuthenticatedRefitClient<IBoardApi>();
         AddAuthenticatedRefitClient<ICardApi>();
+        AddAuthenticatedRefitClient<ICommentApi>();
         AddAuthenticatedRefitClient<IListApi>();
 
         return services;
