@@ -7,7 +7,7 @@ public static class HubRoutes
 
 public static class HubMethods
 {
-    public const string ReceiveNewComment = "ReceiveNewComment";
+    public const string CommentUpdated = "CommentUpdated";
 }
 
 public static class HubClientMethods

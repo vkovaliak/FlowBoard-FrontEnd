@@ -10,5 +10,5 @@ public interface ICommentHubService
 
     Task LeaveCardCommentsAsync(Guid cardId);
 
-    event Action<Guid> OnCommentCreated;
+    event Action<Guid> OnCommentUpdated;
 }

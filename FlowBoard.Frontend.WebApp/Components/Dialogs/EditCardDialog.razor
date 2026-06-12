@@ -132,28 +132,87 @@
                     {
                         @foreach (var comment in _comments)
                         {
-                            <MudPaper Class="pa-2 bg-light" 
+                            <MudPaper Class="pa-3 my-1 bg-light" 
                                       Outlined=@true>
 
                                 <MudStack Row=@true 
-                                          Justify=@Justify.SpaceBetween>
+                                          Justify=@Justify.SpaceBetween 
+                                          AlignItems=@AlignItems.Center>
 
-                                    <MudText Typo=@Typo.caption 
-                                             Class="font-weight-bold">
-                                        @comment.Email
-                                    </MudText>
+                                    <MudStack Row=@true 
+                                              Spacing="2" 
+                                              AlignItems=@AlignItems.Center>
 
-                                    <MudText Typo=@Typo.caption 
-                                             Color=@Color.Secondary>
-                                        @comment.CreatedAt.ToString("g")
-                                    </MudText>
+                                        <MudText Typo=@Typo.caption 
+                                                 Class="font-weight-bold">
+                                            @comment.Email
+                                        </MudText>
+
+                                        <MudText Typo=@Typo.caption 
+                                                 Color=@Color.Secondary>
+                                            @comment.CreatedAt.ToString("g")
+                                        </MudText>
+
+                                    </MudStack>
+
+                                    <MudStack Row=@true Spacing="1">
+
+                                        @if (_editingCommentId != comment.Id)
+                                        {
+                                            <MudIconButton Icon=@Icons.Material.Filled.Edit 
+                                                           Size=@Size.Small 
+                                                           Color=@Color.Default
+                                                           OnClick=@(() => StartEditComment(comment)) />
+
+                                            <MudIconButton Icon=@Icons.Material.Filled.Delete
+                                                           Size=@Size.Small 
+                                                           Color=@Color.Error
+                                                           OnClick=@(() => DeleteCommentAsync(comment.Id)) />
+                                        }
+                                    </MudStack>
 
                                 </MudStack>
 
-                                <MudText Typo=@Typo.body2 
-                                         Class="mt-1">
-                                    @comment.Message
-                                </MudText>
+                                @if (_editingCommentId == comment.Id)
+                                {
+                                    <MudStack Class="mt-2" Spacing="2">
+
+                                        <MudTextField @bind-Value=@_editingCommentMessage
+                                                    Variant=@Variant.Outlined
+                                                    Margin=@Margin.Dense
+                                                    Lines="2" />
+
+                                        <MudStack Row=@true 
+                                                  Justify=@Justify.FlexEnd 
+                                                  Spacing="2">
+
+                                            <MudButton Size=@Size.Small
+                                                       Variant=@Variant.Text
+                                                       Color=@Color.Secondary
+                                                       OnClick=@CancelEditComment>
+                                                Cancel
+                                            </MudButton>
+
+                                            <MudButton Size=@Size.Small
+                                                    Variant=@Variant.Filled
+                                                    Color=@Color.Primary
+                                                    Disabled=@string.IsNullOrWhiteSpace(_editingCommentMessage)
+                                                    OnClick=@SaveCommentUpdateAsync>
+                                                Save
+                                            </MudButton>
+
+                                        </MudStack>
+
+                                    </MudStack>
+                                }
+                                else
+                                {
+                                    <MudText Typo=@Typo.body2 
+                                             Class="mt-1" 
+                                             Style="white-space: pre-wrap;">
+                                        @comment.Message
+                                    </MudText>
+                                }
                                 
                             </MudPaper>
                         }

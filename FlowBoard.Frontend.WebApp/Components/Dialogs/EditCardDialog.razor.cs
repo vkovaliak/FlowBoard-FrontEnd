@@ -36,6 +36,9 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
     private bool _isEditingDescription = false;
     private string _originalDescription = string.Empty;
 
+    private Guid? _editingCommentId = null;
+    private string _editingCommentMessage = string.Empty;
+
     private void EnableDescriptionEditing()
     {
         _originalDescription = _model.Description ?? string.Empty;
@@ -54,7 +57,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
         await LoadCommentsAsync();
 
-        CommentHub.OnCommentCreated += HandleNewComment;
+        CommentHub.OnCommentUpdated += HandleNewComment;
 
         await CommentHub.ConnectAsync();
         await CommentHub.JoinCardCommentsAsync(CardId);
@@ -114,8 +117,52 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        CommentHub.OnCommentCreated -= HandleNewComment;
+        CommentHub.OnCommentUpdated -= HandleNewComment;
 
         await CommentHub.LeaveCardCommentsAsync(CardId);
+    }
+
+    private void StartEditComment(CommentDto comment)
+    {
+        _editingCommentId = comment.Id;
+        _editingCommentMessage = comment.Message;
+    }
+
+    private void CancelEditComment()
+    {
+        _editingCommentId = null;
+        _editingCommentMessage = string.Empty;
+    }
+
+    private async Task SaveCommentUpdateAsync()
+    {
+        if (_editingCommentId == null || 
+            string.IsNullOrWhiteSpace(_editingCommentMessage))
+        {
+            return;
+        }
+
+        var dto = new UpdateCommentDto(_editingCommentMessage);
+        
+        var success = await CommentService.UpdateAsync(
+            CardId, _editingCommentId.Value, dto);
+
+        if (success)
+        {
+            CancelEditComment();
+        }
+    }
+
+    private async Task DeleteCommentAsync(Guid commentId)
+    {
+        var success = await CommentService.DeleteAsync(CardId, commentId);
+
+        if (success)
+        {
+            if (_editingCommentId == commentId)
+            {
+                CancelEditComment();
+            }
+        }
     }
 }
