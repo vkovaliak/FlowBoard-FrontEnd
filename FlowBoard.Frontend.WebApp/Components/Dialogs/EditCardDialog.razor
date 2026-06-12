@@ -95,19 +95,48 @@
                 <MudStack Row=@true 
                           AlignItems=@AlignItems.Center 
                           Spacing="2">
+                    @if (!_isWritingComment)
+                    {
+                        <MudPaper Outlined=@true
+                                Class="pa-3"
+                                Style="cursor:pointer;"
+                                @onclick=@(()=>_isWritingComment = true) >
 
-                    <MudTextField @bind-Value=@_newCommentMessage
-                                  Label="Write a message..."
-                                  Variant=@Variant.Outlined
-                                  Margin=@Margin.Dense
-                                  Lines="2" />
+                            <MudText Color=@Color.Secondary>
+                                Write a comment...
+                            </MudText>
 
-                    <MudButton Variant=@Variant.Filled
-                               Color=@Color.Primary
-                               OnClick=@SendCommentAsync
-                               Disabled=@string.IsNullOrWhiteSpace(_newCommentMessage)>
-                        Add
-                    </MudButton>
+                        </MudPaper>
+                    }
+                    else
+                    {
+                        <MudStack Spacing="2">
+
+                        <Editor ApiKey="ril1s7tjuhstzun5vtt9z4mxgpe0fpoxjohfi3vumix7zf2v"
+                                @bind-Value=@_newCommentMessage
+                                Field=@(() => _newCommentMessage)
+                                Conf=@_editorConfig />
+
+                            <MudStack Row=@true
+                                      Justify=@Justify.FlexEnd
+                                      Class="mt-2">
+
+                                <MudButton Variant=@Variant.Text
+                                           OnClick=@CancelNewComment>
+                                    Cancel
+                                </MudButton>
+
+                                <MudButton Variant=@Variant.Filled
+                                           Color=@Color.Primary
+                                           Disabled=@string.IsNullOrWhiteSpace(_newCommentMessage)
+                                           OnClick=@SendCommentAsync>
+                                    Add
+                                </MudButton>
+
+                            </MudStack>
+
+                        </MudStack>
+                    }
 
                 </MudStack>
 
@@ -177,10 +206,10 @@
                                 {
                                     <MudStack Class="mt-2" Spacing="2">
 
-                                        <MudTextField @bind-Value=@_editingCommentMessage
-                                                    Variant=@Variant.Outlined
-                                                    Margin=@Margin.Dense
-                                                    Lines="2" />
+                                        <Editor ApiKey="ril1s7tjuhstzun5vtt9z4mxgpe0fpoxjohfi3vumix7zf2v"
+                                            @bind-Value=@_editingCommentMessage
+                                            Field=@(() => _newCommentMessage)
+                                            Conf=@_editorConfig />
 
                                         <MudStack Row=@true 
                                                   Justify=@Justify.FlexEnd 
@@ -210,7 +239,7 @@
                                     <MudText Typo=@Typo.body2 
                                              Class="mt-1" 
                                              Style="white-space: pre-wrap;">
-                                        @comment.Message
+                                        @((MarkupString)comment.Message)
                                     </MudText>
                                 }
                                 

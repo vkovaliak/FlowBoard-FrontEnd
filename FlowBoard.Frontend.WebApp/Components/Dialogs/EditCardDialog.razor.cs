@@ -29,13 +29,15 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     private CreateCardModel _model = new();
 
-    private IEnumerable<CommentDto> _comments = [];
-    private string _newCommentMessage = string.Empty;
-    private bool _isLoadingComments = false;
-
+    
     private bool _isEditingDescription = false;
     private string _originalDescription = string.Empty;
 
+    private IEnumerable<CommentDto> _comments = [];
+
+    private string _newCommentMessage = string.Empty;
+    private bool _isLoadingComments = false;        
+    private bool _isWritingComment = false;
     private Guid? _editingCommentId = null;
     private string _editingCommentMessage = string.Empty;
 
@@ -102,10 +104,17 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     private readonly Dictionary<string, object> _editorConfig = new()
     {
-        { "height", 180 },
+        { "height", 100 },
         { "menubar", false },
-        { "plugins", "lists link" },
-        { "toolbar", "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist" }
+        { "statusbar", false },
+        { "plugins", "lists link autoresize" },
+        { "toolbar", 
+            "undo redo | " +
+            "blocks | " +
+            "bold italic underline | " +
+            "bullist numlist | " +
+            "alignleft aligncenter alignright |" +
+            "link" }
     };
 
     private async void HandleNewComment(Guid commentId)
@@ -120,6 +129,12 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
         CommentHub.OnCommentUpdated -= HandleNewComment;
 
         await CommentHub.LeaveCardCommentsAsync(CardId);
+    }
+
+    private void CancelNewComment()
+    {
+        _newCommentMessage = string.Empty;
+        _isWritingComment = false;
     }
 
     private void StartEditComment(CommentDto comment)
@@ -150,6 +165,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
         if (success)
         {
             CancelEditComment();
+            _isWritingComment = false;
         }
     }
 
