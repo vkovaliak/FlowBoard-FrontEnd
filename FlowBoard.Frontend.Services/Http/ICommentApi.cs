@@ -10,4 +10,10 @@ public interface ICommentApi
 
     [Post("/api/comment/card/{cardId}")]
     Task<ApiResponse<Guid>> CreateAsync(Guid cardId, [Body] CreateCommentDto dto);
+
+    [Put("/api/comment/card/{cardId}/comment/{commentId}")]
+    Task<ApiResponse<bool>> UpdateAsync(Guid cardId, Guid commentId, [Body] UpdateCommentDto dto);
+
+    [Delete("/api/comment/card/{cardId}/comment/{commentId}")]
+    Task<ApiResponse<bool>> DeleteAsync(Guid cardId, Guid commentId);
 }
