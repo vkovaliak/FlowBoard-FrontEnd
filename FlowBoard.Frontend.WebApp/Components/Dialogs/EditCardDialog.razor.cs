@@ -3,6 +3,7 @@ using FlowBoard.Frontend.Domain.DTOs.Comments;
 using FlowBoard.Frontend.Domain.Models.Cards;
 using FlowBoard.Frontend.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs;
@@ -17,6 +18,8 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     [Inject]
     public ICommentHubService CommentHub { get; set; } = default!;
+    [Inject] 
+    public IAttachmentService AttachmentService { get; set; } = default!;
 
     [Parameter] 
     public Guid CardId { get; set; }
@@ -107,7 +110,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
         { "height", 100 },
         { "menubar", false },
         { "statusbar", false },
-        { "plugins", "lists link autoresize" },
+        { "plugins", "lists link autoresize image" },
         { "toolbar", 
             "undo redo | " +
             "blocks | " +
@@ -180,5 +183,38 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
                 CancelEditComment();
             }
         }
+    }
+
+    private async Task UploadAttachmentAsync(IBrowserFile file)
+    {
+
+        await using var stream = file.OpenReadStream(50 * 1024 * 1024);
+
+        var uploadedUrl = await AttachmentService.UploadAttachmentAsync(
+            stream,
+            file.Name,
+            file.ContentType);
+
+        if (file.ContentType.StartsWith("image/"))
+        {
+            _model.Description +=
+                $"<p><img src=\"{uploadedUrl}\" style=\"max-width:100%; border-radius:8px;\" /></p>";
+        }
+        else
+        {
+            _model.Description +=
+                $"<p><a href=\"{uploadedUrl}\" target=\"_blank\">{file.Name}</a></p>";
+        }
+    }
+        
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            await UploadAttachmentAsync(file);
+        }
+
+        StateHasChanged();
     }
 }
