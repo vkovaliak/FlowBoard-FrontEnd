@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<ICardService, CardService>();
@@ -59,6 +60,7 @@ public static class ServiceCollectionExtensions
                 });
         }
         
+        AddAuthenticatedRefitClient<IAttachmentApi>();
         AddAuthenticatedRefitClient<IBoardApi>();
         AddAuthenticatedRefitClient<ICardApi>();
         AddAuthenticatedRefitClient<ICommentApi>();

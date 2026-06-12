@@ -41,6 +41,12 @@
 
                     @if (!_isEditingDescription)
                     {
+                        <MudPaper Class="pa-2 mb-2" Outlined=@true>
+
+                            <InputFile OnChange=@HandleFileSelected multiple />
+
+                        </MudPaper>
+
                         <MudPaper Outlined=@true
                                   Class="pa-3" 
                                   Style="cursor: pointer; min-height: 80px; 
