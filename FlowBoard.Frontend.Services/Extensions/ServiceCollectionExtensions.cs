@@ -5,7 +5,6 @@ using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Services.Implementations;
 using FlowBoard.Frontend.Services.Http;
 using FlowBoard.Frontend.Services.Handlers;
-using Microsoft.Extensions.Options;
 using FlowBoard.Frontend.Services.Configurations;
 using Microsoft.Extensions.Configuration;
 using FlowBoard.Frontend.Services.Providers;
@@ -23,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ICommentHubService, CommentHubService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
@@ -35,9 +35,13 @@ public static class ServiceCollectionExtensions
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
 
+        services.Configure<ApiOptions>(
+            configuration.GetSection(ApiOptions.SectionName));
+
         var apiOptions = configuration
             .GetSection(ApiOptions.SectionName)
-            .Get<ApiOptions>() ?? throw new Exception("ApiOptions missing in configuration");
+            .Get<ApiOptions>() ?? throw new Exception(
+                "ApiOptions missing in configuration");
 
         services.AddRefitClient<IAuthApi>()
             .ConfigureHttpClient(client =>

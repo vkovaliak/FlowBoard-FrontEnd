@@ -7,13 +7,16 @@ using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs;
 
-public partial class EditCardDialog : ComponentBase
+public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 {
     [CascadingParameter] 
     public IMudDialogInstance MudDialog { get; set; } = default!;
 
     [Inject] 
     public ICommentService CommentService { get; set; } = default!;
+
+    [Inject]
+    public ICommentHubService CommentHub { get; set; } = default!;
 
     [Parameter] 
     public Guid CardId { get; set; }
@@ -50,6 +53,11 @@ public partial class EditCardDialog : ComponentBase
         _model.Description = CurrentDescription;
 
         await LoadCommentsAsync();
+
+        CommentHub.OnCommentCreated += HandleNewComment;
+
+        await CommentHub.ConnectAsync();
+        await CommentHub.JoinCardCommentsAsync(CardId);
     }
 
     private void Cancel() 
@@ -86,7 +94,6 @@ public partial class EditCardDialog : ComponentBase
         if (success)
         {
             _newCommentMessage = string.Empty;
-            await LoadCommentsAsync();
         }
     }
 
@@ -97,4 +104,18 @@ public partial class EditCardDialog : ComponentBase
         { "plugins", "lists link" },
         { "toolbar", "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist" }
     };
+
+    private async void HandleNewComment(Guid commentId)
+    {
+        var comments = await CommentService.GetCommentsAsync(CardId); 
+        _comments = comments; 
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        CommentHub.OnCommentCreated -= HandleNewComment;
+
+        await CommentHub.LeaveCardCommentsAsync(CardId);
+    }
 }
