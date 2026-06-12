@@ -57,7 +57,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
         await LoadCommentsAsync();
 
-        CommentHub.OnCommentCreated += HandleNewComment;
+        CommentHub.OnCommentUpdated += HandleNewComment;
 
         await CommentHub.ConnectAsync();
         await CommentHub.JoinCardCommentsAsync(CardId);
@@ -117,7 +117,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        CommentHub.OnCommentCreated -= HandleNewComment;
+        CommentHub.OnCommentUpdated -= HandleNewComment;
 
         await CommentHub.LeaveCardCommentsAsync(CardId);
     }

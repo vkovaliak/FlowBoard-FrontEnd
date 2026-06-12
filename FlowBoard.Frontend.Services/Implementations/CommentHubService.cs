@@ -10,7 +10,7 @@ public class CommentHubService : ICommentHubService
 {
     private readonly HubConnection _connection;
 
-    public event Action<Guid>? OnCommentCreated;
+    public event Action<Guid>? OnCommentUpdated;
 
     public CommentHubService(
         IOptions<ApiOptions> apiOptions)
@@ -21,10 +21,10 @@ public class CommentHubService : ICommentHubService
             .Build();
 
          _connection.On<Guid>(
-            HubMethods.ReceiveNewComment,
+            HubMethods.CommentUpdated,
             commentId =>
             {
-                OnCommentCreated?.Invoke(commentId);
+                OnCommentUpdated?.Invoke(commentId);
             });
     }
 
