@@ -1,7 +1,5 @@
 @page "/boards/{Id:guid}"
-@using FlowBoard.Frontend.Domain.DTOs.Boards
-@using FlowBoard.Frontend.WebApp.Components
-@using FlowBoard.Frontend.WebApp.Components.BoardDetails
+@namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
 
 <MudContainer MaxWidth=@MaxWidth.ExtraLarge
               Class="mt-6">
@@ -48,7 +46,7 @@
                 }
                 <div class="flex-shrink-0" style="width: 280px;">
                     <CreateListButtons BoardId=@_board.Id 
-                                    OnListCreate=@CreateListAsync />
+                                       OnListCreate=@CreateListAsync />
                 </div>
             </div>
             

@@ -1,0 +1,34 @@
+<MudPaper Elevation="3"
+          Class="pa-3 d-flex flex-column"
+          Style="flex: 1; min-width: 23%;
+                 background-color: #f4f5f7;
+                 border-radius: 8px;">
+
+    <TaskListHeader ListName=@List.Name
+                    CardsCount=@(List.Cards?.Count ?? 0)
+                    OnAddCardClick=@OpenCreateCardForm
+                    OnDeleteClick=@DeleteListClickAsync
+                    OnRename=@RenameListAsync />
+
+    <MudStack Spacing="2"
+              Class="flex-grow-1 cards-drop-zone"
+              Style="overflow-y: auto; max-height: 60vh; min-height: 40px;"
+              data-list-id=@List.Id>
+
+        @if (List.Cards != null && List.Cards.Any())
+        {
+            @foreach (var card in List.Cards.OrderBy(c => c.Position))
+            {
+                <div data-card-id="@card.Id" style="width: 100%;">
+                    <CardItem Card=@card
+                              OnDelete=@DeleteCardClickAsync
+                              OnEdit=@OpenCardDetailsAsync />
+                </div>
+            }
+        }
+    </MudStack>
+
+    <CreateCardForm @ref=@_createCardForm
+                    OnCreate=@CreateCardAsync />
+                    
+</MudPaper>

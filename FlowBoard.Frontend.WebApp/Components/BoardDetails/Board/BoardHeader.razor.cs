@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace FlowBoard.Frontend.WebApp.Components.BoardDetails;
+namespace FlowBoard.Frontend.WebApp.Components.BoardDetails.Board;
 
 public partial class BoardHeader
 {

@@ -1,0 +1,42 @@
+@if (!_isCreating)
+{
+    <MudButton StartIcon=@Icons.Material.Filled.Add
+               Color=@Color.Default
+               FullWidth=@true
+               Class="justify-start pa-2"
+               Style="text-transform: none; color: #5e6c84;"
+               OnClick=@Open>
+        Add a card
+    </MudButton>
+}
+else
+{
+    <EditForm Model="@_form" OnValidSubmit=@SubmitAsync>
+        <DataAnnotationsValidator />
+
+        <MudStack Spacing="2" Class="pa-1">
+            <MudTextField @bind-Value=@_form.Name
+                          Placeholder="Enter card title..."
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          Autofocus=@true
+                          Class="bg-white"
+                          For=@(() => _form.Name) />
+
+            <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="2">
+                <MudButton Variant=@Variant.Filled
+                           Color=@Color.Primary
+                           Size=@Size.Small
+                           Style="text-transform: none;"
+                           ButtonType=@ButtonType.Submit>
+                    Add card
+                </MudButton>
+
+                <MudIconButton Icon=@Icons.Material.Filled.Close
+                               Color=@Color.Default
+                               Size=@Size.Small
+                               OnClick=@Close />
+            </MudStack>
+        </MudStack>
+    </EditForm>
+}
