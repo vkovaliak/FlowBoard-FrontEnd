@@ -1,0 +1,69 @@
+@using FlowBoard.Frontend.Domain.DTOs.Comments
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+
+<MudPaper Class="pa-3 my-1 bg-light" Outlined=@true>
+
+    <MudStack Row=@true Justify=@Justify.SpaceBetween 
+              AlignItems=@AlignItems.Center>
+
+        <MudStack Row=@true Spacing="2" 
+                  AlignItems=@AlignItems.Center>
+
+            <MudText Typo=@Typo.caption 
+                     Class="font-weight-bold">
+                @Comment.Email
+            </MudText>
+
+            <MudText Typo=@Typo.caption Color=@Color.Secondary>
+                @Comment.CreatedAt.ToString("g")
+            </MudText>
+
+        </MudStack>
+
+        @if (!_isEditing)
+        {
+            <MudStack Row=@true Spacing="1">
+
+                <MudIconButton Icon=@Icons.Material.Filled.Edit
+                               Size=@Size.Small Color=@Color.Default
+                               OnClick=@StartEdit />
+
+                <MudIconButton Icon=@Icons.Material.Filled.Delete
+                               Size=@Size.Small Color=@Color.Error
+                               OnClick=@(() => OnDelete.InvokeAsync(Comment.Id)) />
+            </MudStack>
+        }
+    </MudStack>
+
+    @if (_isEditing)
+    {
+        <MudStack Class="mt-2" Spacing="2">
+
+            <RichTextEditor @bind-Value=@_editMessage />
+
+            <MudStack Row=@true Justify=@Justify.FlexEnd Spacing="2">
+                
+                <MudButton Size=@Size.Small Variant=@Variant.Text
+                           Color=@Color.Secondary OnClick=@CancelEdit>
+                    Cancel
+                </MudButton>
+
+                <MudButton Size=@Size.Small Variant=@Variant.Filled
+                           Color=@Color.Primary
+                           Disabled=@string.IsNullOrWhiteSpace(_editMessage)
+                           OnClick=@SaveAsync>
+                    Save
+                </MudButton>
+
+            </MudStack>
+
+        </MudStack>
+    }
+    else
+    {
+        <MudText Typo=@Typo.body2 Class="mt-1" 
+                 Style="white-space: pre-wrap;">
+            @((MarkupString)Comment.Message)
+        </MudText>
+    }
+</MudPaper>

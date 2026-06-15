@@ -1,0 +1,34 @@
+<MudStack Spacing="2">
+
+    <MudText Typo=@Typo.subtitle1 Class="font-weight-bold">
+        Comments
+    </MudText>
+
+    <CommentComposer OnSubmit=@CreateCommentAsync />
+
+    <MudStack Spacing="2" Style="overflow-y: auto;" Class="mt-2">
+
+        @if (_isLoading)
+        {
+            <MudProgressCircular Color=@Color.Primary 
+                                 Indeterminate=@true 
+                                 Size=@Size.Small />
+        }
+        else if (!_comments.Any())
+        {
+            <MudText Typo=@Typo.body2 Color=@Color.Secondary>
+                No comments yet.
+            </MudText>
+        }
+        else
+        {
+            @foreach (var comment in _comments)
+            {
+                <CommentItem Comment=@comment
+                             OnUpdate=@UpdateCommentAsync
+                             OnDelete=@DeleteCommentAsync />
+            }
+        }
+    </MudStack>
+    
+</MudStack>

@@ -1,0 +1,40 @@
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+
+@if (!_isWriting)
+{
+    <MudPaper Outlined=@true 
+              Class="pa-3" 
+              Style="cursor:pointer;"
+              @onclick=@(() => _isWriting = true)>
+
+        <MudText Color=@Color.Secondary>
+            Write a comment...
+        </MudText>
+
+    </MudPaper>
+}
+else
+{
+    <MudStack Spacing="2">
+
+        <RichTextEditor @bind-Value=@_message />
+
+        <MudStack Row=@true Justify=@Justify.FlexEnd 
+                  Class="mt-2">
+
+            <MudButton Variant=@Variant.Text 
+                       OnClick=@Cancel>
+                Cancel
+            </MudButton>
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       Disabled=@string.IsNullOrWhiteSpace(_message)
+                       OnClick=@SubmitAsync>
+                Add
+            </MudButton>
+
+        </MudStack>
+        
+    </MudStack>
+}

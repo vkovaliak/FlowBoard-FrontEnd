@@ -128,3 +128,12 @@ code {
     height: 60px;
     box-shadow: none !important;
 }
+
+.card-side-panel {
+    height: 100vh;
+    margin: 0;
+    margin-left: auto;  
+    max-height: 100vh;
+    border-radius: 0;
+    width: 400px;
+}
