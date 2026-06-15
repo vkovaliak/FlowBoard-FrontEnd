@@ -1,48 +1,53 @@
-@using FlowBoard.Frontend.Domain.DTOs.Attachments
-
-@if (Attachments.Any())
+@if (Attachments is not null && Attachments.Any())
 {
-    <MudStack Spacing="1" 
-              Class="mt-2">
+    <MudStack Spacing="1" Class="mt-2">
 
         @foreach (var att in Attachments)
         {
-            @if (IsImage(att.FileName))
-            {
-                <MudImage Src=@att.BlobUrl 
-                          Alt=@att.FileName 
-                          Style="max-width: 100%; 
-                                 border-radius: 8px; 
-                                 cursor: pointer;"
-                          @onclick=@(() => OpenInNewTab(att.BlobUrl)) />
-            }
-            else
-            {
-                <MudPaper Outlined=@true 
-                          Class="pa-2" 
-                          Style="cursor: pointer;"
-                          @onclick=@(() => OpenInNewTab(att.BlobUrl))>
+            <MudPaper Outlined=@true Class="pa-2">
+                
+                <MudStack Row=@true
+                          AlignItems=@AlignItems.Center
+                          Justify=@Justify.SpaceBetween>
 
-                    <MudStack Row=@true 
-                              AlignItems=@AlignItems.Center 
-                              Spacing="2">
+                    <MudStack Row=@true
+                              AlignItems=@AlignItems.Center
+                              Spacing="2"
+                              Style="cursor: pointer; overflow: hidden;"
+                              @onclick=@(() => OpenInNewTab(att.BlobUrl))>
 
-                        <MudIcon Icon=@Icons.Material.Filled.InsertDriveFile 
-                                 Color=@Color.Primary 
-                                 Size=@Size.Small />
+                        @if (IsImage(att.FileName))
+                        {
+                            <MudImage Src=@att.BlobUrl
+                                      Alt=@att.FileName
+                                      Width="40"
+                                      Height="40"
+                                      ObjectFit=@ObjectFit.Cover
+                                      Style="border-radius: 4px; flex-shrink: 0;" />
+                        }
+                        else
+                        {
+                            <MudIcon Icon=@Icons.Material.Filled.InsertDriveFile
+                                     Color=@Color.Primary
+                                     Size=@Size.Medium
+                                     Style="flex-shrink: 0;" />
+                        }
 
-                        <MudText Typo=@Typo.body2>
+                        <MudText Typo=@Typo.body2
+                                 Style="overflow: hidden; text-overflow: ellipsis;
+                                        white-space: nowrap;">
                             @att.FileName
                         </MudText>
-
-                        <MudIcon Icon=@Icons.Material.Filled.Download 
-                                 Size=@Size.Small 
-                                 Color=@Color.Default />
-
                     </MudStack>
-                    
-                </MudPaper>
-            }
+
+                    <MudIconButton Icon=@Icons.Material.Filled.Delete
+                                   Size=@Size.Small
+                                   Color=@Color.Error
+                                   title="Delete attachment"
+                                   OnClick=@(() => OnDelete.InvokeAsync(att.Id)) />
+
+                </MudStack>
+            </MudPaper>
         }
     </MudStack>
 }

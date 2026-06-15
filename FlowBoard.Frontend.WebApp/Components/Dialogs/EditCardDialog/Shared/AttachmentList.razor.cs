@@ -10,6 +10,8 @@ public partial class AttachmentList
 
     [Parameter] public IReadOnlyList<AttachmentResponseDto> Attachments { get; set; } = [];
 
+    [Parameter] public EventCallback<Guid> OnDelete { get; set; }
+
     private static bool IsImage(string fileName)
     {
         var ext = Path.GetExtension(fileName).ToLowerInvariant();

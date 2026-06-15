@@ -45,7 +45,8 @@
                                        @bind-Description=@_model.Description 
                                        OnAttachmentUploaded=@HandleNewAttachment/>
                 
-                <AttachmentList Attachments=@Attachments />
+                <AttachmentList Attachments=@_attachments 
+                                OnDelete=@DeleteCardAttachmentAsync/>
 
                 <MudDivider Class="my-2" />
 

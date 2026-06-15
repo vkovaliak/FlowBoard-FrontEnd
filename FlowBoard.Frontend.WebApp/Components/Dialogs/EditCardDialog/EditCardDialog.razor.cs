@@ -17,19 +17,35 @@ public partial class EditCardDialog : ComponentBase
     [Parameter] public string? CurrentDescription { get; set; }
     [Parameter] public List<AttachmentResponseDto> Attachments { get; set; } = [];
 
+    private List<AttachmentResponseDto> _attachments = [];
     private CreateCardModel _model = new();
 
     protected override void OnInitialized()
     {
         _model.Name = CurrentName;
         _model.Description = CurrentDescription;
+
+        _attachments = Attachments.ToList();
     }
 
     private void HandleNewAttachment(AttachmentResponseDto newAttachment)
     {
-        Attachments.Add(newAttachment);
+        _attachments.Add(newAttachment);
         StateHasChanged();
     }
+
+    private async Task DeleteCardAttachmentAsync(Guid attachmentId)
+    {
+        var success = await AttachmentService.DeleteCardAttachmentAsync(
+            attachmentId);
+
+        if (success)
+        {
+            _attachments.RemoveAll(a => a.Id == attachmentId);
+            StateHasChanged();
+        }
+    }
+
 
     private void Cancel() => MudDialog.Cancel();
 

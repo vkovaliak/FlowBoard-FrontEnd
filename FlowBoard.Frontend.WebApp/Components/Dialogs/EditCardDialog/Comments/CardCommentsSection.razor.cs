@@ -8,6 +8,7 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 {
     [Inject] public ICommentService CommentService { get; set; } = default!;
     [Inject] public ICommentHubService CommentHub { get; set; } = default!;
+    [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
 
     [Parameter] public Guid CardId { get; set; }
 
@@ -54,5 +55,17 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
     {
         CommentHub.OnCommentUpdated -= HandleHubUpdate;
         await CommentHub.LeaveCardCommentsAsync(CardId);
+    }
+
+    private async Task DeleteCommentAttachmentAsync(Guid attachmentId)
+    {
+        var success = await AttachmentService.DeleteCommentAttachmentAsync(
+            attachmentId);
+
+        if (success)
+        {
+            _comments = await CommentService.GetCommentsAsync(CardId);
+            StateHasChanged();
+        }
     }
 }
