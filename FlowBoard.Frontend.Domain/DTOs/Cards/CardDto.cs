@@ -1,3 +1,5 @@
+using FlowBoard.Frontend.Domain.DTOs.Attachments;
+
 namespace FlowBoard.Frontend.Domain.DTOs.Cards;
 
 public record CardDto(
@@ -5,5 +7,6 @@ public record CardDto(
     Guid ListId,
     string Name,
     string? Description,
-    int Position
+    int Position,
+    List<AttachmentResponseDto> Attachments
 );

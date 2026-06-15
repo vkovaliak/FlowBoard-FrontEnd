@@ -2,39 +2,41 @@
 
 @if (!_isWriting)
 {
-    <MudPaper Outlined=@true 
-              Class="pa-3" 
+    <MudPaper Outlined=@true Class="pa-3" 
               Style="cursor:pointer;"
               @onclick=@(() => _isWriting = true)>
-
         <MudText Color=@Color.Secondary>
             Write a comment...
         </MudText>
-
     </MudPaper>
 }
 else
 {
     <MudStack Spacing="2">
-
         <RichTextEditor @bind-Value=@_message />
 
-        <MudStack Row=@true Justify=@Justify.FlexEnd 
+        <AttachmentUploader @ref=@_uploader />
+
+        <MudStack Row=@true 
+                  Justify=@Justify.FlexEnd 
                   Class="mt-2">
 
             <MudButton Variant=@Variant.Text 
-                       OnClick=@Cancel>
+                       OnClick=@Cancel Disabled=@_isSubmitting>
                 Cancel
             </MudButton>
-
             <MudButton Variant=@Variant.Filled
                        Color=@Color.Primary
-                       Disabled=@string.IsNullOrWhiteSpace(_message)
+                       Disabled=@(string.IsNullOrWhiteSpace(_message) || _isSubmitting)
                        OnClick=@SubmitAsync>
+                @if (_isSubmitting)
+                {
+                    <MudProgressCircular Size=@Size.Small 
+                                         Indeterminate=@true 
+                                         Class="mr-2" />
+                }
                 Add
             </MudButton>
-
         </MudStack>
-        
     </MudStack>
 }

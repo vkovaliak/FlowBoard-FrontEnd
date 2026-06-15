@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.DTOs.Attachments;
 using FlowBoard.Frontend.Services.Abstractions;
 using Refit;
 
@@ -12,13 +13,13 @@ public class AttachmentService : IAttachmentService
         _attachmentApi = attachmentApi;
     }
 
-    public async Task<string?> UploadAttachmentAsync(
-        Stream fileStream, string fileName, string contentType)
+    public async Task<AttachmentResponseDto?> UploadCardAttachmentAsync(
+        Guid cardId, Stream fileStream, string fileName, string contentType)
     {
-
         var streamPart = new StreamPart(fileStream, fileName, contentType);
 
-        var response = await _attachmentApi.UploadAsync(streamPart);
+        var response = await _attachmentApi.UploadTaskAttachmentAsync(
+            cardId, streamPart);
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
@@ -26,6 +27,21 @@ public class AttachmentService : IAttachmentService
         }
 
         return null;
+    }
 
+    public async Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
+        Guid commentId, Stream fileStream, string fileName, string contentType)
+    {
+        var streamPart = new StreamPart(fileStream, fileName, contentType);
+
+        var response = await _attachmentApi.UploadCommentAttachmentAsync(
+            commentId, streamPart);
+
+        if (response.IsSuccessStatusCode && response.Content != null)
+        {
+            return response.Content;
+        }
+
+        return null;
     }
 }

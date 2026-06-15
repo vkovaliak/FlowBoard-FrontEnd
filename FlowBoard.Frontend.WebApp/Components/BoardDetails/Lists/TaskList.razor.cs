@@ -51,7 +51,8 @@ public partial class TaskList
         {
             { x => x.CardId, card.Id },
             { x => x.CurrentName, card.Name },
-            { x => x.CurrentDescription, card.Description }
+            { x => x.CurrentDescription, card.Description },
+            { x => x.Attachments, card.Attachments }
         };
 
         var options = new DialogOptions

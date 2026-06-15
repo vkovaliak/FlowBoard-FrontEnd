@@ -1,0 +1,48 @@
+@using FlowBoard.Frontend.Domain.DTOs.Attachments
+
+@if (Attachments.Any())
+{
+    <MudStack Spacing="1" 
+              Class="mt-2">
+
+        @foreach (var att in Attachments)
+        {
+            @if (IsImage(att.FileName))
+            {
+                <MudImage Src=@att.BlobUrl 
+                          Alt=@att.FileName 
+                          Style="max-width: 100%; 
+                                 border-radius: 8px; 
+                                 cursor: pointer;"
+                          @onclick=@(() => OpenInNewTab(att.BlobUrl)) />
+            }
+            else
+            {
+                <MudPaper Outlined=@true 
+                          Class="pa-2" 
+                          Style="cursor: pointer;"
+                          @onclick=@(() => OpenInNewTab(att.BlobUrl))>
+
+                    <MudStack Row=@true 
+                              AlignItems=@AlignItems.Center 
+                              Spacing="2">
+
+                        <MudIcon Icon=@Icons.Material.Filled.InsertDriveFile 
+                                 Color=@Color.Primary 
+                                 Size=@Size.Small />
+
+                        <MudText Typo=@Typo.body2>
+                            @att.FileName
+                        </MudText>
+
+                        <MudIcon Icon=@Icons.Material.Filled.Download 
+                                 Size=@Size.Small 
+                                 Color=@Color.Default />
+
+                    </MudStack>
+                    
+                </MudPaper>
+            }
+        }
+    </MudStack>
+}
