@@ -17,23 +17,22 @@ public class CommentService : ICommentService
     {
         var response = await _commentApi.GetByCardIdAsync(cardId);
 
-        return response.IsSuccessStatusCode 
+        return response.IsSuccessStatusCode
             && response.Content != null ? response.Content : [];
     }
 
-    public async Task<bool> CreateAsync(Guid cardId, CreateCommentDto comment)
+    public async Task<Guid> CreateAsync(Guid cardId, CreateCommentDto comment)
     {
         var response = await _commentApi.CreateAsync(cardId, comment);
 
-        return response.IsSuccessStatusCode 
-            && response.Content != Guid.Empty;
+        return response.Content;
     }
 
     public async Task<bool> UpdateAsync(Guid cardId, Guid commentId, UpdateCommentDto comment)
     {
         var response = await _commentApi.UpdateAsync(cardId, commentId, comment);
 
-        return response.IsSuccessStatusCode 
+        return response.IsSuccessStatusCode
             && response.Content != false;
     }
 
@@ -41,7 +40,7 @@ public class CommentService : ICommentService
     {
         var response = await _commentApi.DeleteAsync(cardId, commentId);
 
-        return response.IsSuccessStatusCode 
+        return response.IsSuccessStatusCode
             && response.Content != false;
     }
 }

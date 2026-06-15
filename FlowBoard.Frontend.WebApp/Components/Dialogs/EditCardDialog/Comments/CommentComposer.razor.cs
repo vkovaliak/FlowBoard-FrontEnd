@@ -1,18 +1,26 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments;
 
 public partial class CommentComposer
 {
-    [Parameter] public EventCallback<string> OnSubmit { get; set; }
+    [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
 
-    private bool _isWriting;
+    [Parameter] public Func<string, Task<Guid?>> OnCreateComment { get; set; } = default!;
+
+    private AttachmentUploader _uploader = default!;
     private string _message = string.Empty;
+    private bool _isWriting;
+    private bool _isSubmitting;
 
     private void Cancel()
     {
         _message = string.Empty;
         _isWriting = false;
+        _uploader?.Clear();
     }
 
     private async Task SubmitAsync()
@@ -22,7 +30,24 @@ public partial class CommentComposer
             return;
         }
 
-        await OnSubmit.InvokeAsync(_message);
+        _isSubmitting = true;
+
+        var commentId = await OnCreateComment(_message);
+
+        if (commentId is not null && _uploader.HasPendingFiles)
+        {
+            await _uploader.UploadAllAsync(
+                file => UploadToCommentAsync(commentId.Value, file));
+        }
+
+        _isSubmitting = false;
         Cancel();
+    }
+
+    private async Task UploadToCommentAsync(Guid commentId, IBrowserFile file)
+    {
+        await using var stream = file.OpenReadStream(50 * 1024 * 1024);
+        await AttachmentService.UploadCommentAttachmentAsync(
+            commentId, stream, file.Name, file.ContentType);
     }
 }

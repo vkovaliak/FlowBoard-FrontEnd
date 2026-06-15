@@ -1,3 +1,5 @@
+using FlowBoard.Frontend.Domain.DTOs.Attachments;
+
 namespace FlowBoard.Frontend.Domain.DTOs.Comments;
 
 public record CommentDto(
@@ -6,5 +8,6 @@ public record CommentDto(
     string Message,
     DateTime CreatedAt,
     Guid CreatedBy,
-    string Email
+    string Email,
+    List<AttachmentResponseDto> Attachments
 );

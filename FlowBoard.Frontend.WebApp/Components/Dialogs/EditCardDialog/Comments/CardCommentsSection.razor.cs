@@ -36,8 +36,12 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task CreateCommentAsync(string message)
-        => await CommentService.CreateAsync(CardId, new CreateCommentDto(message));
+    private async Task<Guid?> CreateCommentAsync(string message)
+    {
+        var createdCommentId = await CommentService.CreateAsync(
+            CardId, new CreateCommentDto(message));
+        return createdCommentId;
+    }
 
     private async Task UpdateCommentAsync((Guid Id, string Message) args)
         => await CommentService.UpdateAsync(

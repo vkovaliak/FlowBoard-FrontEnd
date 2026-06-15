@@ -65,5 +65,7 @@
                  Style="white-space: pre-wrap;">
             @((MarkupString)Comment.Message)
         </MudText>
+
+         <AttachmentList Attachments=@Comment.Attachments />
     }
 </MudPaper>

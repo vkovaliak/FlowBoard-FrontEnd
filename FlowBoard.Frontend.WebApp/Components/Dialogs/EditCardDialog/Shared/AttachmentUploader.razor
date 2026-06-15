@@ -1,0 +1,66 @@
+@using FlowBoard.Frontend.Domain.DTOs.Attachments
+
+<MudStack Spacing="2">
+
+    <InputFile OnChange=@OnFilesSelected 
+               multiple id=@_inputId 
+               style="display: none;" />
+
+    <label for=@_inputId 
+           style="cursor: pointer; display: inline-flex;">
+
+        <MudIcon Icon=@Icons.Material.Filled.AttachFile
+                 Color=@Color.Default
+                 Size=@Size.Medium
+                 title="Attach files" />
+    </label>
+
+    @if (_pendingFiles.Any())
+    {
+        <MudStack Spacing="1">
+            @foreach (var file in _pendingFiles)
+            {
+                <MudPaper Outlined=@true 
+                          Class="pa-2">
+
+                    <MudStack Row=@true 
+                              AlignItems=@AlignItems.Center
+                              Justify=@Justify.SpaceBetween>
+
+                        <MudStack Row=@true 
+                                  AlignItems=@AlignItems.Center 
+                                  Spacing="2">
+
+                            <MudIcon Icon=@GetFileIcon(file.ContentType) 
+                                     Size=@Size.Small />
+
+                            <MudText Typo=@Typo.body2>
+                                @file.Name
+                            </MudText>
+
+                            <MudText Typo=@Typo.caption 
+                                     Color=@Color.Secondary>
+                                @FormatSize(file.Size)
+                            </MudText>
+                            
+                        </MudStack>
+
+                        @if (_uploadingFile == file.Name)
+                        {
+                            <MudProgressCircular Size=@Size.Small 
+                                                 Indeterminate=@true />
+                        }
+                        else
+                        {
+                            <MudIconButton Icon=@Icons.Material.Filled.Close
+                                           Size=@Size.Small
+                                           Color=@Color.Error
+                                           OnClick=@(() => RemoveFile(file)) />
+                        }
+                    </MudStack>
+                    
+                </MudPaper>
+            }
+        </MudStack>
+    }
+</MudStack>
