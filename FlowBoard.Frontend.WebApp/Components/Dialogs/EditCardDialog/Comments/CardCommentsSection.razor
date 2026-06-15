@@ -24,7 +24,8 @@
             {
                 <CommentItem Comment=@comment
                              OnUpdate=@UpdateCommentAsync
-                             OnDelete=@DeleteCommentAsync />
+                             OnDelete=@DeleteCommentAsync 
+                             OnDeleteAttachment=@DeleteCommentAttachmentAsync/>
             }
         }
     </MudStack>

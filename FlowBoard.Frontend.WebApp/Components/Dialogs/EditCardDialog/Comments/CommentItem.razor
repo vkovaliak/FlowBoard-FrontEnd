@@ -66,6 +66,7 @@
             @((MarkupString)Comment.Message)
         </MudText>
 
-         <AttachmentList Attachments=@Comment.Attachments />
+         <AttachmentList Attachments=@Comment.Attachments 
+                         OnDelete="OnDeleteAttachment"/>
     }
 </MudPaper>

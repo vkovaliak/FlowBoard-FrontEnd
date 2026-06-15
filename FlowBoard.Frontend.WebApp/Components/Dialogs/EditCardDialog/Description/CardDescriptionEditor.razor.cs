@@ -43,6 +43,9 @@ public partial class CardDescriptionEditor
         var result = await AttachmentService.UploadCardAttachmentAsync(
             CardId, stream, file.Name, file.ContentType);
         
-        await OnAttachmentUploaded.InvokeAsync(result);
+        if (result is not null)
+        {
+            await OnAttachmentUploaded.InvokeAsync(result);
+        }
     }
 }

@@ -44,4 +44,16 @@ public class AttachmentService : IAttachmentService
 
         return null;
     }
+
+    public async Task<bool> DeleteCardAttachmentAsync(Guid attachmentId)
+    {
+        var response = await _attachmentApi.DeleteCardAttachmentAsync(attachmentId);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteCommentAttachmentAsync(Guid attachmentId)
+    {
+        var response = await _attachmentApi.DeleteCommentAttachmentAsync(attachmentId);
+        return response.IsSuccessStatusCode;
+    }
 }

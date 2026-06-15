@@ -14,4 +14,10 @@ public interface IAttachmentApi
     [Post("/api/attachment/comment/{commentId}/upload")]
     Task<ApiResponse<AttachmentResponseDto>> UploadCommentAttachmentAsync(
         Guid commentId, StreamPart file);
+    
+    [Delete("/api/attachment/card/{attachmentId}")]
+    Task<ApiResponse<bool>> DeleteCardAttachmentAsync(Guid attachmentId);
+
+    [Delete("/api/attachment/comment/{attachmentId}")]
+    Task<ApiResponse<bool>> DeleteCommentAttachmentAsync(Guid attachmentId);
 }

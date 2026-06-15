@@ -9,6 +9,8 @@ public partial class CommentItem
     [Parameter] public EventCallback<(Guid Id, string Message)> OnUpdate { get; set; }
     [Parameter] public EventCallback<Guid> OnDelete { get; set; }
 
+    [Parameter] public EventCallback<Guid> OnDeleteAttachment { get; set; }
+
     private bool _isEditing;
     private string _editMessage = string.Empty;
 
