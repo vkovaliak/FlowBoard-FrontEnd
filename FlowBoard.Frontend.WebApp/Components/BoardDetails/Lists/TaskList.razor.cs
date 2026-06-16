@@ -1,7 +1,6 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.DTOs.Lists;
 using FlowBoard.Frontend.WebApp.Components.BoardDetails.Cards;
-using FlowBoard.Frontend.WebApp.Components.Dialogs;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -35,7 +34,6 @@ public partial class TaskList
     {
         var dto = new CreateCardDto(
             ListId: List.Id,
-            BoardId: BoardId,
             Name: cardName,
             Description: null);
 
@@ -49,6 +47,7 @@ public partial class TaskList
     {
         var parameters = new DialogParameters<EditCardDialog>
         {
+            { x => x.BoardId, BoardId },
             { x => x.CardId, card.Id },
             { x => x.CurrentName, card.Name },
             { x => x.CurrentDescription, card.Description },

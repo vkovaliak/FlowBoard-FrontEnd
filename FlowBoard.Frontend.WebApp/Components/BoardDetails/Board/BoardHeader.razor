@@ -18,6 +18,10 @@
         @(IsPublic ? "Public" : "Private")
     </MudChip>
 
+    <MudSpacer />
+
+    <BoardMembers Members=@Members />
+
     <MudButton Variant=@Variant.Outlined
                Color=@Color.Primary
                StartIcon=@Icons.Material.Filled.PersonAdd

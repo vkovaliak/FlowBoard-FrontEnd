@@ -14,12 +14,12 @@ public class AttachmentService : IAttachmentService
     }
 
     public async Task<AttachmentResponseDto?> UploadCardAttachmentAsync(
-        Guid cardId, Stream fileStream, string fileName, string contentType)
+        Guid boardId, Guid cardId, Stream fileStream, string fileName, string contentType)
     {
         var streamPart = new StreamPart(fileStream, fileName, contentType);
 
         var response = await _attachmentApi.UploadTaskAttachmentAsync(
-            cardId, streamPart);
+            boardId, cardId, streamPart);
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
@@ -30,12 +30,12 @@ public class AttachmentService : IAttachmentService
     }
 
     public async Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
-        Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType)
+        Guid boardId, Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType)
     {
         var streamPart = new StreamPart(fileStream, fileName, contentType);
 
         var response = await _attachmentApi.UploadCommentAttachmentAsync(
-            cardId, commentId, streamPart);
+            boardId, cardId, commentId, streamPart);
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
@@ -45,15 +45,15 @@ public class AttachmentService : IAttachmentService
         return null;
     }
 
-    public async Task<bool> DeleteCardAttachmentAsync(Guid cardId, Guid attachmentId)
+    public async Task<bool> DeleteCardAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
     {
-        var response = await _attachmentApi.DeleteCardAttachmentAsync(cardId, attachmentId);
+        var response = await _attachmentApi.DeleteCardAttachmentAsync(boardId, cardId, attachmentId);
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<bool> DeleteCommentAttachmentAsync(Guid cardId, Guid attachmentId)
+    public async Task<bool> DeleteCommentAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
     {
-        var response = await _attachmentApi.DeleteCommentAttachmentAsync(cardId, attachmentId);
+        var response = await _attachmentApi.DeleteCommentAttachmentAsync(boardId, cardId, attachmentId);
         return response.IsSuccessStatusCode;
     }
 }

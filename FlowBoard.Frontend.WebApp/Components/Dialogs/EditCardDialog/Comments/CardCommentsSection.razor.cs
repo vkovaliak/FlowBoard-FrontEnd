@@ -10,6 +10,7 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
     [Inject] public ICommentHubService CommentHub { get; set; } = default!;
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
 
+    [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
 
     private IEnumerable<CommentDto> _comments = [];
@@ -27,29 +28,31 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
     private async Task LoadAsync()
     {
         _isLoading = true;
-        _comments = await CommentService.GetCommentsAsync(CardId);
+        _comments = await CommentService.GetCommentsAsync(
+            BoardId, CardId);
         _isLoading = false;
     }
 
     private async void HandleHubUpdate(Guid _)
     {
-        _comments = await CommentService.GetCommentsAsync(CardId);
+        _comments = await CommentService.GetCommentsAsync(
+            BoardId, CardId);
         await InvokeAsync(StateHasChanged);
     }
 
     private async Task<Guid?> CreateCommentAsync(string message)
     {
         var createdCommentId = await CommentService.CreateAsync(
-            CardId, new CreateCommentDto(message));
+            BoardId, CardId, new CreateCommentDto(message));
         return createdCommentId;
     }
 
     private async Task UpdateCommentAsync((Guid Id, string Message) args)
         => await CommentService.UpdateAsync(
-            CardId, args.Id, new UpdateCommentDto(args.Message));
+            BoardId, CardId, args.Id, new UpdateCommentDto(args.Message));
 
     private async Task DeleteCommentAsync(Guid commentId)
-        => await CommentService.DeleteAsync(CardId, commentId);
+        => await CommentService.DeleteAsync(BoardId, CardId, commentId);
 
     public async ValueTask DisposeAsync()
     {
@@ -59,7 +62,8 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 
     private async Task DeleteCommentAttachmentAsync(Guid attachmentId)
     {
-        await AttachmentService.DeleteCommentAttachmentAsync(CardId, attachmentId);
+        await AttachmentService.DeleteCommentAttachmentAsync(
+            BoardId, CardId, attachmentId);
 
     }
 }

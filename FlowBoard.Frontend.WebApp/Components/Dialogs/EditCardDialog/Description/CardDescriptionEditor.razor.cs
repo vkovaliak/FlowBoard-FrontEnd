@@ -9,6 +9,7 @@ public partial class CardDescriptionEditor
 {
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
 
+    [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string? Description { get; set; }
     [Parameter] public EventCallback<string?> DescriptionChanged { get; set; }
@@ -41,7 +42,7 @@ public partial class CardDescriptionEditor
         await using var stream = file.OpenReadStream(50 * 1024 * 1024);
 
         var result = await AttachmentService.UploadCardAttachmentAsync(
-            CardId, stream, file.Name, file.ContentType);
+            BoardId, CardId, stream, file.Name, file.ContentType);
         
         if (result is not null)
         {

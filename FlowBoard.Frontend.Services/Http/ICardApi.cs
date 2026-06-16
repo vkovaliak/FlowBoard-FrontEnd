@@ -5,15 +5,15 @@ namespace FlowBoard.Frontend.Services.Http;
 
 public interface ICardApi
 {
-    [Post("/api/cards")]
-    Task<ApiResponse<Guid>> CreateAsync([Body] CreateCardDto dto);
+    [Post("/api/boards/{boardId}/cards")]
+    Task<ApiResponse<Guid>> CreateAsync(Guid boardId, [Body] CreateCardDto dto);
 
-    [Put("/api/cards/{boardId}/list/{listId}/card/{cardId}")]
+    [Put("/api/boards/{boardId}/lists/{listId}/cards/{cardId}")]
     Task<ApiResponse<bool>> UpdateAsync(Guid boardId, Guid listId, Guid cardId, [Body] UpdateCardDto dto);
 
-    [Delete("/api/cards/{boardId}/list/{listId}/card/{cardId}")]
+    [Delete("/api/boards/{boardId}/lists/{listId}/cards/{cardId}")]
     Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid listId, Guid cardId);
 
-    [Put("/api/cards/{boardId}/card/{cardId}/move")]
+    [Put("/api/boards/{boardId}/cards/{cardId}/move")]
     Task<ApiResponse<bool>> MoveAsync(Guid boardId, Guid cardId, [Body] MoveCardDto dto);
 }

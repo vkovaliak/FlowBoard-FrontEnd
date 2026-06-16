@@ -5,12 +5,12 @@ namespace FlowBoard.Frontend.Services.Abstractions;
 public interface IAttachmentService
 {
     Task<AttachmentResponseDto?> UploadCardAttachmentAsync(
-        Guid cardId, Stream fileStream, string fileName, string contentType);
+        Guid boardId, Guid cardId, Stream fileStream, string fileName, string contentType);
 
     Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
-        Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType);
+        Guid boardId, Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType);
 
-    Task<bool> DeleteCardAttachmentAsync(Guid cardId, Guid attachmentId);
+    Task<bool> DeleteCardAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId);
     
-    Task<bool> DeleteCommentAttachmentAsync(Guid cardId, Guid attachmentId);
+    Task<bool> DeleteCommentAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId);
 }

@@ -13,9 +13,9 @@ public class CardService : ICardService
         _cardApi = cardApi;
     }
 
-    public async Task<bool> CreateAsync(CreateCardDto list)
+    public async Task<bool> CreateAsync(Guid boardId, CreateCardDto list)
     {
-        var response = await _cardApi.CreateAsync(list);
+        var response = await _cardApi.CreateAsync(boardId, list);
 
         return response.IsSuccessStatusCode 
             && response.Content != Guid.Empty;

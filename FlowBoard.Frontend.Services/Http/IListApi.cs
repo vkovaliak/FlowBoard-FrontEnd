@@ -5,15 +5,15 @@ namespace FlowBoard.Frontend.Services.Http;
 
 public interface IListApi
 {
-    [Post("/api/lists")]
-    Task<ApiResponse<Guid>> CreateAsync([Body] CreateListDto dto);
+    [Post("/api/boards/{boardId}/lists")]
+    Task<ApiResponse<Guid>> CreateAsync(Guid boardId, [Body] CreateListDto dto);
 
-    [Put("/api/lists/{boardId}/list/{listId}")]
+    [Put("/api/boards/{boardId}/lists/{listId}")]
     Task<ApiResponse<bool>> UpdateAsync(Guid boardId, Guid listId, [Body] UpdateListDto dto);
 
-    [Delete("/api/lists/{boardId}/list/{listId}")]
+    [Delete("/api/boards/{boardId}/lists/{listId}")]
     Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid listId);
 
-    [Put("/api/lists/{boardId}/list/{listId}/move")]
+    [Put("/api/boards/{boardId}/lists/{listId}/move")]
     Task<ApiResponse<bool>> MoveAsync(Guid boardId, Guid listId, [Body] MoveListDto dto);
 }

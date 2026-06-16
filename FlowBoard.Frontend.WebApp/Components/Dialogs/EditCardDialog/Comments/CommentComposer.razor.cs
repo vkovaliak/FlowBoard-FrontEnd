@@ -9,6 +9,7 @@ public partial class CommentComposer
 {
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
 
+    [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public Func<string, Task<Guid?>> OnCreateComment { get; set; } = default!;
 
@@ -49,6 +50,6 @@ public partial class CommentComposer
     {
         await using var stream = file.OpenReadStream(50 * 1024 * 1024);
         await AttachmentService.UploadCommentAttachmentAsync(
-            CardId, commentId, stream, file.Name, file.ContentType);
+            BoardId, CardId, commentId, stream, file.Name, file.ContentType);
     }
 }
