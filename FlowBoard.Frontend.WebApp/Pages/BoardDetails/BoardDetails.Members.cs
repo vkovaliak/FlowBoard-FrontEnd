@@ -33,10 +33,5 @@ public partial class BoardDetails
         ShowResult(success,
             $"User {email} successfully invited!",
             "Failed to invite user.");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 }

@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBoardService, BoardService>();
+        services.AddScoped<IBoardHubService, BoardHubService>();
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICommentHubService, CommentHubService>();

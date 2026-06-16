@@ -8,7 +8,7 @@ using FlowBoard.Frontend.Domain.DTOs.Boards;
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
 [Authorize]
-public partial class BoardDetails : IDisposable
+public partial class BoardDetails : IAsyncDisposable
 {
     [Parameter]
     public Guid Id { get; set; }
@@ -19,6 +19,7 @@ public partial class BoardDetails : IDisposable
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public IJSRuntime JsRuntime { get; set; } = default!;
+    [Inject] public IBoardHubService BoardHub { get; set; } = default!;
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
@@ -34,6 +35,12 @@ public partial class BoardDetails : IDisposable
             _isNotFound = true;
             Snackbar.Add("Board not found or access denied.", Severity.Error);
         }
+        else
+        {
+            BoardHub.OnBoardUpdated += HandleBoardHubUpdate;
+            await BoardHub.ConnectAsync();
+            await BoardHub.JoinBoardAsync(Id);
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -42,6 +49,15 @@ public partial class BoardDetails : IDisposable
         {
             _objRef = DotNetObjectReference.Create(this);
             await JsRuntime.InvokeVoidAsync("initKanbanSortable", _objRef);
+        }
+    }
+
+    private async void HandleBoardHubUpdate(Guid updatedBoardId)
+    {
+        if (updatedBoardId == Id)
+        {
+            await RefreshBoardAsync();
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -65,8 +81,11 @@ public partial class BoardDetails : IDisposable
             cancelText: "Cancel") == true;
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         _objRef?.Dispose();
+        
+        BoardHub.OnBoardUpdated -= HandleBoardHubUpdate;
+        await BoardHub.LeaveBoardAsync(Id);
     }
 }

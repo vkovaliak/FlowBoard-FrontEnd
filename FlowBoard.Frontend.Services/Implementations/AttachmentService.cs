@@ -30,12 +30,12 @@ public class AttachmentService : IAttachmentService
     }
 
     public async Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
-        Guid commentId, Stream fileStream, string fileName, string contentType)
+        Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType)
     {
         var streamPart = new StreamPart(fileStream, fileName, contentType);
 
         var response = await _attachmentApi.UploadCommentAttachmentAsync(
-            commentId, streamPart);
+            cardId, commentId, streamPart);
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
@@ -45,15 +45,15 @@ public class AttachmentService : IAttachmentService
         return null;
     }
 
-    public async Task<bool> DeleteCardAttachmentAsync(Guid attachmentId)
+    public async Task<bool> DeleteCardAttachmentAsync(Guid cardId, Guid attachmentId)
     {
-        var response = await _attachmentApi.DeleteCardAttachmentAsync(attachmentId);
+        var response = await _attachmentApi.DeleteCardAttachmentAsync(cardId, attachmentId);
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<bool> DeleteCommentAttachmentAsync(Guid attachmentId)
+    public async Task<bool> DeleteCommentAttachmentAsync(Guid cardId, Guid attachmentId)
     {
-        var response = await _attachmentApi.DeleteCommentAttachmentAsync(attachmentId);
+        var response = await _attachmentApi.DeleteCommentAttachmentAsync(cardId, attachmentId);
         return response.IsSuccessStatusCode;
     }
 }

@@ -9,11 +9,6 @@ public partial class BoardDetails
         var success = await CardService.CreateAsync(dto);
 
         ShowResult(success, "Card added!", "Failed to add card");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 
     private async Task HandleUpdateCardAsync(
@@ -25,11 +20,6 @@ public partial class BoardDetails
         ShowResult(success,
             "Card updated successfully!",
             "Failed to update card");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 
     private async Task HandleDeleteCardAsync(
@@ -50,10 +40,5 @@ public partial class BoardDetails
         ShowResult(success,
             $"Card '{args.CardName}' deleted",
             "Failed to delete card");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 }
