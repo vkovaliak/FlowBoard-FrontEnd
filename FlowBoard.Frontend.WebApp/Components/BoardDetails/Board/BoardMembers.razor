@@ -1,0 +1,53 @@
+<MudMenu Label=@($"{Members.Count} Members")
+         StartIcon=@Icons.Material.Filled.Group
+         Variant=@Variant.Outlined
+         Color=@Color.Default
+         AnchorOrigin=@Origin.BottomRight
+         TransformOrigin=@Origin.TopRight
+         Style="text-transform: none;">
+
+    <div style="min-width: 320px; 
+                max-height: 400px; 
+                overflow-y: auto;">
+
+        <MudText Typo=@Typo.subtitle2 
+                 Class="px-4 pt-2 pb-1 font-weight-bold">
+            Board Members (@Members.Count)
+        </MudText>
+
+        <MudDivider />
+
+        @foreach (var member in Members.OrderBy(m => m.Role))
+        {
+            <div class="d-flex align-center px-4 py-2" 
+                 style="gap: 12px;">
+
+                <MudAvatar Color=@GetAvatarColor(member.Role) 
+                           Size=@Size.Medium>
+                    @GetInitials(member.EmailAddress)
+                </MudAvatar>
+
+                <div class="flex-grow-1" style="min-width: 0;">
+
+                    <MudText Typo=@Typo.body2
+                             Style="overflow: hidden; text-overflow: ellipsis;
+                                    white-space: nowrap;">
+                        @member.EmailAddress
+                    </MudText>
+                    
+                </div>
+
+                <MudChip T=@string
+                         Size=@Size.Small
+                         Variant=@Variant.Filled
+                         Color=@GetRoleColor(member.Role)
+                         Style="text-transform: none;">
+                    @member.Role.ToString()
+                </MudChip>
+
+            </div>
+        }
+
+    </div>
+
+</MudMenu>

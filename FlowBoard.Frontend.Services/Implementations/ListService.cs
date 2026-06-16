@@ -13,9 +13,9 @@ public class ListService : IListService
         _listApi = listApi;
     }
 
-    public async Task<bool> CreateAsync(CreateListDto list)
+    public async Task<bool> CreateAsync(Guid boardId, CreateListDto list)
     {
-        var response = await _listApi.CreateAsync(list);
+        var response = await _listApi.CreateAsync(boardId, list);
 
         return response.IsSuccessStatusCode 
             && response.Content != Guid.Empty;

@@ -13,32 +13,32 @@ public class CommentService : ICommentService
         _commentApi = commentApi;
     }
 
-    public async Task<IEnumerable<CommentDto>> GetCommentsAsync(Guid cardId)
+    public async Task<IEnumerable<CommentDto>> GetCommentsAsync(Guid boardId, Guid cardId)
     {
-        var response = await _commentApi.GetByCardIdAsync(cardId);
+        var response = await _commentApi.GetByCardIdAsync(boardId, cardId);
 
         return response.IsSuccessStatusCode
             && response.Content != null ? response.Content : [];
     }
 
-    public async Task<Guid> CreateAsync(Guid cardId, CreateCommentDto comment)
+    public async Task<Guid> CreateAsync(Guid boardId, Guid cardId, CreateCommentDto comment)
     {
-        var response = await _commentApi.CreateAsync(cardId, comment);
+        var response = await _commentApi.CreateAsync(boardId, cardId, comment);
 
         return response.Content;
     }
 
-    public async Task<bool> UpdateAsync(Guid cardId, Guid commentId, UpdateCommentDto comment)
+    public async Task<bool> UpdateAsync(Guid boardId, Guid cardId, Guid commentId, UpdateCommentDto comment)
     {
-        var response = await _commentApi.UpdateAsync(cardId, commentId, comment);
+        var response = await _commentApi.UpdateAsync(boardId, cardId, commentId, comment);
 
         return response.IsSuccessStatusCode
             && response.Content != false;
     }
 
-    public async Task<bool> DeleteAsync(Guid cardId, Guid commentId)
+    public async Task<bool> DeleteAsync(Guid boardId, Guid cardId, Guid commentId)
     {
-        var response = await _commentApi.DeleteAsync(cardId, commentId);
+        var response = await _commentApi.DeleteAsync(boardId, cardId, commentId);
 
         return response.IsSuccessStatusCode
             && response.Content != false;

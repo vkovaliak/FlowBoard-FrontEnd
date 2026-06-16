@@ -5,15 +5,15 @@ namespace FlowBoard.Frontend.Services.Http;
 
 public interface ICommentApi
 {
-    [Get("/api/comment/card/{cardId}")]
-    Task<ApiResponse<IEnumerable<CommentDto>>> GetByCardIdAsync(Guid cardId);
+    [Get("/api/boards/{boardId}/cards/{cardId}/comments")]
+    Task<ApiResponse<IEnumerable<CommentDto>>> GetByCardIdAsync(Guid boardId, Guid cardId);
 
-    [Post("/api/comment/card/{cardId}")]
-    Task<ApiResponse<Guid>> CreateAsync(Guid cardId, [Body] CreateCommentDto dto);
+    [Post("/api/boards/{boardId}/cards/{cardId}/comments")]
+    Task<ApiResponse<Guid>> CreateAsync(Guid boardId, Guid cardId, [Body] CreateCommentDto dto);
 
-    [Put("/api/comment/card/{cardId}/comment/{commentId}")]
-    Task<ApiResponse<bool>> UpdateAsync(Guid cardId, Guid commentId, [Body] UpdateCommentDto dto);
+    [Put("/api/boards/{boardId}/cards/{cardId}/comments/{commentId}")]
+    Task<ApiResponse<bool>> UpdateAsync(Guid boardId, Guid cardId, Guid commentId, [Body] UpdateCommentDto dto);
 
-    [Delete("/api/comment/card/{cardId}/comment/{commentId}")]
-    Task<ApiResponse<bool>> DeleteAsync(Guid cardId, Guid commentId);
+    [Delete("/api/boards/{boardId}/cards/{cardId}/comments/{commentId}")]
+    Task<ApiResponse<bool>> DeleteAsync(Guid boardId, Guid cardId, Guid commentId);
 }

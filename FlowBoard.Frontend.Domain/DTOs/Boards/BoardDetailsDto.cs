@@ -1,4 +1,5 @@
 using FlowBoard.Frontend.Domain.DTOs.Lists;
+using FlowBoard.Frontend.Domain.Enums;
 
 namespace FlowBoard.Frontend.Domain.DTOs.Boards;
 
@@ -8,5 +9,7 @@ public record BoardDetailsDto(
     bool IsPublic,
     Guid CreatedBy,
     DateTime CreatedAt,
-    List<ListDto> Lists
+    BoardRole UserRole,
+    List<ListDto> Lists,
+    List<BoardMemberDto> Members
 );

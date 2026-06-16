@@ -12,6 +12,7 @@ public partial class EditCardDialog : ComponentBase
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
 
+    [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string CurrentName { get; set; } = string.Empty;
     [Parameter] public string? CurrentDescription { get; set; }
@@ -36,7 +37,7 @@ public partial class EditCardDialog : ComponentBase
     private async Task DeleteCardAttachmentAsync(Guid attachmentId)
     {
         var success = await AttachmentService.DeleteCardAttachmentAsync(
-            CardId, attachmentId);
+            BoardId, CardId, attachmentId);
 
         if (success)
         {

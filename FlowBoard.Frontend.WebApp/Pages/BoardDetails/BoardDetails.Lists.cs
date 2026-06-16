@@ -13,8 +13,8 @@ public partial class BoardDetails
             return;
         }
 
-        var newList = new CreateListDto(BoardId: Id, Name: listName);
-        var success = await ListService.CreateAsync(newList);
+        var newList = new CreateListDto(Name: listName);
+        var success = await ListService.CreateAsync(Id, newList);
 
         ShowResult(success,
             "List created successfully!",

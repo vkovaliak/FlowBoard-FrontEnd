@@ -41,7 +41,8 @@
                               Margin=@Margin.Dense
                               Required=@true RequiredError="Card name cannot be empty" For=@(() => _model.Name) />
 
-                <CardDescriptionEditor CardId=@CardId 
+                <CardDescriptionEditor BoardId=@BoardId
+                                       CardId=@CardId 
                                        @bind-Description=@_model.Description 
                                        OnAttachmentUploaded=@HandleNewAttachment/>
                 
@@ -50,7 +51,7 @@
 
                 <MudDivider Class="my-2" />
 
-                <CardCommentsSection CardId=@CardId />
+                <CardCommentsSection BoardId=@BoardId CardId=@CardId />
 
             </MudStack>
 

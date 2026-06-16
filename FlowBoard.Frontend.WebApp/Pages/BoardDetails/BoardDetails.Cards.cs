@@ -6,7 +6,11 @@ public partial class BoardDetails
 {
     private async Task HandleCreateCardAsync(CreateCardDto dto)
     {
-        var success = await CardService.CreateAsync(dto);
+        if (_board == null)
+        {
+            return;
+        }
+        var success = await CardService.CreateAsync(_board.Id, dto);
 
         ShowResult(success, "Card added!", "Failed to add card");
     }

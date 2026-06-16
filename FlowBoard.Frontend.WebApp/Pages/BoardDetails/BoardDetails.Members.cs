@@ -19,19 +19,18 @@ public partial class BoardDetails
             "Invite Member", options);
         var result = await dialog.Result;
 
-        if (!result!.Canceled && result.Data is string email)
+        if (!result!.Canceled && result.Data is InviteMemberDto inviteDto)
         {
-            await HandleInviteMemberAsync(email);
-        }    
+            await HandleInviteMemberAsync(inviteDto);
+        }
     }
 
-    private async Task HandleInviteMemberAsync(string email)
+    private async Task HandleInviteMemberAsync(InviteMemberDto inviteDto)
     {
-        var inviteDto = new InviteMemberDto(Email: email);
         var success = await BoardService.InviteMemberAsync(Id, inviteDto);
 
         ShowResult(success,
-            $"User {email} successfully invited!",
+            $"User {inviteDto.Email} successfully invited!",
             "Failed to invite user.");
     }
 }
