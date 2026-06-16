@@ -8,9 +8,9 @@ public interface IAttachmentService
         Guid cardId, Stream fileStream, string fileName, string contentType);
 
     Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
-        Guid commentId, Stream fileStream, string fileName, string contentType);
+        Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType);
 
-    Task<bool> DeleteCardAttachmentAsync(Guid attachmentId);
+    Task<bool> DeleteCardAttachmentAsync(Guid cardId, Guid attachmentId);
     
-    Task<bool> DeleteCommentAttachmentAsync(Guid attachmentId);
+    Task<bool> DeleteCommentAttachmentAsync(Guid cardId, Guid attachmentId);
 }

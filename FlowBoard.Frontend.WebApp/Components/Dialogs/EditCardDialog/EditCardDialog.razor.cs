@@ -24,7 +24,6 @@ public partial class EditCardDialog : ComponentBase
     {
         _model.Name = CurrentName;
         _model.Description = CurrentDescription;
-
         _attachments = Attachments.ToList();
     }
 
@@ -37,7 +36,7 @@ public partial class EditCardDialog : ComponentBase
     private async Task DeleteCardAttachmentAsync(Guid attachmentId)
     {
         var success = await AttachmentService.DeleteCardAttachmentAsync(
-            attachmentId);
+            CardId, attachmentId);
 
         if (success)
         {
@@ -45,7 +44,6 @@ public partial class EditCardDialog : ComponentBase
             StateHasChanged();
         }
     }
-
 
     private void Cancel() => MudDialog.Cancel();
 

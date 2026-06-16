@@ -11,13 +11,13 @@ public interface IAttachmentApi
         Guid cardId, StreamPart file);
 
     [Multipart]
-    [Post("/api/attachment/comment/{commentId}/upload")]
+    [Post("/api/attachment/card/{cardId}/comment/{commentId}/upload")]
     Task<ApiResponse<AttachmentResponseDto>> UploadCommentAttachmentAsync(
-        Guid commentId, StreamPart file);
+       Guid cardId, Guid commentId, StreamPart file);
     
-    [Delete("/api/attachment/card/{attachmentId}")]
-    Task<ApiResponse<bool>> DeleteCardAttachmentAsync(Guid attachmentId);
+    [Delete("/api/attachment/card/{cardId}/attachment/{attachmentId}")]
+    Task<ApiResponse<bool>> DeleteCardAttachmentAsync(Guid cardId, Guid attachmentId);
 
-    [Delete("/api/attachment/comment/{attachmentId}")]
-    Task<ApiResponse<bool>> DeleteCommentAttachmentAsync(Guid attachmentId);
+    [Delete("/api/attachment/card/{cardId}/comment/{attachmentId}")]
+    Task<ApiResponse<bool>> DeleteCommentAttachmentAsync(Guid cardId, Guid attachmentId);
 }

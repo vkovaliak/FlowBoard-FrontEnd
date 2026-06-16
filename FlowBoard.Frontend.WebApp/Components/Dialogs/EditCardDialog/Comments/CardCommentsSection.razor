@@ -2,7 +2,8 @@
 <MudStack Spacing="2">
     <MudText Typo=@Typo.subtitle1 Class="font-weight-bold">Comments</MudText>
 
-    <CommentComposer OnCreateComment=@CreateCommentAsync />
+    <CommentComposer OnCreateComment=@CreateCommentAsync
+                     CardId=@CardId />
 
     <MudStack Spacing="2" Style="overflow-y: auto;" Class="mt-2">
         @if (_isLoading)

@@ -59,13 +59,7 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 
     private async Task DeleteCommentAttachmentAsync(Guid attachmentId)
     {
-        var success = await AttachmentService.DeleteCommentAttachmentAsync(
-            attachmentId);
+        await AttachmentService.DeleteCommentAttachmentAsync(CardId, attachmentId);
 
-        if (success)
-        {
-            _comments = await CommentService.GetCommentsAsync(CardId);
-            StateHasChanged();
-        }
     }
 }

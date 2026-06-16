@@ -19,11 +19,6 @@ public partial class BoardDetails
         ShowResult(success,
             "List created successfully!",
             "Failed to create list");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 
     private async Task HandleRenameListAsync((Guid ListId, string NewName) args)
@@ -40,11 +35,6 @@ public partial class BoardDetails
         ShowResult(success,
             "List renamed successfully!",
             "Failed to rename list");
-
-        if (success)
-        { 
-            await RefreshBoardAsync();
-        }
     }
 
     private async Task HandleDeleteListAsync((Guid ListId, string ListName) args)
@@ -61,10 +51,5 @@ public partial class BoardDetails
         ShowResult(success,
             $"List '{args.ListName}' deleted",
             "Failed to delete list");
-
-        if (success)
-        {
-            await RefreshBoardAsync();
-        }
     }
 }
