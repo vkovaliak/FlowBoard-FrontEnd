@@ -22,7 +22,8 @@
                 <div data-card-id="@card.Id" style="width: 100%;">
                     <CardItem Card=@card
                               OnDelete=@DeleteCardClickAsync
-                              OnEdit=@OpenCardDetailsAsync />
+                              OnEdit=@OpenCardDetailsAsync 
+                              OnToggleComplete=@ToggleCardCompleteAsync/>
                 </div>
             }
         }

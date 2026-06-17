@@ -10,4 +10,5 @@ public interface ICardService
     Task<bool> MoveAsync(Guid boardId, Guid cardId, MoveCardDto dto);
     Task<bool> AssignMemberAsync(Guid boardId, Guid cardId, Guid userId);
     Task<bool> UnassignMemberAsync(Guid boardId, Guid cardId, Guid userId);
+    Task<bool> ToggleCompletionAsync(Guid boardId, Guid cardId);
 }

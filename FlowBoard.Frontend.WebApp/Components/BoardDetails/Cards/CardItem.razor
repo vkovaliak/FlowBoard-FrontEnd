@@ -5,11 +5,26 @@
     <MudStack Row=@true Justify=@Justify.SpaceBetween 
                 AlignItems=@AlignItems.Start
                 Class="mb-1">
+                
+        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="1"
+                  Style="min-width: 0;">
 
-        <MudText Typo=@Typo.body2 Class="font-weight-bold"
-                    Style="word-break: break-word;">
-            @Card.Name
-        </MudText>
+            <div @onclick:stopPropagation="true">
+                <MudIconButton Icon=@(Card.IsCompleted 
+                                   ? Icons.Material.Filled.CheckCircle 
+                                   : Icons.Material.Outlined.RadioButtonUnchecked)
+                               Color=@(Card.IsCompleted ? Color.Success : Color.Default)
+                               Size=@Size.Small
+                               Style="padding: 2px;"
+                               OnClick=@(() => OnToggleComplete.InvokeAsync(Card)) />
+            </div>
+
+            <MudText Typo=@Typo.body2 Class="font-weight-bold"
+                        Style="word-break: break-word;">
+                @Card.Name
+            </MudText>
+    
+    </MudStack>
 
         <div @onclick:stopPropagation="true">
 

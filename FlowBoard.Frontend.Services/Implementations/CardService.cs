@@ -60,4 +60,12 @@ public class CardService : ICardService
         return response.IsSuccessStatusCode
             && response.Content != false;
     }
+
+    public async Task<bool> ToggleCompletionAsync(Guid boardId, Guid cardId)
+    {
+        var response = await _cardApi.ToggleCompletionAsync(boardId, cardId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
 }
