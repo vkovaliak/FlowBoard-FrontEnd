@@ -1,0 +1,13 @@
+@using FlowBoard.Frontend.WebApp.Components.Labels
+
+@if (Labels.Count > 0)
+{
+    <MudStack Row=@true Spacing="1" Class="flex-wrap mb-1">
+
+        @foreach (var label in Labels)
+        {
+            <LabelChip Label=@label Size=@Size.Small />
+        }
+        
+    </MudStack>
+}

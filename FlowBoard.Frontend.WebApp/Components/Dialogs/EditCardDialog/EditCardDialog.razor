@@ -3,6 +3,9 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Assignees
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.DueDate
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
+
 
 <MudDialog Class="card-side-panel">
 
@@ -42,6 +45,12 @@
                               Variant=@Variant.Outlined 
                               Margin=@Margin.Dense
                               Required=@true RequiredError="Card name cannot be empty" For=@(() => _model.Name) />
+                
+                <CardListSelector BoardId=@BoardId
+                                  CardId=@CardId
+                                  CurrentListId=@CurrentListId
+                                  Lists=@Lists
+                                  OnMoved=@OnCardMoved />
 
                 <CardAssigneeSelector BoardId="@BoardId"
                                       CardId="@CardId"
@@ -49,7 +58,12 @@
                                       BoardMembers="@BoardMembers" />
 
                 <CardDueDatePicker @bind-DueDate=@_model.DueDate
-                       IsCompleted=@_isCompleted />
+                                   IsCompleted=@_isCompleted />
+                
+                <LabelManager BoardId=@BoardId
+                              CardId=@CardId
+                              AttachedLabels=@CardLabels
+                              OnChanged=@OnLabelsChanged />
 
                 <CardDescriptionEditor BoardId=@BoardId
                                        CardId=@CardId 

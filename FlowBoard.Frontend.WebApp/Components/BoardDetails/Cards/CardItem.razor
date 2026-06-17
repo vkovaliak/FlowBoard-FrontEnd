@@ -2,6 +2,8 @@
           Style="border-radius: 8px; position: relative; cursor: pointer;"
           @onclick=@(() => OnEdit.InvokeAsync(Card))>
 
+    <CardLabels Labels=@Card.Labels />
+
     <MudStack Row=@true Justify=@Justify.SpaceBetween 
                 AlignItems=@AlignItems.Start
                 Class="mb-1">

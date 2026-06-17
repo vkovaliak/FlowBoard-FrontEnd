@@ -1,0 +1,112 @@
+@using FlowBoard.Frontend.Domain.Constants
+@using FlowBoard.Frontend.WebApp.Components.Labels
+
+<MudStack Spacing="1">
+
+    <MudText Typo=@Typo.caption 
+             Color=@Color.Secondary 
+             Class="ml-1">
+        Labels
+    </MudText>
+
+    <MudStack Row=@true Spacing="1" Class="flex-wrap">
+
+        @foreach (var label in AttachedLabels)
+        {
+            <LabelChip Label=@label
+                       OnClose=@(() => DetachAsync(label)) />
+        }
+
+        <MudIconButton Icon=@Icons.Material.Filled.Add
+                       Size=@Size.Small
+                       Variant=@Variant.Outlined
+                       Style="border-radius: 6px; padding: 4px;"
+                       OnClick=@TogglePopover />
+
+    </MudStack>
+
+    <MudPopover Open=@_isOpen
+                AnchorOrigin=@Origin.BottomLeft
+                TransformOrigin=@Origin.TopLeft
+                Style="padding: 12px; min-width: 260px;">
+
+        <MudText Typo=@Typo.subtitle2 
+                 Class="mb-2">
+            Board labels
+        </MudText>
+
+        @if (BoardLabels.Count == 0)
+        {
+            <MudText Typo=@Typo.caption 
+                     Color=@Color.Secondary 
+                     Class="mb-2">
+                No labels yet. Create the first one below.
+            </MudText>
+        }
+
+        @foreach (var label in _boardLabels)
+        {
+            <div style="display: flex; align-items: center; gap: 8px; 
+                        padding: 4px 0; cursor: pointer;"
+                 @onclick=@(() => ToggleAsync(label))>
+
+                <MudCheckBox T=@bool
+                             Value=@IsAttached(label)
+                             Size=@Size.Small
+                             Dense=@true
+                             ReadOnly=@true />
+
+                <div style=@($"flex-grow:1; background-color:{label.Color}; " +
+                              "color:white; border-radius:4px; padding:2px 8px; " +
+                              "font-size:13px;")>
+                    @label.Name
+                </div>
+            </div>
+        }
+
+        <MudDivider Class="my-2" />
+
+        <MudTextField @bind-Value=@_newName
+                      Placeholder="New label name"
+                      Variant=@Variant.Outlined
+                      Margin=@Margin.Dense
+                      Class="mb-2" />
+
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+            @foreach (var color in LabelColors.Palette)
+            {
+                <div @onclick=@(() => SelectColor(color))
+                     style=@GetSwatchStyle(color)>
+                </div>
+            }
+        </div>
+
+        <MudStack Row=@true Spacing="2">
+
+            <MudButton Variant=@Variant.Text
+                       Size=@Size.Small
+                       OnClick=@TogglePopover>
+                Close
+            </MudButton>
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       Size=@Size.Small
+                       FullWidth=@true
+                       Disabled=@(string.IsNullOrWhiteSpace(_newName))
+                       OnClick=@CreateAndAttachAsync>
+                Create
+            </MudButton>
+
+        </MudStack>
+
+    </MudPopover>
+
+    @if (_isOpen)
+    {
+        <MudOverlay Visible=@_isOpen
+                    OnClick=@TogglePopover
+                    Style="background: transparent;" />
+    }
+
+</MudStack>

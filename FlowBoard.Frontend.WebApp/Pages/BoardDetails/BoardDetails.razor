@@ -38,14 +38,15 @@
                                 display: flex;">      
 
                         <TaskList List=@list
-                                BoardId=@_board.Id
-                                BoardMembers=@_board.Members
-                                OnRenameList=@HandleRenameListAsync
-                                OnDeleteList=@HandleDeleteListAsync
-                                OnCreateCard=@HandleCreateCardAsync
-                                OnUpdateCard=@HandleUpdateCardAsync 
-                                OnDeleteCard=@HandleDeleteCardAsync
-                                OnToggleCardComplete=@HandleToggleCardCompleteAsync /> 
+                                  BoardId=@_board.Id
+                                  AllLists=@_board.Lists
+                                  BoardMembers=@_board.Members
+                                  OnRenameList=@HandleRenameListAsync
+                                  OnDeleteList=@HandleDeleteListAsync
+                                  OnCreateCard=@HandleCreateCardAsync
+                                  OnUpdateCard=@HandleUpdateCardAsync 
+                                  OnDeleteCard=@HandleDeleteCardAsync
+                                  OnToggleCardComplete=@HandleToggleCardCompleteAsync /> 
                     </div>
                 }
                 <div class="flex-shrink-0" style="width: 280px;">

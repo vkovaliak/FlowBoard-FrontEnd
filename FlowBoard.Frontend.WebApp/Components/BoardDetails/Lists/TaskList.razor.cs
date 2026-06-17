@@ -13,6 +13,7 @@ public partial class TaskList
     [Inject] public IDialogService DialogService { get; set; } = default!;
 
     [Parameter] public ListDto List { get; set; } = default!;
+    [Parameter] public List<ListDto> AllLists { get; set; } = [];
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
 
@@ -61,7 +62,10 @@ public partial class TaskList
             { x => x.IsCompleted, card.IsCompleted },
             { x => x.Attachments, card.Attachments },
             { x => x.Assignees, card.Assignees },
-            { x => x.BoardMembers, BoardMembers }
+            { x => x.BoardMembers, BoardMembers },
+            { x => x.CardLabels, card.Labels },
+            { x => x.CurrentListId, card.ListId },
+            { x => x.Lists, AllLists }
         };
 
         var options = new DialogOptions

@@ -1,0 +1,25 @@
+<MudStack Spacing="1">
+
+    <MudText Typo=@Typo.caption 
+             Color=@Color.Secondary 
+             Class="ml-1">
+        In list
+    </MudText>
+
+    <MudSelect T=@Guid
+               Value=@CurrentListId
+               ValueChanged=@OnListChangedAsync
+               Variant=@Variant.Outlined
+               Margin=@Margin.Dense
+               Dense=@true>
+
+        @foreach (var list in Lists)
+        {
+            <MudSelectItem T=@Guid Value=@list.Id>
+                @list.Name
+            </MudSelectItem>
+        }
+
+    </MudSelect>
+
+</MudStack>
