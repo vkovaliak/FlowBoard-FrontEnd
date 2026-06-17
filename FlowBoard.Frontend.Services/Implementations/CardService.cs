@@ -44,4 +44,20 @@ public class CardService : ICardService
         return response.IsSuccessStatusCode 
             && response.Content != false;
     }
+
+    public async Task<bool> AssignMemberAsync(Guid boardId, Guid cardId, Guid userId)
+    {
+        var response = await _cardApi.AssignMemberAsync(boardId, cardId, userId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
+
+    public async Task<bool> UnassignMemberAsync(Guid boardId, Guid cardId, Guid userId)
+    {
+        var response = await _cardApi.UnassignMemberAsync(boardId, cardId, userId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
 }

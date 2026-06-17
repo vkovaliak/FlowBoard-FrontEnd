@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.DTOs.Lists;
 using FlowBoard.Frontend.WebApp.Components.BoardDetails.Cards;
@@ -13,6 +14,7 @@ public partial class TaskList
 
     [Parameter] public ListDto List { get; set; } = default!;
     [Parameter] public Guid BoardId { get; set; }
+    [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
 
     [Parameter] public EventCallback<(Guid ListId, string NewName)> OnRenameList { get; set; }
     [Parameter] public EventCallback<(Guid ListId, string ListName)> OnDeleteList { get; set; }
@@ -51,7 +53,9 @@ public partial class TaskList
             { x => x.CardId, card.Id },
             { x => x.CurrentName, card.Name },
             { x => x.CurrentDescription, card.Description },
-            { x => x.Attachments, card.Attachments }
+            { x => x.Attachments, card.Attachments },
+            { x => x.Assignees, card.Assignees },
+            { x => x.BoardMembers, BoardMembers }
         };
 
         var options = new DialogOptions

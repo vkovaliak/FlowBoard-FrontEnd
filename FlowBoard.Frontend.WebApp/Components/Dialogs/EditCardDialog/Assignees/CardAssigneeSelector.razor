@@ -1,0 +1,42 @@
+<MudStack Spacing="2">
+
+    <MudText Typo=@Typo.caption
+             Color=@Color.Secondary>
+        Assignees
+    </MudText>
+
+    @if (Assignees.Any())
+    {
+        <MudStack Row=@true 
+                  Wrap=@Wrap.Wrap 
+                  Spacing="1">
+
+            @foreach (var assignee in Assignees)
+            {
+                <MudChip T=@string
+                         OnClose=@(() => RemoveAssigneeAsync(assignee))
+                         Color=@Color.Primary>
+
+                    @assignee.EmailAddress
+                </MudChip>
+            }
+
+        </MudStack>
+    }
+
+    <MudSelect T=Guid?"
+               Label="Assign member"
+               Value=@_selectedUserId
+               ValueChanged=@AssignUserAsync
+               Variant=@Variant.Outlined>
+
+        @foreach (var member in AvailableMembers)
+        {
+            <MudSelectItem Value=@((Guid?)member.UserId)>
+                @member.EmailAddress
+            </MudSelectItem>
+        }
+
+    </MudSelect>
+
+</MudStack>

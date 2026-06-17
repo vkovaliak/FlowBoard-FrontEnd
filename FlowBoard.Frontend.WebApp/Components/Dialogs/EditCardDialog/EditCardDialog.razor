@@ -1,6 +1,7 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Description
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Assignees
 
 <MudDialog Class="card-side-panel">
 
@@ -40,6 +41,11 @@
                               Variant=@Variant.Outlined 
                               Margin=@Margin.Dense
                               Required=@true RequiredError="Card name cannot be empty" For=@(() => _model.Name) />
+
+                <CardAssigneeSelector BoardId="@BoardId"
+                                      CardId="@CardId"
+                                      Assignees="@Assignees"
+                                      BoardMembers="@BoardMembers" />
 
                 <CardDescriptionEditor BoardId=@BoardId
                                        CardId=@CardId 

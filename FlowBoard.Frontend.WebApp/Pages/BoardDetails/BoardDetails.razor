@@ -39,6 +39,7 @@
 
                         <TaskList List=@list
                                 BoardId=@_board.Id
+                                BoardMembers=@_board.Members
                                 OnRenameList=@HandleRenameListAsync
                                 OnDeleteList=@HandleDeleteListAsync
                                 OnCreateCard=@HandleCreateCardAsync

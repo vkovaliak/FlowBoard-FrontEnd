@@ -8,5 +8,6 @@ public record CardDto(
     string Name,
     string? Description,
     int Position,
-    List<AttachmentResponseDto> Attachments
+    List<AttachmentResponseDto> Attachments,
+    List<CardAssigneeDto> Assignees
 );
