@@ -4,6 +4,7 @@ using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.Models.Cards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Attachments;
+using FlowBoard.Frontend.Domain.DTOs.Boards;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 
@@ -17,6 +18,8 @@ public partial class EditCardDialog : ComponentBase
     [Parameter] public string CurrentName { get; set; } = string.Empty;
     [Parameter] public string? CurrentDescription { get; set; }
     [Parameter] public List<AttachmentResponseDto> Attachments { get; set; } = [];
+    [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
+    [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
 
     private List<AttachmentResponseDto> _attachments = [];
     private CreateCardModel _model = new();

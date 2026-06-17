@@ -16,4 +16,10 @@ public interface ICardApi
 
     [Put("/api/boards/{boardId}/cards/{cardId}/move")]
     Task<ApiResponse<bool>> MoveAsync(Guid boardId, Guid cardId, [Body] MoveCardDto dto);
+
+    [Post("/api/boards/{boardId}/cards/{cardId}/assignees/{userId}")]
+    Task<ApiResponse<bool>> AssignMemberAsync(Guid boardId, Guid cardId, Guid userId);
+
+    [Delete("/api/boards/{boardId}/cards/{cardId}/assignees/{userId}")]
+    Task<ApiResponse<bool>> UnassignMemberAsync(Guid boardId, Guid cardId, Guid userId);
 }

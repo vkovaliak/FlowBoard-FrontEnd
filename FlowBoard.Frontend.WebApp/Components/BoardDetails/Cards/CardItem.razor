@@ -50,4 +50,19 @@
 
         </MudStack>
     }
+
+    @if (Card.Assignees.Any())
+    {
+        <MudStack Row="true"
+                Class="mt-2">
+
+            @foreach (var assignee in Card.Assignees.Take(3))
+            {
+                <MudAvatar Size="Size.Small">
+                    @assignee.EmailAddress[0]
+                </MudAvatar>
+            }
+
+        </MudStack>
+    }
 </MudPaper>
