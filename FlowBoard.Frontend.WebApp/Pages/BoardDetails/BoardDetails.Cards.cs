@@ -1,4 +1,5 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
+using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -44,5 +45,15 @@ public partial class BoardDetails
         ShowResult(success,
             $"Card '{args.CardName}' deleted",
             "Failed to delete card");
+    }
+
+    private async Task HandleToggleCardCompleteAsync(CardDto card)
+    {
+        var success = await CardService.ToggleCompletionAsync(Id, card.Id);
+
+        if (!success)
+        {
+            Snackbar.Add("Failed to update card status", Severity.Error);
+        }
     }
 }

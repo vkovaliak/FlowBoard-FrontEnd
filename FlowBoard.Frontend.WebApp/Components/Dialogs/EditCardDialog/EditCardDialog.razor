@@ -2,6 +2,7 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Assignees
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.DueDate
 
 <MudDialog Class="card-side-panel">
 
@@ -46,6 +47,9 @@
                                       CardId="@CardId"
                                       Assignees="@Assignees"
                                       BoardMembers="@BoardMembers" />
+
+                <CardDueDatePicker @bind-DueDate=@_model.DueDate
+                       IsCompleted=@_isCompleted />
 
                 <CardDescriptionEditor BoardId=@BoardId
                                        CardId=@CardId 

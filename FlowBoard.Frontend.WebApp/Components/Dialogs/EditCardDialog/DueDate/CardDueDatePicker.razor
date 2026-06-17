@@ -1,0 +1,37 @@
+<MudStack Spacing="1">
+
+    <MudText Typo=@Typo.caption
+             Color=@Color.Secondary
+             Class="ml-1">
+        Due date
+    </MudText>
+
+    <MudStack Row=@true
+              AlignItems=@AlignItems.Center
+              Spacing="2">
+
+        <MudDatePicker @bind-Date=@_date
+                       Variant=@Variant.Outlined
+                       Margin=@Margin.Dense
+                       Editable=@true
+                       Clearable=@true
+                       PickerVariant=@PickerVariant.Dialog
+                       DateFormat="MMM dd, yyyy"
+                       Placeholder="Select due date"
+                       AdornmentIcon=@Icons.Material.Filled.CalendarToday
+                       Style="flex-grow: 1;" />
+
+        @if (_date is not null)
+        {
+            <MudChip T=@string
+                     Size=@Size.Small
+                     Variant=@Variant.Filled
+                     Color=@GetStatusColor()
+                     Style="text-transform: none;">
+                @GetStatusText()
+            </MudChip>
+        }
+
+    </MudStack>
+
+</MudStack>

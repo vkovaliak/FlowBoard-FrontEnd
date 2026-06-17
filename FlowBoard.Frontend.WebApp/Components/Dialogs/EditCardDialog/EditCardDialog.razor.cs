@@ -20,14 +20,19 @@ public partial class EditCardDialog : ComponentBase
     [Parameter] public List<AttachmentResponseDto> Attachments { get; set; } = [];
     [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
+    [Parameter] public DateTime? CurrentDueDate { get; set; }
+    [Parameter] public bool IsCompleted { get; set; }
 
     private List<AttachmentResponseDto> _attachments = [];
     private CreateCardModel _model = new();
+    private bool _isCompleted;
 
     protected override void OnInitialized()
     {
         _model.Name = CurrentName;
         _model.Description = CurrentDescription;
+        _model.DueDate = CurrentDueDate;
+        _isCompleted = IsCompleted;
         _attachments = Attachments.ToList();
     }
 
@@ -59,6 +64,9 @@ public partial class EditCardDialog : ComponentBase
         }
 
         MudDialog.Close(DialogResult.Ok(
-            new UpdateCardDto(_model.Name, _model.Description ?? string.Empty)));
+            new UpdateCardDto(
+                _model.Name, 
+                _model.Description ?? string.Empty,
+                _model.DueDate)));
     }
 }

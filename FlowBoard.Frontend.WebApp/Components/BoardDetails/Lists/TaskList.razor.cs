@@ -21,6 +21,7 @@ public partial class TaskList
     [Parameter] public EventCallback<CreateCardDto> OnCreateCard { get; set; }
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, UpdateCardDto Dto)> OnUpdateCard { get; set; }
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, string CardName)> OnDeleteCard { get; set; }
+    [Parameter] public EventCallback<CardDto> OnToggleCardComplete { get; set; }
 
     private CreateCardForm _createCardForm = default!;
 
@@ -45,6 +46,9 @@ public partial class TaskList
     private async Task DeleteCardClickAsync(CardDto card)
         => await OnDeleteCard.InvokeAsync((List.Id, card.Id, card.Name));
 
+    private async Task ToggleCardCompleteAsync(CardDto card)
+        => await OnToggleCardComplete.InvokeAsync(card);
+
     private async Task OpenCardDetailsAsync(CardDto card)
     {
         var parameters = new DialogParameters<EditCardDialog>
@@ -53,6 +57,8 @@ public partial class TaskList
             { x => x.CardId, card.Id },
             { x => x.CurrentName, card.Name },
             { x => x.CurrentDescription, card.Description },
+            { x => x.CurrentDueDate, card.DueDate },
+            { x => x.IsCompleted, card.IsCompleted },
             { x => x.Attachments, card.Attachments },
             { x => x.Assignees, card.Assignees },
             { x => x.BoardMembers, BoardMembers }

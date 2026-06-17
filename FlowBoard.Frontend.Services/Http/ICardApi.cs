@@ -22,4 +22,7 @@ public interface ICardApi
 
     [Delete("/api/boards/{boardId}/cards/{cardId}/assignees/{userId}")]
     Task<ApiResponse<bool>> UnassignMemberAsync(Guid boardId, Guid cardId, Guid userId);
+    
+    [Put("/api/boards/{boardId}/cards/{cardId}/toggle-completion")]
+    Task<ApiResponse<bool>> ToggleCompletionAsync(Guid boardId, Guid cardId);
 }

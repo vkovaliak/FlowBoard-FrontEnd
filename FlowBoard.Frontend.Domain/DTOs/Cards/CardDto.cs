@@ -8,6 +8,8 @@ public record CardDto(
     string Name,
     string? Description,
     int Position,
+    DateTime? DueDate,
+    bool IsCompleted,
     List<AttachmentResponseDto> Attachments,
     List<CardAssigneeDto> Assignees
 );
