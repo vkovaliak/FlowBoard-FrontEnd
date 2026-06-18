@@ -18,7 +18,8 @@ public partial class Register
     {        
         var registerDto = new UserRegisterDto(
             Email: Model.Email,
-            Password: Model.Password
+            Password: Model.Password,
+            UserName: Model.UserName
         );
         
         var result = await AuthService.RegisterAsync(registerDto);

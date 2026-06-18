@@ -1,0 +1,12 @@
+@if (!string.IsNullOrWhiteSpace(AvatarUrl))
+{
+    <MudAvatar Size=@Size Style=@SizeStyle>
+        <MudImage Src=@AvatarUrl Alt=@UserName />
+    </MudAvatar>
+}
+else
+{
+    <MudAvatar Size=@Size Style=@($"{GetColorStyle()} {SizeStyle}")>
+        @GetInitial()
+    </MudAvatar>
+}

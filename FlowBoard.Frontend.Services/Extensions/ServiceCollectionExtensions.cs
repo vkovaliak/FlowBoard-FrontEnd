@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IListService, ListService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<AuthenticationStateProvider>(provider => 
             provider.GetRequiredService<CustomAuthStateProvider>());
@@ -70,7 +71,8 @@ public static class ServiceCollectionExtensions
         AddAuthenticatedRefitClient<ICommentApi>();
         AddAuthenticatedRefitClient<IListApi>();
         AddAuthenticatedRefitClient<ILabelApi>();
-
+        AddAuthenticatedRefitClient<IUserApi>();
+        
         return services;
     }
 }
