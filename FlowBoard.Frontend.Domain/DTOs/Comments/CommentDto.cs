@@ -9,5 +9,7 @@ public record CommentDto(
     DateTime CreatedAt,
     Guid CreatedBy,
     string Email,
+    string UserName,
+    string? AvatarUrl,
     List<AttachmentResponseDto> Attachments
 );

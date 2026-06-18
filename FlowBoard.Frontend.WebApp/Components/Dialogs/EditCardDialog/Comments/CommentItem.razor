@@ -1,5 +1,5 @@
-@using FlowBoard.Frontend.Domain.DTOs.Comments
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+@using FlowBoard.Frontend.WebApp.Components.Common
 
 <MudPaper Class="pa-3 my-1 bg-light" Outlined=@true>
 
@@ -9,9 +9,15 @@
         <MudStack Row=@true Spacing="2" 
                   AlignItems=@AlignItems.Center>
 
+            <UserAvatar UserName=@Comment.UserName
+                        AvatarUrl=@Comment.AvatarUrl
+                        Size=@Size.Small
+                        SizeStyle="width: 28px; height: 28px; 
+                                   font-size: 12px;" />
+
             <MudText Typo=@Typo.caption 
                      Class="font-weight-bold">
-                @Comment.Email
+                @Comment.UserName
             </MudText>
 
             <MudText Typo=@Typo.caption Color=@Color.Secondary>

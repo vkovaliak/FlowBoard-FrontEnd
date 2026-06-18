@@ -21,6 +21,14 @@
                             InputType=@InputType.Email
                             @bind-Value=@Model.Email 
                             For=@(() => Model.Email)/>
+                
+                <MudTextField Label="Username"
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              InputType=@InputType.Text
+                              Class="mt-3"
+                              @bind-Value=@Model.UserName                          
+                              For=@(() => Model.UserName) />
 
                 <MudTextField Label="Password"
                             Variant=@Variant.Outlined

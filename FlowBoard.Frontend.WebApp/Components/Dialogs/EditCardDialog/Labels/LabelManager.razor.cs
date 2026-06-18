@@ -72,7 +72,6 @@ public partial class LabelManager
             return;
         }
 
-        _attached.Add(label); 
         await OnChanged.InvokeAsync();
     }
 
@@ -86,7 +85,6 @@ public partial class LabelManager
             return;
         }
 
-        _attached.RemoveAll(x => x.Id == label.Id);
         await OnChanged.InvokeAsync();
     }
 

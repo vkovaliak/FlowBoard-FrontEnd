@@ -1,3 +1,5 @@
+@using FlowBoard.Frontend.WebApp.Components.Common
+
 <MudMenu Label=@($"{Members.Count} Members")
          StartIcon=@Icons.Material.Filled.Group
          Variant=@Variant.Outlined
@@ -10,8 +12,7 @@
                 max-height: 400px; 
                 overflow-y: auto;">
 
-        <MudText Typo=@Typo.subtitle2 
-                 Class="px-4 pt-2 pb-1 font-weight-bold">
+        <MudText Typo=@Typo.subtitle2 Class="px-4 pt-2 pb-1 font-weight-bold">
             Board Members (@Members.Count)
         </MudText>
 
@@ -22,19 +23,23 @@
             <div class="d-flex align-center px-4 py-2" 
                  style="gap: 12px;">
 
-                <MudAvatar Color=@GetAvatarColor(member.Role) 
-                           Size=@Size.Medium>
-                    @GetInitials(member.EmailAddress)
-                </MudAvatar>
+                <UserAvatar UserName=@member.UserName
+                            AvatarUrl=@member.AvatarUrl
+                            Size=@Size.Medium />
 
                 <div class="flex-grow-1" style="min-width: 0;">
-
                     <MudText Typo=@Typo.body2
+                             Style="overflow: hidden; text-overflow: ellipsis;
+                                    white-space: nowrap;">
+                        @member.UserName
+                    </MudText>
+                    
+                    <MudText Typo=@Typo.caption 
+                             Color=@Color.Secondary
                              Style="overflow: hidden; text-overflow: ellipsis;
                                     white-space: nowrap;">
                         @member.EmailAddress
                     </MudText>
-                    
                 </div>
 
                 <MudChip T=@string

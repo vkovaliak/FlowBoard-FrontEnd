@@ -1,4 +1,5 @@
 @using FlowBoard.Frontend.WebApp.Components.Checklists
+@using FlowBoard.Frontend.WebApp.Components.Common
 
 <MudPaper Elevation="1" Class="pa-3 bg-white" 
           Style="border-radius: 8px; position: relative; cursor: pointer;"
@@ -76,15 +77,30 @@
         </MudStack>
     }
 
+
     @if (Card.Assignees.Any())
     {
         <MudStack Row="true"
-                Class="mt-2">
+                  Class="mt-2" 
+                  Spacing="1">
 
             @foreach (var assignee in Card.Assignees.Take(3))
             {
-                <MudAvatar Size="Size.Small">
-                    @assignee.EmailAddress[0]
+                <UserAvatar UserName=@assignee.UserName
+                            AvatarUrl=@assignee.AvatarUrl
+                            Size=@Size.Small
+                            SizeStyle="width: 28px; 
+                                       height: 28px; 
+                                       font-size: 12px;" />
+            }
+
+            @if (Card.Assignees.Count > 3)
+            {
+                <MudAvatar Size=@Size.Small
+                           Style="width: 28px; height: 28px; font-size: 12px;
+                                background-color: #6b778c; color: white;">
+                                
+                    +@(Card.Assignees.Count - 3)
                 </MudAvatar>
             }
 

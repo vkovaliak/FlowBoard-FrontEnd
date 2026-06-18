@@ -1,0 +1,117 @@
+@page "/account"
+@using FlowBoard.Frontend.WebApp.Components.Common
+@attribute [Authorize]
+
+<MudContainer MaxWidth=@MaxWidth.Small 
+              Class="mt-6">
+
+    @if (_loading)
+    {
+        <MudProgressCircular Indeterminate=@true />
+    }
+    else if (_user is null)
+    {
+        <MudAlert Severity=@Severity.Error>
+            Failed to load account data
+        </MudAlert>
+    }
+    else
+    {
+        <MudPaper Elevation="1" 
+                  Class="pa-6">
+
+            <MudText Typo=@Typo.h5 
+                     Class="mb-4">
+                My Account
+            </MudText>
+
+            <MudStack Row=@true 
+                      AlignItems=@AlignItems.Center 
+                      Spacing="4" 
+                      Class="mb-6">
+
+                <div style="position: relative; 
+                            display: inline-flex;">
+
+                    <UserAvatar UserName=@_user.UserName
+                                AvatarUrl=@_user.AvatarUrl
+                                SizeStyle="width: 80px; height: 80px; 
+                                           font-size: 32px;" />
+
+                    <label for="avatar-input"
+                           style="position: absolute; bottom: -4px; right: -4px;
+                                  width: 32px; height: 32px; border-radius: 50%;
+                                  background-color: var(--mud-palette-primary);
+                                  display: flex; align-items: center;
+                                  justify-content: center; cursor: pointer;"
+                           title="Change avatar">
+
+                        <MudIcon Icon=@Icons.Material.Filled.PhotoCamera
+                                 Size=@Size.Small
+                                 Style="color: white;" />
+                    </label>
+
+                    <InputFile id="avatar-input"
+                               OnChange=@OnAvatarSelectedAsync
+                               accept="image/*"
+                               style="display: none;" />
+
+                </div>
+
+                <MudStack Spacing="0">
+
+                    <MudText Typo=@Typo.h6>
+                        @_user.UserName
+                    </MudText>
+
+                    <MudText Typo=@Typo.body2 
+                             Color=@Color.Secondary>
+                        @_user.EmailAddress
+                    </MudText>
+
+                </MudStack>
+
+            </MudStack>
+
+            <MudDivider Class="mb-4" />
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="mb-1">
+                Username
+            </MudText>
+
+            <MudStack Row=@true 
+                      Spacing="2" 
+                      AlignItems=@AlignItems.Center 
+                      Class="mb-4">
+
+                <MudTextField @bind-Value=@_userNameInput
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              Immediate=@true
+                              Class="flex-grow-1" />
+
+                <MudButton Variant=@Variant.Filled
+                           Color=@Color.Primary
+                           Disabled=@(IsUserNameUnchanged || _saving)
+                           OnClick=@SaveUserNameAsync>
+                    Save
+                </MudButton>
+
+            </MudStack>
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="mb-1">
+                Emai
+            l</MudText>
+            
+            <MudTextField Value=@_user.EmailAddress
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          ReadOnly=@true
+                          Disabled=@true />
+
+        </MudPaper>
+    }
+
+</MudContainer>

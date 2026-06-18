@@ -1,3 +1,5 @@
+@using FlowBoard.Frontend.WebApp.Components.Common
+
 <MudStack Spacing="2">
 
     <MudText Typo=@Typo.caption
@@ -15,9 +17,21 @@
             {
                 <MudChip T=@string
                          OnClose=@(() => RemoveAssigneeAsync(assignee))
-                         Color=@Color.Primary>
+                         Color=@Color.Default
+                         Style="padding-left: 4px;">
 
-                    @assignee.EmailAddress
+                    <div style="display: flex; 
+                                align-items: 
+                                center; gap: 6px;">
+
+                        <UserAvatar UserName=@assignee.UserName
+                                    AvatarUrl=@assignee.AvatarUrl
+                                    Size=@Size.Small
+                                    SizeStyle="width: 24px; 
+                                               height: 24px; 
+                                               font-size: 12px;" />
+                        @assignee.UserName
+                    </div>
                 </MudChip>
             }
 
@@ -33,7 +47,20 @@
         @foreach (var member in AvailableMembers)
         {
             <MudSelectItem Value=@((Guid?)member.UserId)>
-                @member.EmailAddress
+
+                <div style="display: flex; 
+                            align-items: center; 
+                            gap: 8px;">
+
+                    <UserAvatar UserName=@member.UserName
+                                AvatarUrl=@member.AvatarUrl
+                                Size=@Size.Small
+                                SizeStyle="width: 24px; height: 24px; 
+                                           font-size: 12px;" />
+
+                    @member.UserName
+                </div>
+
             </MudSelectItem>
         }
 
