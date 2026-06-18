@@ -13,42 +13,25 @@ public partial class LabelManager
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
-
-    [Parameter] public List<LabelDto> BoardLabels { get; set; } = [];
-
     [Parameter] public List<LabelDto> AttachedLabels { get; set; } = [];
 
-    [Parameter] public EventCallback OnChanged { get; set; }
-    
-    private List<LabelDto> _attached = [];
     private List<LabelDto> _boardLabels = [];
+
     private string _newName = string.Empty;
     private string _newColor = LabelColors.Default;
     private bool _isOpen;
 
     private bool IsAttached(LabelDto label)
-        => _attached.Any(x => x.Id == label.Id);
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadBoardLabelsAsync();
-    }
+        => AttachedLabels.Any(x => x.Id == label.Id);
 
-    private async Task LoadBoardLabelsAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        _attached = AttachedLabels.ToList();
         _boardLabels = await LabelService.GetByBoardIdAsync(BoardId);
     }
 
-    private void TogglePopover()
-    {
-        _isOpen = !_isOpen;
-    }
+    private void TogglePopover() => _isOpen = !_isOpen;
 
-    private void SelectColor(string color)
-    {
-        _newColor = color;
-    }
+    private void SelectColor(string color) => _newColor = color;
 
     private async Task ToggleAsync(LabelDto label)
     {
@@ -69,10 +52,7 @@ public partial class LabelManager
         if (!success)
         {
             Snackbar.Add("Failed to attach label", Severity.Error);
-            return;
         }
-
-        await OnChanged.InvokeAsync();
     }
 
     private async Task DetachAsync(LabelDto label)
@@ -82,10 +62,7 @@ public partial class LabelManager
         if (!success)
         {
             Snackbar.Add("Failed to detach label", Severity.Error);
-            return;
         }
-
-        await OnChanged.InvokeAsync();
     }
 
     private async Task CreateAndAttachAsync()
@@ -110,8 +87,7 @@ public partial class LabelManager
         _newColor = LabelColors.Default;
         _isOpen = false;
 
-        await LoadBoardLabelsAsync();
-        await OnChanged.InvokeAsync();
+        _boardLabels = await LabelService.GetByBoardIdAsync(BoardId);
     }
 
     private string GetSwatchStyle(string color)

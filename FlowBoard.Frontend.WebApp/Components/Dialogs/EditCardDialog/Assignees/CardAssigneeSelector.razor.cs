@@ -15,7 +15,6 @@ public partial class CardAssigneeSelector
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
-    [Parameter] public EventCallback OnChanged { get; set; }
 
     private Guid? _selectedUserId = null;
 
@@ -39,7 +38,6 @@ public partial class CardAssigneeSelector
         }
 
         _selectedUserId = null;
-        await OnChanged.InvokeAsync();
     }
 
     private async Task RemoveAssigneeAsync(CardAssigneeDto assignee)
@@ -50,9 +48,6 @@ public partial class CardAssigneeSelector
         if (!success)
         {
             Snackbar.Add("Failed to remove member", Severity.Error);
-            return;
         }
-
-        await OnChanged.InvokeAsync();
     }
 }

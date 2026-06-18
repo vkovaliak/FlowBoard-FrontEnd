@@ -37,6 +37,12 @@ window.initKanbanSortable = (dotNetHelper) => {
             ghostClass: 'sortable-ghost',
             swapThreshold: 0.75,
             invertSwap: true,
+
+            onStart: function (evt) {
+                evt.item._nextSibling = evt.item.nextElementSibling;
+                evt.item._parent = evt.item.parentNode;
+            },
+
             onEnd: function (evt) {
                 const cardId = evt.item.getAttribute('data-card-id');
                 const toListId = evt.to.getAttribute('data-list-id');
@@ -44,7 +50,8 @@ window.initKanbanSortable = (dotNetHelper) => {
 
                 undoDrop(evt)
 
-                dotNetHelper.invokeMethodAsync('HandleCardMovedJS', cardId, toListId, newIndex);
+                dotNetHelper.invokeMethodAsync(
+                    'HandleCardMovedJS', cardId, toListId, newIndex);
             }
         });
     });

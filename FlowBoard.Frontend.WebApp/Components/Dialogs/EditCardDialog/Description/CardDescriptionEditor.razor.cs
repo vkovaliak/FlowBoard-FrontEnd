@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using FlowBoard.Frontend.Services.Abstractions;
-using FlowBoard.Frontend.Domain.DTOs.Attachments;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Description;
 
@@ -13,7 +12,6 @@ public partial class CardDescriptionEditor
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string? Description { get; set; }
     [Parameter] public EventCallback<string?> DescriptionChanged { get; set; }
-    [Parameter] public EventCallback<AttachmentResponseDto> OnAttachmentUploaded { get; set; }
 
     private bool _isEditing;
 
@@ -34,19 +32,14 @@ public partial class CardDescriptionEditor
         foreach (var file in e.GetMultipleFiles())
         {
             await UploadAsync(file);
-        }            
+        }
     }
 
     private async Task UploadAsync(IBrowserFile file)
     {
         await using var stream = file.OpenReadStream(50 * 1024 * 1024);
 
-        var result = await AttachmentService.UploadCardAttachmentAsync(
+        await AttachmentService.UploadCardAttachmentAsync(
             BoardId, CardId, stream, file.Name, file.ContentType);
-        
-        if (result is not null)
-        {
-            await OnAttachmentUploaded.InvokeAsync(result);
-        }
     }
 }

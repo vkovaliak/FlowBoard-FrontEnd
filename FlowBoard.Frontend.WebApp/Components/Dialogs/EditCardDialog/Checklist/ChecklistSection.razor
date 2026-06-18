@@ -16,13 +16,13 @@
 
     </MudStack>
 
-    @if (_items.Count > 0)
+    @if (Items.Count > 0)
     {
-        <ChecklistProgress Items=@_items />
+        <ChecklistProgress Items=@Items />
     }
 
     <MudStack Spacing="0">
-        @foreach (var item in _items.OrderBy(x => x.Position))
+        @foreach (var item in Items.OrderBy(x => x.Position))
         {
             <ChecklistItemRow Item=@item
                               OnToggle=@(() => ToggleAsync(item))

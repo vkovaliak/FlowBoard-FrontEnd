@@ -16,8 +16,6 @@ public partial class CardListSelector
     [Parameter] public Guid CurrentListId { get; set; }
     [Parameter] public List<ListDto> Lists { get; set; } = [];
 
-    [Parameter] public EventCallback OnMoved { get; set; }
-
     private async Task OnListChangedAsync(Guid newListId)
     {
         if (newListId == CurrentListId)
@@ -39,10 +37,6 @@ public partial class CardListSelector
         if (!success)
         {
             Snackbar.Add("Failed to move card", Severity.Error);
-            return;
         }
-
-        CurrentListId = newListId;
-        await OnMoved.InvokeAsync();
     }
 }
