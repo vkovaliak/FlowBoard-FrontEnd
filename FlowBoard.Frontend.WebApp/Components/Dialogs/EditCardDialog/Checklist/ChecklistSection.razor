@@ -1,0 +1,76 @@
+@using FlowBoard.Frontend.WebApp.Components.Checklists;
+
+<MudStack Spacing="2">
+
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center 
+              Spacing="2">
+
+        <MudIcon Icon=@Icons.Material.Outlined.CheckBox
+                 Size=@Size.Small
+                 Style="color: #6b778c;" />
+
+        <MudText Typo=@Typo.subtitle1>
+            Checklist
+        </MudText>
+
+    </MudStack>
+
+    @if (_items.Count > 0)
+    {
+        <ChecklistProgress Items=@_items />
+    }
+
+    <MudStack Spacing="0">
+        @foreach (var item in _items.OrderBy(x => x.Position))
+        {
+            <ChecklistItemRow Item=@item
+                              OnToggle=@(() => ToggleAsync(item))
+                              OnDelete=@(() => DeleteAsync(item)) />
+        }
+    </MudStack>
+
+    @if (_isAdding)
+    {
+        <MudStack Spacing="1">
+
+            <MudTextField @bind-Value=@_newText
+                          Placeholder="Add an item"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          AutoFocus=@true
+                          OnKeyDown=@OnKeyDown
+                          Immediate=@true />
+
+            <MudStack Row=@true Spacing="2">
+
+                <MudButton Variant=@Variant.Filled
+                           Color=@Color.Primary
+                           Size=@Size.Small
+                           Disabled=@(string.IsNullOrWhiteSpace(_newText))
+                           OnClick=@AddAsync>
+                    Add
+                </MudButton>
+
+                <MudButton Variant=@Variant.Text
+                           Size=@Size.Small
+                           OnClick=@CancelAdd>
+                    Cancel
+                </MudButton>
+
+            </MudStack>
+            
+        </MudStack>
+    }
+    else
+    {
+        <MudButton Variant=@Variant.Outlined
+                   Size=@Size.Small
+                   StartIcon=@Icons.Material.Filled.Add
+                   OnClick=@StartAdd
+                   Style="align-self: flex-start;">
+            Add an item
+        </MudButton>
+    }
+
+</MudStack>

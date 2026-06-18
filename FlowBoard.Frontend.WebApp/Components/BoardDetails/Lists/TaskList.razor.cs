@@ -65,7 +65,8 @@ public partial class TaskList
             { x => x.BoardMembers, BoardMembers },
             { x => x.CardLabels, card.Labels },
             { x => x.CurrentListId, card.ListId },
-            { x => x.Lists, AllLists }
+            { x => x.Lists, AllLists },
+            { x => x.CardChecklistItems, card.ChecklistItems }
         };
 
         var options = new DialogOptions

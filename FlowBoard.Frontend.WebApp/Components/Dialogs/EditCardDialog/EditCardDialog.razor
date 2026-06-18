@@ -5,6 +5,8 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.DueDate
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
+\@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
+
 
 
 <MudDialog Class="card-side-panel">
@@ -64,6 +66,11 @@
                               CardId=@CardId
                               AttachedLabels=@CardLabels
                               OnChanged=@OnLabelsChanged />
+                
+                <ChecklistSection BoardId=@BoardId
+                                  CardId=@CardId
+                                  Items=@CardChecklistItems
+                                  OnChanged=@OnChecklistChanged />
 
                 <CardDescriptionEditor BoardId=@BoardId
                                        CardId=@CardId 

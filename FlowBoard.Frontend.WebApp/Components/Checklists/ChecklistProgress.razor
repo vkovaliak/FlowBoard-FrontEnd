@@ -1,0 +1,42 @@
+@if (Total > 0)
+{
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center 
+              Spacing="2" 
+              Class="@Class">
+
+        @if (IsCompleted)
+        {
+            <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                     Color=@Color.Success
+                     Size=@IconSize />
+        }
+        else
+        {
+            <MudIcon Icon=@Icons.Material.Outlined.CheckBox
+                     Size=@IconSize
+                     Style="color: #6b778c;" />
+        }
+
+        <MudProgressLinear Value=@Percentage
+                           Color=@(IsCompleted ? Color.Success : Color.Primary)
+                           Rounded=@true
+                           Size=@Size.Small
+                           Class="flex-grow-1" />
+
+        @if (IsCompleted)
+        {
+            <MudIcon Icon=@Icons.Material.Filled.Check
+                     Color=@Color.Success
+                     Size=@Size.Small />
+        }
+        else
+        {
+            <MudText Typo=@Typo.caption 
+                     Style="color: #6b778c; min-width: 32px;">
+                @($"{(int)Percentage}%")
+            </MudText>
+        }
+
+    </MudStack>
+}

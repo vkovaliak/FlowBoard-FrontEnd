@@ -7,6 +7,7 @@ using FlowBoard.Frontend.Domain.DTOs.Attachments;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Labels;
 using FlowBoard.Frontend.Domain.DTOs.Lists;
+using FlowBoard.Frontend.Domain.DTOs.Checklists;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 
@@ -29,6 +30,7 @@ public partial class EditCardDialog : ComponentBase
     [Parameter] public List<LabelDto> CardLabels { get; set; } = [];
     [Parameter] public Guid CurrentListId { get; set; }
     [Parameter] public List<ListDto> Lists { get; set; } = [];
+    [Parameter] public List<ChecklistItemDto> CardChecklistItems { get; set; } = [];
 
     private List<AttachmentResponseDto> _attachments = [];
     private List<LabelDto> _attachedLabels = [];
@@ -85,6 +87,11 @@ public partial class EditCardDialog : ComponentBase
     }
 
     private async Task OnCardMoved()
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task OnChecklistChanged()
     {
         await Task.CompletedTask;
     }
