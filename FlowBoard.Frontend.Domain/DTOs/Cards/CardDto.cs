@@ -1,4 +1,5 @@
 using FlowBoard.Frontend.Domain.DTOs.Attachments;
+using FlowBoard.Frontend.Domain.DTOs.Labels;
 
 namespace FlowBoard.Frontend.Domain.DTOs.Cards;
 
@@ -11,5 +12,6 @@ public record CardDto(
     DateTime? DueDate,
     bool IsCompleted,
     List<AttachmentResponseDto> Attachments,
-    List<CardAssigneeDto> Assignees
+    List<CardAssigneeDto> Assignees,
+    List<LabelDto> Labels
 );
