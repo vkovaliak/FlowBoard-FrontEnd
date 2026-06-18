@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<IBoardHubService, BoardHubService>();
         services.AddScoped<ICardService, CardService>();
+        services.AddScoped<IChecklistService, ChecklistService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICommentHubService, CommentHubService>();
         services.AddScoped<ILabelService, LabelService>();
@@ -65,6 +66,7 @@ public static class ServiceCollectionExtensions
         AddAuthenticatedRefitClient<IAttachmentApi>();
         AddAuthenticatedRefitClient<IBoardApi>();
         AddAuthenticatedRefitClient<ICardApi>();
+        AddAuthenticatedRefitClient<IChecklistApi>();
         AddAuthenticatedRefitClient<ICommentApi>();
         AddAuthenticatedRefitClient<IListApi>();
         AddAuthenticatedRefitClient<ILabelApi>();

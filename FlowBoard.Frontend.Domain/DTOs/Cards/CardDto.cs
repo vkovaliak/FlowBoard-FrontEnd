@@ -1,4 +1,5 @@
 using FlowBoard.Frontend.Domain.DTOs.Attachments;
+using FlowBoard.Frontend.Domain.DTOs.Checklists;
 using FlowBoard.Frontend.Domain.DTOs.Labels;
 
 namespace FlowBoard.Frontend.Domain.DTOs.Cards;
@@ -13,5 +14,6 @@ public record CardDto(
     bool IsCompleted,
     List<AttachmentResponseDto> Attachments,
     List<CardAssigneeDto> Assignees,
-    List<LabelDto> Labels
+    List<LabelDto> Labels,
+    List<ChecklistItemDto> ChecklistItems
 );

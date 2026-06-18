@@ -1,0 +1,24 @@
+<MudStack Row=@true 
+          AlignItems=@AlignItems.Center 
+          Spacing="1" 
+          Class="checklist-row">
+
+    <MudCheckBox T=@bool
+                 Value=@Item.IsCompleted
+                 ValueChanged=@OnToggleAsync
+                 Size=@Size.Small
+                 Dense=@true
+                 Color=@Color.Success />
+
+    <MudText Typo=@Typo.body2
+             Style=@GetTextStyle()
+             Class="flex-grow-1">
+        @Item.Text
+    </MudText>
+
+    <MudIconButton Icon=@Icons.Material.Filled.Close
+                   Size=@Size.Small
+                   Style="color: #6b778c;"
+                   OnClick=@OnDeleteAsync />
+
+</MudStack>

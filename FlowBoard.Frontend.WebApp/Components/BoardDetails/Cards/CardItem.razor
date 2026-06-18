@@ -1,3 +1,5 @@
+@using FlowBoard.Frontend.WebApp.Components.Checklists
+
 <MudPaper Elevation="1" Class="pa-3 bg-white" 
           Style="border-radius: 8px; position: relative; cursor: pointer;"
           @onclick=@(() => OnEdit.InvokeAsync(Card))>
@@ -26,7 +28,7 @@
                 @Card.Name
             </MudText>
     
-    </MudStack>
+        </MudStack>
 
         <div @onclick:stopPropagation="true">
 
@@ -53,6 +55,12 @@
         </div>
 
     </MudStack>
+
+    @if (Card.ChecklistItems.Count > 0)
+    {
+        <ChecklistProgress Items=@Card.ChecklistItems Class="mt-2" />
+    }
+
 
     @if (!string.IsNullOrWhiteSpace(Card.Description))
     {
