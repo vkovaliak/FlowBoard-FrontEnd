@@ -5,64 +5,74 @@ using FlowBoard.Frontend.Domain.Models.Cards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Attachments;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
-using FlowBoard.Frontend.Domain.DTOs.Labels;
-using FlowBoard.Frontend.Domain.DTOs.Lists;
-using FlowBoard.Frontend.Domain.DTOs.Checklists;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 
-public partial class EditCardDialog : ComponentBase
+public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 {
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
+    [Inject] public IBoardService BoardService { get; set; } = default!;
+    [Inject] public IBoardHubService BoardHub { get; set; } = default!;
+
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
-    [Parameter] public string CurrentName { get; set; } = string.Empty;
-    [Parameter] public string? CurrentDescription { get; set; }
-    [Parameter] public List<AttachmentResponseDto> Attachments { get; set; } = [];
-    [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
-    [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
-    [Parameter] public DateTime? CurrentDueDate { get; set; }
-    [Parameter] public bool IsCompleted { get; set; }
-    [Parameter] public List<LabelDto> BoardLabels { get; set; } = [];
-    [Parameter] public List<LabelDto> AttachedLabels { get; set; } = [];
-    [Parameter] public List<LabelDto> CardLabels { get; set; } = [];
-    [Parameter] public Guid CurrentListId { get; set; }
-    [Parameter] public List<ListDto> Lists { get; set; } = [];
-    [Parameter] public List<ChecklistItemDto> CardChecklistItems { get; set; } = [];
 
-    private List<AttachmentResponseDto> _attachments = [];
-    private List<LabelDto> _attachedLabels = [];
+    private BoardDetailsDto? _board;
+    private CardDto? _card;
     private CreateCardModel _model = new();
-    private bool _isCompleted;
+    private bool _isLoading = true;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        _model.Name = CurrentName;
-        _model.Description = CurrentDescription;
-        _model.DueDate = CurrentDueDate;
-        _isCompleted = IsCompleted;
-        _attachments = Attachments.ToList();
-        _attachedLabels = AttachedLabels.ToList();
+        await LoadCardAsync(isInitial: true);
+
+        BoardHub.OnBoardUpdated += HandleBoardUpdated;
+        await BoardHub.ConnectAsync();
+        await BoardHub.JoinBoardAsync(BoardId);
     }
 
-    private void HandleNewAttachment(AttachmentResponseDto newAttachment)
+    private async Task LoadCardAsync(bool isInitial = false)
     {
-        _attachments.Add(newAttachment);
-        StateHasChanged();
+        _board = await BoardService.GetDetailsAsync(BoardId);
+
+        _card = _board?.Lists
+            .SelectMany(l => l.Cards ?? [])
+            .FirstOrDefault(c => c.Id == CardId);
+
+        if (isInitial && _card is not null)
+        {
+            _model.Name = _card.Name;
+            _model.Description = _card.Description;
+            _model.DueDate = _card.DueDate;
+        }
+
+        _isLoading = false;
+    }
+
+    private async void HandleBoardUpdated(Guid updatedBoardId)
+    {
+        if (updatedBoardId != BoardId)
+        {
+            return;
+        }
+
+        await LoadCardAsync();
+
+        if (_card is null)
+        {
+            await InvokeAsync(MudDialog.Cancel);
+            return;
+        }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task DeleteCardAttachmentAsync(Guid attachmentId)
     {
-        var success = await AttachmentService.DeleteCardAttachmentAsync(
+        await AttachmentService.DeleteCardAttachmentAsync(
             BoardId, CardId, attachmentId);
-
-        if (success)
-        {
-            _attachments.RemoveAll(a => a.Id == attachmentId);
-            StateHasChanged();
-        }
     }
 
     private void Cancel() => MudDialog.Cancel();
@@ -76,23 +86,16 @@ public partial class EditCardDialog : ComponentBase
 
         MudDialog.Close(DialogResult.Ok(
             new UpdateCardDto(
-                _model.Name, 
+                _model.Name,
                 _model.Description ?? string.Empty,
                 _model.DueDate)));
     }
 
-    private async Task OnLabelsChanged()
-    {
-        await Task.CompletedTask;
-    }
+    private async Task OnChanged() => await Task.CompletedTask;
 
-    private async Task OnCardMoved()
+    public async ValueTask DisposeAsync()
     {
-        await Task.CompletedTask;
-    }
-
-    private async Task OnChecklistChanged()
-    {
-        await Task.CompletedTask;
+        BoardHub.OnBoardUpdated -= HandleBoardUpdated;
+        await BoardHub.LeaveBoardAsync(BoardId);
     }
 }

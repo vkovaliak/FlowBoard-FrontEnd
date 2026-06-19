@@ -36,57 +36,75 @@
 
     <DialogContent>
 
-        <EditForm Model="@_model">
+        @if (_isLoading)
+        {
+            <MudStack AlignItems=@AlignItems.Center 
+                      Class="pa-8">
 
-            <DataAnnotationsValidator />
-
-            <MudStack Spacing="4">
-
-                <MudTextField @bind-Value=@_model.Name 
-                              Label="Card Name" 
-                              Variant=@Variant.Outlined 
-                              Margin=@Margin.Dense
-                              Required=@true RequiredError="Card name cannot be empty" For=@(() => _model.Name) />
-                
-                <CardListSelector BoardId=@BoardId
-                                  CardId=@CardId
-                                  CurrentListId=@CurrentListId
-                                  Lists=@Lists
-                                  OnMoved=@OnCardMoved />
-
-                <CardAssigneeSelector BoardId="@BoardId"
-                                      CardId="@CardId"
-                                      Assignees="@Assignees"
-                                      BoardMembers="@BoardMembers" />
-
-                <CardDueDatePicker @bind-DueDate=@_model.DueDate
-                                   IsCompleted=@_isCompleted />
-                
-                <LabelManager BoardId=@BoardId
-                              CardId=@CardId
-                              AttachedLabels=@CardLabels
-                              OnChanged=@OnLabelsChanged />
-                
-                <ChecklistSection BoardId=@BoardId
-                                  CardId=@CardId
-                                  Items=@CardChecklistItems
-                                  OnChanged=@OnChecklistChanged />
-
-                <CardDescriptionEditor BoardId=@BoardId
-                                       CardId=@CardId 
-                                       @bind-Description=@_model.Description 
-                                       OnAttachmentUploaded=@HandleNewAttachment/>
-                
-                <AttachmentList Attachments=@_attachments 
-                                OnDelete=@DeleteCardAttachmentAsync/>
-
-                <MudDivider Class="my-2" />
-
-                <CardCommentsSection BoardId=@BoardId CardId=@CardId />
+                <MudProgressCircular Indeterminate=@true 
+                                     Color=@Color.Primary />
 
             </MudStack>
+        }
+        else if (_card is null)
+        {
+            <MudAlert Severity=@Severity.Warning>
+                This card no longer exists.
+            </MudAlert>
+        }
+        else
+        {
+            <EditForm Model="@_model">
 
-        </EditForm>
+                <DataAnnotationsValidator />
+
+                <MudStack Spacing="4">
+
+                    <MudTextField @bind-Value=@_model.Name
+                                  Label="Card Name"
+                                  Variant=@Variant.Outlined
+                                  Margin=@Margin.Dense
+                                  Required=@true
+                                  RequiredError="Card name cannot be empty"
+                                  For=@(() => _model.Name) />
+
+                    <CardListSelector BoardId=@BoardId
+                                      CardId=@CardId
+                                      CurrentListId=@_card.ListId
+                                      Lists=@_board!.Lists />
+
+                    <CardAssigneeSelector BoardId=@BoardId
+                                          CardId=@CardId
+                                          Assignees=@_card.Assignees
+                                          BoardMembers=@_board.Members />
+
+                    <CardDueDatePicker @bind-DueDate=@_model.DueDate
+                                       IsCompleted=@_card.IsCompleted />
+
+                    <LabelManager BoardId=@BoardId
+                                  CardId=@CardId
+                                  AttachedLabels=@_card.Labels />
+
+                    <ChecklistSection BoardId=@BoardId
+                                    CardId=@CardId
+                                    Items=@_card.ChecklistItems />
+
+                    <CardDescriptionEditor BoardId=@BoardId
+                                           CardId=@CardId
+                                           @bind-Description=@_model.Description />
+
+                    <AttachmentList Attachments=@_card.Attachments
+                                    OnDelete=@DeleteCardAttachmentAsync />
+
+                    <MudDivider Class="my-2" />
+
+                    <CardCommentsSection BoardId=@BoardId 
+                                         CardId=@CardId />
+
+                </MudStack>
+
+            </EditForm>
+        }
 
     </DialogContent>
 

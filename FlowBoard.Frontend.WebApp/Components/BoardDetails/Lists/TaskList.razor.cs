@@ -55,18 +55,7 @@ public partial class TaskList
         var parameters = new DialogParameters<EditCardDialog>
         {
             { x => x.BoardId, BoardId },
-            { x => x.CardId, card.Id },
-            { x => x.CurrentName, card.Name },
-            { x => x.CurrentDescription, card.Description },
-            { x => x.CurrentDueDate, card.DueDate },
-            { x => x.IsCompleted, card.IsCompleted },
-            { x => x.Attachments, card.Attachments },
-            { x => x.Assignees, card.Assignees },
-            { x => x.BoardMembers, BoardMembers },
-            { x => x.CardLabels, card.Labels },
-            { x => x.CurrentListId, card.ListId },
-            { x => x.Lists, AllLists },
-            { x => x.CardChecklistItems, card.ChecklistItems }
+            { x => x.CardId, card.Id }
         };
 
         var options = new DialogOptions

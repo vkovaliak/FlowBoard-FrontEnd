@@ -14,16 +14,9 @@ public partial class ChecklistSection
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<ChecklistItemDto> Items { get; set; } = [];
-    [Parameter] public EventCallback OnChanged { get; set; }
 
-    private List<ChecklistItemDto> _items = [];
     private bool _isAdding;
     private string _newText = string.Empty;
-
-    protected override void OnInitialized()
-    {
-        _items = Items.ToList();
-    }
 
     private void StartAdd()
     {
@@ -53,8 +46,7 @@ public partial class ChecklistSection
         }
 
         var dto = new AddChecklistItemDto(_newText.Trim());
-        var newId = await ChecklistService.AddAsync(
-            BoardId, CardId, dto);
+        var newId = await ChecklistService.AddAsync(BoardId, CardId, dto);
 
         if (newId is null)
         {
@@ -62,7 +54,8 @@ public partial class ChecklistSection
             return;
         }
 
-        await OnChanged.InvokeAsync();
+        _isAdding = false;
+        _newText = string.Empty;
     }
 
     private async Task ToggleAsync(ChecklistItemDto item)
@@ -72,10 +65,7 @@ public partial class ChecklistSection
         if (!success)
         {
             Snackbar.Add("Failed to update item", Severity.Error);
-            return;
         }
-
-        await OnChanged.InvokeAsync();
     }
 
     private async Task DeleteAsync(ChecklistItemDto item)
@@ -85,9 +75,6 @@ public partial class ChecklistSection
         if (!success)
         {
             Snackbar.Add("Failed to delete item", Severity.Error);
-            return;
         }
-
-        await OnChanged.InvokeAsync();
     }
 }
