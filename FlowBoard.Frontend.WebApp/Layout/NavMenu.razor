@@ -1,39 +1,19 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">FlowBoard.Frontend.WebApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿<MudNavMenu Class="custom-nav-menu">
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    <MudNavLink Href="/" 
+                Icon=@Icons.Material.Filled.Dashboard 
+                Match=@NavLinkMatch.All>
+        <MudText Typo=@Typo.body1 Class="font-weight-medium">Boards</MudText>
+    </MudNavLink>
 
-@code {
-    private bool collapseNavMenu = true;
+    <MudNavLink Href="/my-tasks" 
+                Icon=@Icons.Material.Filled.Checklist>
+        <MudText Typo=@Typo.body1 Class="font-weight-medium">My Tasks</MudText>
+    </MudNavLink>
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    <MudNavLink Href="/calendar" 
+                Icon=@Icons.Material.Filled.CalendarMonth>
+        <MudText Typo=@Typo.body1 Class="font-weight-medium">Calendar</MudText>
+    </MudNavLink>
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+</MudNavMenu>

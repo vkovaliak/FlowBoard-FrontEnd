@@ -1,26 +1,61 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
+
+<MudThemeProvider Theme="@_theme" @bind-IsDarkMode="@_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+
+    <MudAppBar Elevation="1" 
+               Style="background-color: #1E293B; color: #F1F5F9;">
+
+        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="4">
+
+            <MudImage Src="images/logo.png"
+                    Alt="Flow Board"
+                    Width="32"
+                    Height="32"
+                    Style="border-radius: 8px;" />
+
+            <MudText Typo=@Typo.h6
+                    Style="font-weight: 700;">
+                Flow Board
+            </MudText>
+
+        </MudStack>
+
+
+        <MudIconButton Icon=@Icons.Material.Filled.Menu
+                   Color=@Color.Inherit
+                   OnClick=@ToggleDrawer
+                   Class="ml-6" />
+
+        <MudSpacer />
+
+        <MudButton Variant=@Variant.Text
+                   Color=@Color.Error
+                   StartIcon=@Icons.Material.Filled.Logout
+                   OnClick=@HandleLogoutAsync>
+            Logout
+        </MudButton>
+
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_drawerOpen"
+               Elevation="2"
+               Variant=@DrawerVariant.Responsive
+               ClipMode=@DrawerClipMode.Always>
+
         <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <MudButton Variant=@Variant.Text
-                       Color=@Color.Error
-                       StartIcon=@Icons.Material.Filled.Logout
-                       Style="text-transform: none; font-weight: 600;"
-                       OnClick=@HandleLogoutAsync>
-                Logout
-            </MudButton>
-        </div>
+    </MudDrawer>
 
-        <article class="content px-4">
-            <MudThemeProvider />
-            <MudDialogProvider />
-            <MudSnackbarProvider />
-            <MudPopoverProvider />
+    <MudMainContent>
+        <MudContainer MaxWidth=@MaxWidth.False Class="pa-4">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+        
+    </MudMainContent>
+
+</MudLayout>
