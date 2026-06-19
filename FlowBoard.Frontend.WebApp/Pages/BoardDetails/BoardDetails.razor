@@ -1,8 +1,9 @@
 @page "/boards/{Id:guid}"
 @namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
 
-<MudContainer MaxWidth=@MaxWidth.ExtraLarge
-              Class="mt-6">
+<MudContainer MaxWidth=@MaxWidth.False
+              Class="mt-6"
+              Style="width: 85vw; overflow: hidden;">
     
     @if (_isNotFound)
     {
@@ -20,39 +21,46 @@
                      OnInviteClick=@OpenInviteDialogAsync/>
 
         <MudPaper Elevation="2" 
-                  Square=@false
-                  Outlined=@false
-                  Class="pa-4 mud-theme-dark-lighten-2 overflow-x-auto"
-                  Style="width: 100%; height: calc(100vh - 220px); 
-                         min-height: 400px;">
+                  Class="pa-4"
+                  Style="height: calc(100vh - 220px);
+                         width:100%;
+                         min-width: 400px;
+                         max-width: 100%;
+                         overflow: hidden;">
 
-            <div class="d-flex flex-row flex-nowrap board-lists-container" 
-                 style="gap: 24px; height: 100%; align-items: flex-start;">
-            
-                @foreach (var list in _board.Lists.OrderBy(l => l.Position))
-                {
-                    <div class="list-draggable-item" 
-                         data-list-id="@list.Id" 
-                         style="width: 280px; min-width: 280px; 
-                                height: max-content; 
-                                display: flex;">      
+            <div class="board-scroll-wrapper">
 
-                        <TaskList List=@list
-                                  BoardId=@_board.Id
-                                  AllLists=@_board.Lists
-                                  BoardMembers=@_board.Members
-                                  OnRenameList=@HandleRenameListAsync
-                                  OnDeleteList=@HandleDeleteListAsync
-                                  OnCreateCard=@HandleCreateCardAsync
-                                  OnUpdateCard=@HandleUpdateCardAsync 
-                                  OnDeleteCard=@HandleDeleteCardAsync
-                                  OnToggleCardComplete=@HandleToggleCardCompleteAsync /> 
+                <div class="d-flex flex-row flex-nowrap board-lists-container" 
+                        style="gap: 24px; height: 100%; align-items: flex-start;">
+                
+                    @foreach (var list in _board.Lists.OrderBy(l => l.Position))
+                    {
+                        <div class="list-draggable-item" 
+                            data-list-id="@list.Id" 
+                            style="width: 280px; min-width: 280px; 
+                                    height: max-content; 
+                                    display: flex;">      
+
+                            <TaskList List=@list
+                                    BoardId=@_board.Id
+                                    AllLists=@_board.Lists
+                                    BoardMembers=@_board.Members
+                                    OnRenameList=@HandleRenameListAsync
+                                    OnDeleteList=@HandleDeleteListAsync
+                                    OnCreateCard=@HandleCreateCardAsync
+                                    OnUpdateCard=@HandleUpdateCardAsync 
+                                    OnDeleteCard=@HandleDeleteCardAsync
+                                    OnToggleCardComplete=@HandleToggleCardCompleteAsync /> 
+                        </div>
+                    }
+                    <div class="flex-shrink-0" style="width: 280px;">
+                        
+                        <CreateListButtons BoardId=@_board.Id 
+                                        OnListCreate=@CreateListAsync />
                     </div>
-                }
-                <div class="flex-shrink-0" style="width: 280px;">
-                    <CreateListButtons BoardId=@_board.Id 
-                                       OnListCreate=@CreateListAsync />
+
                 </div>
+
             </div>
             
         </MudPaper>

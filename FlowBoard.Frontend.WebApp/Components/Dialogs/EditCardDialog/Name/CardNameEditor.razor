@@ -1,0 +1,15 @@
+<MudStack Spacing="1">
+
+    <MudText Typo=@Typo.caption 
+             Color=@Color.Secondary 
+             Class="ml-1">
+        Card name
+    </MudText>
+
+    <MudTextField @bind-Value=@_name
+                  @bind-Value:after=@SaveNameAsync
+                  Variant=@Variant.Outlined
+                  Margin=@Margin.Dense
+                  Immediate=@false />
+                  
+</MudStack>

@@ -25,4 +25,16 @@ public interface ICardApi
     
     [Put("/api/boards/{boardId}/cards/{cardId}/toggle-completion")]
     Task<ApiResponse<bool>> ToggleCompletionAsync(Guid boardId, Guid cardId);
+
+    [Put("/api/boards/{boardId}/cards/{cardId}/name")]
+    Task<ApiResponse<bool>> RenameAsync(
+        Guid boardId, Guid cardId, [Body] RenameCardDto dto);
+
+    [Put("/api/boards/{boardId}/cards/{cardId}/description")]
+    Task<ApiResponse<bool>> UpdateDescriptionAsync(
+        Guid boardId, Guid cardId, [Body] UpdateCardDescriptionDto dto);
+
+    [Put("/api/boards/{boardId}/cards/{cardId}/due-date")]
+    Task<ApiResponse<bool>> SetDueDateAsync(
+        Guid boardId, Guid cardId, [Body] SetCardDueDateDto dto);
 }

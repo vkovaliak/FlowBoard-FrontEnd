@@ -68,4 +68,34 @@ public class CardService : ICardService
         return response.IsSuccessStatusCode
             && response.Content != false;
     }
+
+    public async Task<bool> RenameAsync(
+        Guid boardId, Guid cardId, RenameCardDto dto)
+    {
+        var response = await _cardApi.RenameAsync(
+            boardId, cardId, dto);
+            
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
+
+    public async Task<bool> UpdateDescriptionAsync(
+        Guid boardId, Guid cardId, UpdateCardDescriptionDto dto)
+    {
+        var response = await _cardApi.UpdateDescriptionAsync(
+            boardId, cardId, dto);
+
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
+
+    public async Task<bool> SetDueDateAsync(
+        Guid boardId, Guid cardId, SetCardDueDateDto dto)
+    {
+        var response = await _cardApi.SetDueDateAsync(
+            boardId, cardId, dto);
+
+        return response.IsSuccessStatusCode 
+            && response.Content != false;
+    }
 }
