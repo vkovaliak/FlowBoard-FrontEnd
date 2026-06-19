@@ -45,6 +45,27 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         }
     }
 
+
+    public async Task<Guid> GetCurrentUserIdAsync()
+    {
+        var authState = await GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is { IsAuthenticated: true })
+        {
+            var userIdStr = user.FindFirst(c => c.Type == "sub")?.Value 
+                            ?? user.FindFirst(
+                                c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (Guid.TryParse(userIdStr, out var parsedId))
+            {
+                return parsedId;
+            }
+        }
+
+        return Guid.Empty;
+    }
+
     public void NotifyUserAuthentication(string token)
     {
         var handler = new JwtSecurityTokenHandler();

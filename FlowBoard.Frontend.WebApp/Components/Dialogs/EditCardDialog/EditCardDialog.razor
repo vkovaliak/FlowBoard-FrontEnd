@@ -5,33 +5,26 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.DueDate
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
-\@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
-
-
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name;
 
 <MudDialog Class="card-side-panel">
 
     <TitleContent>
-
         <MudStack Row=@true 
                   Justify=@Justify.SpaceBetween 
                   AlignItems=@AlignItems.Center 
                   Style="width: 100%;">
 
             <MudText Typo=@Typo.h6>
-
                 <MudIcon Icon=@Icons.Material.Filled.CreditCard 
                          Class="mr-2" />
-
-                Edit Card
+                Card details
             </MudText>
-
             <MudIconButton Icon=@Icons.Material.Filled.Close 
                            Size=@Size.Small 
-                           OnClick=@Cancel />
-
+                           OnClick=@Close />
         </MudStack>
-
     </TitleContent>
 
     <DialogContent>
@@ -40,10 +33,8 @@
         {
             <MudStack AlignItems=@AlignItems.Center 
                       Class="pa-8">
-
                 <MudProgressCircular Indeterminate=@true 
                                      Color=@Color.Primary />
-
             </MudStack>
         }
         else if (_card is null)
@@ -54,73 +45,49 @@
         }
         else
         {
-            <EditForm Model="@_model">
+            <MudStack Spacing="4">
 
-                <DataAnnotationsValidator />
+                <CardNameEditor BoardId=@BoardId
+                                CardId=@CardId
+                                Name=@_card.Name />
 
-                <MudStack Spacing="4">
-
-                    <MudTextField @bind-Value=@_model.Name
-                                  Label="Card Name"
-                                  Variant=@Variant.Outlined
-                                  Margin=@Margin.Dense
-                                  Required=@true
-                                  RequiredError="Card name cannot be empty"
-                                  For=@(() => _model.Name) />
-
-                    <CardListSelector BoardId=@BoardId
-                                      CardId=@CardId
-                                      CurrentListId=@_card.ListId
-                                      Lists=@_board!.Lists />
-
-                    <CardAssigneeSelector BoardId=@BoardId
-                                          CardId=@CardId
-                                          Assignees=@_card.Assignees
-                                          BoardMembers=@_board.Members />
-
-                    <CardDueDatePicker @bind-DueDate=@_model.DueDate
-                                       IsCompleted=@_card.IsCompleted />
-
-                    <LabelManager BoardId=@BoardId
+                <CardListSelector BoardId=@BoardId
                                   CardId=@CardId
-                                  AttachedLabels=@_card.Labels />
+                                  CurrentListId=@_card.ListId
+                                  Lists=@_board!.Lists />
 
-                    <ChecklistSection BoardId=@BoardId
-                                    CardId=@CardId
-                                    Items=@_card.ChecklistItems />
+                <CardAssigneeSelector BoardId=@BoardId
+                                      CardId=@CardId
+                                      Assignees=@_card.Assignees
+                                      BoardMembers=@_board.Members />
 
-                    <CardDescriptionEditor BoardId=@BoardId
-                                           CardId=@CardId
-                                           @bind-Description=@_model.Description />
+                <CardDueDatePicker BoardId=@BoardId
+                                   CardId=@CardId
+                                   DueDate=@_card.DueDate
+                                   IsCompleted=@_card.IsCompleted />
 
-                    <AttachmentList Attachments=@_card.Attachments
-                                    OnDelete=@DeleteCardAttachmentAsync />
+                <LabelManager BoardId=@BoardId
+                              CardId=@CardId
+                              AttachedLabels=@_card.Labels />
 
-                    <MudDivider Class="my-2" />
+                <ChecklistSection BoardId=@BoardId
+                                  CardId=@CardId
+                                  Items=@_card.ChecklistItems />
 
-                    <CardCommentsSection BoardId=@BoardId 
-                                         CardId=@CardId />
+                <CardDescriptionEditor BoardId=@BoardId
+                                       CardId=@CardId
+                                       Description=@_card.Description />
 
-                </MudStack>
+                <AttachmentList Attachments=@_card.Attachments
+                                OnDelete=@DeleteCardAttachmentAsync />
 
-            </EditForm>
+                <MudDivider Class="my-2" />
+
+                <CardCommentsSection BoardId=@BoardId CardId=@CardId />
+
+            </MudStack>
         }
 
     </DialogContent>
-
-    <DialogActions>
-
-        <MudButton OnClick=@Cancel 
-                   Variant=@Variant.Text>
-            Cancel
-        </MudButton>
-
-        <MudButton Color=@Color.Primary 
-                   Variant=@Variant.Filled 
-                   OnClick=@Save>
-            Save
-        </MudButton>
-
-    </DialogActions>
 
 </MudDialog>

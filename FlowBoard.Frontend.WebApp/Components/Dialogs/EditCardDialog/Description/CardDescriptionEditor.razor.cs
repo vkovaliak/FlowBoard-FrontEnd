@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
+using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Services.Abstractions;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Description;
@@ -7,24 +9,42 @@ namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Descriptio
 public partial class CardDescriptionEditor
 {
     [Inject] public IAttachmentService AttachmentService { get; set; } = default!;
+    [Inject] private ICardService CardService { get; set; } = default!;
+    [Inject] private ISnackbar Snackbar { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string? Description { get; set; }
-    [Parameter] public EventCallback<string?> DescriptionChanged { get; set; }
 
     private bool _isEditing;
+    private string? _draft; 
 
-    private string? _description
+    private void StartEditing()
     {
-        get => Description;
-        set => _ = SetDescriptionAsync(value);
+        _draft = Description;
+        _isEditing = true;
     }
 
-    private async Task SetDescriptionAsync(string? value)
+    private void CancelEditing()
     {
-        Description = value;
-        await DescriptionChanged.InvokeAsync(value);
+        _isEditing = false;
+        _draft = null;
+    }
+
+    private async Task SaveAsync()
+    {
+        var dto = new UpdateCardDescriptionDto(_draft);
+        var success = await CardService.UpdateDescriptionAsync(
+            BoardId, CardId, dto);
+
+        if (!success)
+        {
+            Snackbar.Add("Failed to update description", Severity.Error);
+            return;
+        }
+
+        _isEditing = false;
+        _draft = null;
     }
 
     private async Task HandleFilesSelected(InputFileChangeEventArgs e)
@@ -38,7 +58,6 @@ public partial class CardDescriptionEditor
     private async Task UploadAsync(IBrowserFile file)
     {
         await using var stream = file.OpenReadStream(50 * 1024 * 1024);
-
         await AttachmentService.UploadCardAttachmentAsync(
             BoardId, CardId, stream, file.Name, file.ContentType);
     }

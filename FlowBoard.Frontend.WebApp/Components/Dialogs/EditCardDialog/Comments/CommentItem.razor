@@ -28,16 +28,19 @@
 
         @if (!_isEditing)
         {
-            <MudStack Row=@true Spacing="1">
+            @if (CanManage)
+            {
+                <MudStack Row=@true Spacing="1">
 
-                <MudIconButton Icon=@Icons.Material.Filled.Edit
-                               Size=@Size.Small Color=@Color.Default
-                               OnClick=@StartEdit />
+                    <MudIconButton Icon=@Icons.Material.Filled.Edit
+                                Size=@Size.Small Color=@Color.Default
+                                OnClick=@StartEdit />
 
-                <MudIconButton Icon=@Icons.Material.Filled.Delete
-                               Size=@Size.Small Color=@Color.Error
-                               OnClick=@(() => OnDelete.InvokeAsync(Comment.Id)) />
-            </MudStack>
+                    <MudIconButton Icon=@Icons.Material.Filled.Delete
+                                Size=@Size.Small Color=@Color.Error
+                                OnClick=@(() => OnDelete.InvokeAsync(Comment.Id)) />
+                </MudStack>
+            }
         }
     </MudStack>
 

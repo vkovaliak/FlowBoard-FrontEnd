@@ -12,30 +12,42 @@
             Description
         </MudText>
 
-        <div style="position: relative; display: inline-flex;
-                    width: 36px; height: 36px;
-                    align-items: center; justify-content: center;
-                    border-radius: 50%; cursor: pointer;"
-            title="Attach files">
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center 
+                  Spacing="1">
 
-            <MudIcon Icon=@Icons.Material.Filled.AttachFile
-                    Color=@Color.Default
-                    Size=@Size.Small />
+            @if (!_isEditing)
+            {
+                <MudButton Variant=@Variant.Text
+                           Color=@Color.Primary
+                           Size=@Size.Small
+                           OnClick=@StartEditing>
+                    Edit
+                </MudButton>
+            }
 
-            <InputFile OnChange=@HandleFilesSelected multiple
-                    style="position: absolute; inset: 0;
-                            opacity: 0; cursor: pointer;" />
-        </div>
+            <div style="position: relative; display: inline-flex;
+                        width: 36px; height: 36px;
+                        align-items: center; justify-content: center;
+                        border-radius: 50%; cursor: pointer;"
+                 title="Attach files">
+                 
+                <MudIcon Icon=@Icons.Material.Filled.AttachFile
+                         Color=@Color.Default Size=@Size.Small />
 
+                <InputFile OnChange=@HandleFilesSelected multiple
+                           style="position: absolute; inset: 0;
+                                  opacity: 0; cursor: pointer;" />
+            </div>
+        </MudStack>
     </MudStack>
 
     @if (!_isEditing)
     {
-        <MudPaper Outlined=@true Class="pa-3"
-                  Style="cursor: pointer; min-height: 80px;
-                         border-color: var(--mud-palette-lines-inputs);"
-                  @onclick=@(() => _isEditing = true)>
-
+        <MudPaper Outlined=@true 
+                  Class="pa-3"
+                  Style="min-height: 80px;
+                         border-color: var(--mud-palette-lines-inputs);">
             @if (string.IsNullOrWhiteSpace(Description))
             {
                 <MudText Typo=@Typo.body2 Color=@Color.Secondary
@@ -53,15 +65,24 @@
     }
     else
     {
-        <RichTextEditor @bind-Value=@_description />
+        <RichTextEditor @bind-Value=@_draft />
 
-        <MudStack Row=@true Justify=@Justify.FlexEnd Class="mt-1">
-            <MudButton Variant=@Variant.Text
+        <MudStack Row=@true 
+                  Justify=@Justify.FlexEnd 
+                  Spacing="2" 
+                  Class="mt-1">
+
+            <MudButton Variant=@Variant.Text 
                        Color=@Color.Secondary
-                       Size=@Size.Small
-                       OnClick=@(() => _isEditing = false)>
-                Close Editor
+                       Size=@Size.Small OnClick=@CancelEditing>
+                Cancel
             </MudButton>
+
+            <MudButton Variant=@Variant.Filled Color=@Color.Primary
+                       Size=@Size.Small OnClick=@SaveAsync>
+                Save
+            </MudButton>
+
         </MudStack>
     }
 </MudStack>
