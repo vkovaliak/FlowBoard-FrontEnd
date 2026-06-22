@@ -1,6 +1,11 @@
 
 <MudStack Spacing="2">
-    <MudText Typo=@Typo.subtitle1 Class="font-weight-bold">Comments</MudText>
+    <MudText Typo=@Typo.subtitle2 
+             Color=@Color.Default 
+             Class="ml-1"
+             Style="font-weight: 500">
+        Comments
+    </MudText>
 
     <CommentComposer BoardId=@BoardId
                      OnCreateComment=@CreateCommentAsync

@@ -6,88 +6,102 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name;
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name
 
-<MudDialog Class="card-side-panel">
+@if (_card != null)
+{
+    <MudDialog Class="card-side-panel">
 
-    <TitleContent>
-        <MudStack Row=@true 
-                  Justify=@Justify.SpaceBetween 
-                  AlignItems=@AlignItems.Center 
-                  Style="width: 100%;">
+        <TitleContent>
 
-            <MudText Typo=@Typo.h6>
-                <MudIcon Icon=@Icons.Material.Filled.CreditCard 
-                         Class="mr-2" />
-                Card details
-            </MudText>
-            <MudIconButton Icon=@Icons.Material.Filled.Close 
-                           Size=@Size.Small 
-                           OnClick=@Close />
-        </MudStack>
-    </TitleContent>
+            <MudStack Row=@true 
+                      Justify=@Justify.SpaceBetween
+                      AlignItems=@AlignItems.Center 
+                      Style="width: 100%;" 
+                      Class="mt-5">
 
-    <DialogContent>
+                <div style="flex-grow: 1; min-width: 0;">
 
-        @if (_isLoading)
-        {
-            <MudStack AlignItems=@AlignItems.Center 
-                      Class="pa-8">
-                <MudProgressCircular Indeterminate=@true 
-                                     Color=@Color.Primary />
+                    <CardNameEditor BoardId=@BoardId 
+                                    CardId=@CardId 
+                                    Name=@_card.Name />
+                </div>
+
+                <MudIconButton Icon=@Icons.Material.Filled.Close
+                               Size=@Size.Small 
+                               OnClick=@Close />
             </MudStack>
-        }
-        else if (_card is null)
-        {
-            <MudAlert Severity=@Severity.Warning>
-                This card no longer exists.
-            </MudAlert>
-        }
-        else
-        {
-            <MudStack Spacing="4">
 
-                <CardNameEditor BoardId=@BoardId
-                                CardId=@CardId
-                                Name=@_card.Name />
+        </TitleContent>
 
-                <CardListSelector BoardId=@BoardId
-                                  CardId=@CardId
-                                  CurrentListId=@_card.ListId
-                                  Lists=@_board!.Lists />
+        <DialogContent>
+
+            
+            <div class="edit-card-toprow mb-4">
 
                 <CardAssigneeSelector BoardId=@BoardId
-                                      CardId=@CardId
-                                      Assignees=@_card.Assignees
-                                      BoardMembers=@_board.Members />
+                                        CardId=@CardId
+                                        Assignees=@_card.Assignees
+                                        BoardMembers=@_board!.Members />
 
                 <CardDueDatePicker BoardId=@BoardId
-                                   CardId=@CardId
-                                   DueDate=@_card.DueDate
-                                   IsCompleted=@_card.IsCompleted />
+                                    CardId=@CardId
+                                    DueDate=@_card.DueDate
+                                    IsCompleted=@_card.IsCompleted />
 
-                <LabelManager BoardId=@BoardId
-                              CardId=@CardId
-                              AttachedLabels=@_card.Labels />
+                <CardListSelector BoardId=@BoardId
+                                    CardId=@CardId
+                                    CurrentListId=@_card.ListId
+                                    Lists=@_board.Lists />
 
-                <ChecklistSection BoardId=@BoardId
-                                  CardId=@CardId
-                                  Items=@_card.ChecklistItems />
+            </div>
+
+            <div class="mb-4">
 
                 <CardDescriptionEditor BoardId=@BoardId
-                                       CardId=@CardId
-                                       Description=@_card.Description />
+                                        CardId=@CardId
+                                        Description=@_card.Description />
+            </div>
 
-                <AttachmentList Attachments=@_card.Attachments
-                                OnDelete=@DeleteCardAttachmentAsync />
+            <div class="edit-card-grid">
 
-                <MudDivider Class="my-2" />
+                <div class="edit-card-col">
 
-                <CardCommentsSection BoardId=@BoardId CardId=@CardId />
+                    <MudStack Spacing="4">
 
-            </MudStack>
-        }
+                        <AttachmentsSection BoardId=@BoardId
+                                            CardId=@CardId
+                                            Attachments=@_card.Attachments
+                                            OnDelete=@DeleteCardAttachmentAsync />
 
-    </DialogContent>
+                        <ChecklistSection BoardId=@BoardId
+                                            CardId=@CardId
+                                            Items=@_card.ChecklistItems />
 
-</MudDialog>
+                    </MudStack>
+
+                </div>
+
+                <div class="edit-card-col">
+
+                    <MudStack Spacing="4">
+
+                        <LabelManager BoardId=@BoardId
+                                        CardId=@CardId
+                                        AttachedLabels=@_card.Labels />
+
+                        <MudDivider />
+
+                        <CardCommentsSection BoardId=@BoardId 
+                                                CardId=@CardId />
+
+                    </MudStack>
+                    
+                </div>
+
+            </div>
+
+        </DialogContent>
+
+    </MudDialog>
+}

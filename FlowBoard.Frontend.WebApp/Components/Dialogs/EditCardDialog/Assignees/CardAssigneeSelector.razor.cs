@@ -10,44 +10,70 @@ public partial class CardAssigneeSelector
 {
     [Inject] public ICardService CardService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
+    [Inject] public IDialogService DialogService { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
 
-    private Guid? _selectedUserId = null;
-
-    private IEnumerable<BoardMemberDto> AvailableMembers =>
-        BoardMembers.Where(x => Assignees.All(a => a.UserId != x.UserId));
-
-    private async Task AssignUserAsync(Guid? userId)
+    private async Task OpenAssignDialogAsync()
     {
-        if (userId is null)
+        var parameters = new DialogParameters<AssignMembersDialog>
+        {
+            { x => x.BoardMembers, BoardMembers },
+            { x => x.AssignedUserIds, Assignees.Select(
+                a => a.UserId).ToHashSet() }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraSmall,
+            FullWidth = true,
+            CloseButton = false
+        };
+
+        var dialog = await DialogService.ShowAsync<AssignMembersDialog>(
+            "Assign members", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (result is null || result.Canceled)
         {
             return;
         }
 
-        var success = await CardService.AssignMemberAsync(
-            BoardId, CardId, userId.Value);
-
-        if (!success)
+        if (result.Data is not HashSet<Guid> selectedIds)
         {
-            Snackbar.Add("Failed to assign member", Severity.Error);
             return;
         }
 
-        _selectedUserId = null;
+        await ApplyChangesAsync(selectedIds);
     }
 
-    private async Task RemoveAssigneeAsync(CardAssigneeDto assignee)
+    private async Task ApplyChangesAsync(HashSet<Guid> selectedIds)
     {
-        var success = await CardService.UnassignMemberAsync(
-            BoardId, CardId, assignee.UserId);
+        var currentIds = Assignees.Select(a => a.UserId).ToHashSet();
 
-        if (!success)
+        foreach (var userId in selectedIds.Except(currentIds))
         {
-            Snackbar.Add("Failed to remove member", Severity.Error);
+            var success = await CardService.AssignMemberAsync(
+                BoardId, CardId, userId);
+            if (!success)
+            {
+                Snackbar.Add("Failed to assign member", Severity.Error);
+            }
+        }
+
+        foreach (var userId in currentIds.Except(selectedIds))
+        {
+            var success = await CardService.UnassignMemberAsync(
+                BoardId, CardId, userId);
+
+            if (!success)
+            {
+                Snackbar.Add("Failed to remove member", Severity.Error);
+            }
         }
     }
 }

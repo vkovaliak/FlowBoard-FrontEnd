@@ -32,20 +32,4 @@ public partial class CardDueDatePicker
             Snackbar.Add("Failed to update due date", Severity.Error);
         }
     }
-
-    private Color GetStatusColor()
-    {
-        if (IsCompleted) return Color.Success;
-        if (DueDate < DateTime.Today) return Color.Error;
-        if (DueDate == DateTime.Today) return Color.Warning;
-        return Color.Default;
-    }
-
-    private string GetStatusText()
-    {
-        if (IsCompleted) return "Completed";
-        if (DueDate < DateTime.Today) return "Overdue";
-        if (DueDate == DateTime.Today) return "Due today";
-        return "Upcoming";
-    }
 }

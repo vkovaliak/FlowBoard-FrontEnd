@@ -1,0 +1,82 @@
+@using FlowBoard.Frontend.WebApp.Components.Common
+
+<MudDialog>
+
+    <TitleContent>
+
+        <MudStack Row=@true 
+                  Justify=@Justify.SpaceBetween
+                  AlignItems=@AlignItems.Center
+                   Style="width: 100%;">
+
+            <MudText Typo=@Typo.h6>
+                Assign members
+            </MudText>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Close
+                           Size=@Size.Small 
+                           OnClick=@Cancel />
+        </MudStack>
+
+    </TitleContent>
+
+    <DialogContent>
+
+
+        <div style="max-height: 320px; overflow-y: auto;">
+
+            @foreach (var member in BoardMembers)
+            {
+                <div class="d-flex align-center px-2 py-2"
+                     style="gap: 12px; cursor: pointer; border-radius: 6px;"
+                     @onclick=@(() => Toggle(member.UserId))>
+
+                    <MudCheckBox T=@bool
+                                 Value=@_selected.Contains(member.UserId)
+                                 ValueChanged=@(_ => Toggle(member.UserId))
+                                 Color=@Color.Primary
+                                 Dense=@true />
+
+                    <UserAvatar UserName=@member.UserName
+                                AvatarUrl=@member.AvatarUrl
+                                Size=@Size.Medium />
+
+                    <div style="min-width: 0;">
+
+                        <MudText Typo=@Typo.body2 
+                                 Class="font-weight-bold"
+                                 Style="overflow: hidden; text-overflow: ellipsis;
+                                        white-space: nowrap;">
+                            @member.UserName
+                        </MudText>
+
+                        <MudText Typo=@Typo.caption 
+                                 Color=@Color.Secondary
+                                 Style="overflow: hidden; text-overflow: ellipsis;
+                                        white-space: nowrap;">
+                            @member.EmailAddress
+                        </MudText>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </DialogContent>
+
+    <DialogActions>
+        
+        <MudButton Variant=@Variant.Text 
+                   OnClick=@Cancel>
+                Cancel
+        </MudButton>
+
+        <MudButton Variant=@Variant.Filled 
+                   Color=@Color.Primary
+                   OnClick=@Apply>Assign
+        </MudButton>
+        
+    </DialogActions>
+
+</MudDialog>

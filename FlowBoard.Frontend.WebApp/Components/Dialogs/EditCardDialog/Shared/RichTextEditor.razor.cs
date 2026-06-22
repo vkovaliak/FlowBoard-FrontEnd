@@ -30,7 +30,7 @@ public partial class RichTextEditor
         ["statusbar"] = false,
         ["plugins"] = "lists link autoresize image",
         ["toolbar"] =
-            "undo redo | blocks | bold italic underline | " +
+            "blocks | bold italic underline | " +
             "bullist numlist | alignleft aligncenter alignright | link"
     };
 }

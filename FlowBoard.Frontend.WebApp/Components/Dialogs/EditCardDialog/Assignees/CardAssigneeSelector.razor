@@ -1,69 +1,37 @@
 @using FlowBoard.Frontend.WebApp.Components.Common
 
-<MudStack Spacing="2">
+<MudStack Spacing="1">
 
-    <MudText Typo=@Typo.caption
-             Color=@Color.Secondary>
+    <MudText Typo=@Typo.subtitle2 
+             Color=@Color.Default 
+             Class="ml-1"
+             Style="font-weight: 500">
         Assignees
     </MudText>
 
-    @if (Assignees.Any())
-    {
-        <MudStack Row=@true 
-                  Wrap=@Wrap.Wrap 
-                  Spacing="1">
+    <div style="display: flex; align-items: center;">
 
-            @foreach (var assignee in Assignees)
-            {
-                <MudChip T=@string
-                         OnClose=@(() => RemoveAssigneeAsync(assignee))
-                         Color=@Color.Default
-                         Style="padding-left: 4px;">
-
-                    <div style="display: flex; 
-                                align-items: 
-                                center; gap: 6px;">
-
-                        <UserAvatar UserName=@assignee.UserName
-                                    AvatarUrl=@assignee.AvatarUrl
-                                    Size=@Size.Small
-                                    SizeStyle="width: 24px; 
-                                               height: 24px; 
-                                               font-size: 12px;" />
-                        @assignee.UserName
-                    </div>
-                </MudChip>
-            }
-
-        </MudStack>
-    }
-
-    <MudSelect T=Guid?
-               Label="Assign member"
-               Value=@_selectedUserId
-               ValueChanged=@AssignUserAsync
-               Variant=@Variant.Outlined>
-
-        @foreach (var member in AvailableMembers)
+        @foreach (var assignee in Assignees)
         {
-            <MudSelectItem Value=@((Guid?)member.UserId)>
-
-                <div style="display: flex; 
-                            align-items: center; 
-                            gap: 8px;">
-
-                    <UserAvatar UserName=@member.UserName
-                                AvatarUrl=@member.AvatarUrl
-                                Size=@Size.Small
-                                SizeStyle="width: 24px; height: 24px; 
-                                           font-size: 12px;" />
-
-                    @member.UserName
-                </div>
-
-            </MudSelectItem>
+            <div style="margin-left: -6px;" title=@assignee.UserName>
+                <UserAvatar UserName=@assignee.UserName
+                            AvatarUrl=@assignee.AvatarUrl
+                            Size=@Size.Small
+                            SizeStyle="width: 32px; height: 32px;
+                                       font-size: 13px;
+                                       border: 2px solid white;" />
+            </div>
         }
 
-    </MudSelect>
+        <div style="margin-left: 4px;">
+            <MudIconButton Icon=@Icons.Material.Filled.Add
+                           Size=@Size.Small
+                           Variant=@Variant.Outlined
+                           Style="border-radius: 50%; width: 32px; height: 32px;
+                                  border: 1px dashed #cbd5e1;"
+                           OnClick=@OpenAssignDialogAsync />
+        </div>
+
+    </div>
 
 </MudStack>
