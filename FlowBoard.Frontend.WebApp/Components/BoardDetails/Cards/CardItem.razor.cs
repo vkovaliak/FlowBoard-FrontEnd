@@ -20,11 +20,9 @@ public partial class CardItem
 
     private string GetTitleStyle()
     {
-        var baseStyle = "word-break: break-word;";
+        var baseStyle = "word-break: break-word; font-size: 16px; font-weight:600";
 
-        return Card.IsCompleted
-            ? $"{baseStyle} text-decoration: line-through; color: #97a0af;"
-            : baseStyle;
+        return baseStyle;
     }
 
     private Color GetDueDateColor()

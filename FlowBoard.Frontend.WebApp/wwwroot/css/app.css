@@ -192,3 +192,39 @@ transform: rotate(-90deg);
     background-repeat: no-repeat;
     background-position: left top;
 }
+
+.member-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.member-avatar-stacked {
+    margin-left: -8px;   
+}
+
+.member-avatar-stacked:first-child {
+    margin-left: 0;
+}
+
+.card-item .card-complete-toggle {
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.card-item:hover .card-complete-toggle {
+    opacity: 1;
+}
+
+.card-item.card-completed .card-complete-toggle {
+    opacity: 1;
+}
+
+.card-label {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+}

@@ -9,6 +9,11 @@ public partial class BoardMembers
 {
     [Parameter] public List<BoardMemberDto> Members { get; set; } = [];
 
+    private bool _isOpen;
+
+    private void ToggleOpen() => _isOpen = !_isOpen;
+    private void Close() => _isOpen = false;
+
     private static Color GetRoleColor(BoardRole role) => role switch
     {
         BoardRole.Owner => Color.Warning,
