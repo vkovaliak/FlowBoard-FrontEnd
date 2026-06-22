@@ -2,14 +2,25 @@
             AlignItems=@AlignItems.Center
             Class="mb-6">
 
-    <MudIconButton Icon=@Icons.Material.Filled.ArrowBack 
-                    Href="/" 
-                    Color=@Color.Default />
+    <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="1">
 
-    <MudText Typo=@Typo.h4
-                Class="font-weight-bold">
-        @BoardName
-    </MudText>
+        <MudLink Href="/"
+                 Typo=@Typo.h6
+                 Color=@Color.Default
+                 Underline=@Underline.None
+                 Style="font-weight: 500; color: #94A3B8;">
+            Boards
+        </MudLink>
+
+        <MudText Typo=@Typo.h6 Style="color: #CBD5E1; font-weight: 400;">
+            /
+        </MudText>
+
+        <MudText Typo=@Typo.h6 Style="font-weight: 700; color: #1E293B;">
+            @BoardName
+        </MudText>
+        
+    </MudStack>
     
     <MudChip T=@string
                 Color=@(IsPublic ? Color.Primary : Color.Secondary)

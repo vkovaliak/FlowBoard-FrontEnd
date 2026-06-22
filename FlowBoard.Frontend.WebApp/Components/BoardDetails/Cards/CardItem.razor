@@ -1,109 +1,153 @@
+@using System.Globalization
 @using FlowBoard.Frontend.WebApp.Components.Checklists
 @using FlowBoard.Frontend.WebApp.Components.Common
 
-<MudPaper Elevation="1" Class="pa-3 bg-white" 
-          Style="border-radius: 8px; position: relative; cursor: pointer;"
+<MudPaper Elevation="1"
+          Class=@($"pa-3 bg-white card-item {(Card.IsCompleted ? "card-completed" : "")}")
+          Style="border-radius: 8px; 
+                 position: relative; 
+                 cursor: pointer;"
           @onclick=@(() => OnEdit.InvokeAsync(Card))>
 
-    <CardLabels Labels=@Card.Labels />
+    <MudStack Row=@true 
+              Justify=@Justify.SpaceBetween 
+              AlignItems=@AlignItems.Start>
 
-    <MudStack Row=@true Justify=@Justify.SpaceBetween 
-                AlignItems=@AlignItems.Start
-                Class="mb-1">
-                
-        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="1"
-                  Style="min-width: 0;">
+        <MudText Typo=@Typo.subtitle1
+                 Style=@GetTitleStyle()>
+            @Card.Name
+        </MudText>
 
-            <div @onclick:stopPropagation="true">
-                <MudIconButton Icon=@(Card.IsCompleted 
-                                   ? Icons.Material.Filled.CheckCircle 
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center 
+                  Spacing="1">
+
+            <div class="card-complete-toggle" 
+                 @onclick:stopPropagation="true">
+
+                <MudIconButton Icon=@(Card.IsCompleted
+                                   ? Icons.Material.Filled.CheckCircle
                                    : Icons.Material.Outlined.RadioButtonUnchecked)
-                               Color=@(Card.IsCompleted ? Color.Success : Color.Default)
+                               Color=@(Card.IsCompleted ? Color.Primary : Color.Default)
                                Size=@Size.Small
                                Style="padding: 2px;"
                                OnClick=@(() => OnToggleComplete.InvokeAsync(Card)) />
             </div>
 
-            <MudText Typo=@Typo.body2 Class="font-weight-bold"
-                        Style="word-break: break-word;">
-                @Card.Name
-            </MudText>
-    
+            <div @onclick:stopPropagation="true">
+                <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                         Size=@Size.Small
+                         Dense=@true
+                         AnchorOrigin=@Origin.BottomRight
+                         TransformOrigin=@Origin.TopRight>
+
+                    <MudMenuItem Icon=@Icons.Material.Filled.OpenInFull
+                                 OnClick=@(() => OnEdit.InvokeAsync(Card))>
+                        Open
+                    </MudMenuItem>
+
+                    <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                                 IconColor=@Color.Error
+                                 OnClick=@(() => OnDelete.InvokeAsync(Card))>
+                        Delete
+                    </MudMenuItem>
+
+                </MudMenu>
+
+            </div>
+
         </MudStack>
-
-        <div @onclick:stopPropagation="true">
-
-            <MudMenu Icon=@Icons.Material.Filled.MoreVert 
-                     Size=@Size.Small
-                     Dense=@true
-                     AnchorOrigin=@Origin.BottomRight
-                     TransformOrigin=@Origin.TopRight
-                     Style="margin-top: -8px; margin-right: -8px;">
-                
-                <MudMenuItem Icon=@Icons.Material.Filled.OpenInFull 
-                            OnClick=@(() => OnEdit.InvokeAsync(Card))>
-                    Open
-                </MudMenuItem>
-            
-                <MudMenuItem Icon=@Icons.Material.Filled.Delete
-                            IconColor=@Color.Error
-                            OnClick=@(() => OnDelete.InvokeAsync(Card))>
-                    Delete
-                </MudMenuItem>
-
-            </MudMenu>
-            
-        </div>
 
     </MudStack>
 
-    @if (Card.ChecklistItems.Count > 0)
-    {
-        <ChecklistProgress Items=@Card.ChecklistItems Class="mt-2" />
-    }
-
-
-    @if (!string.IsNullOrWhiteSpace(Card.Description))
+    @if (Card.Labels.Count > 0)
     {
         <MudStack Row=@true 
-                  AlignItems=@AlignItems.Center 
                   Spacing="1" 
-                  Class="mt-2 text-muted">
+                  Class="flex-wrap mt-2">
 
-            <MudIcon Icon=@Icons.Material.Filled.Notes 
-                     Size=@Size.Small 
-                     Style="color: #42526e;" />
+            @foreach (var label in Card.Labels)
+            {
+                <span class="card-label"
+                      style=@($"background-color: {label.Color};")>
+                    @label.Name
+                </span>
+            }
 
         </MudStack>
     }
 
-
-    @if (Card.Assignees.Any())
+    @if (Card.Assignees.Any() 
+        || Card.DueDate != default 
+        || !string.IsNullOrWhiteSpace(Card.Description))
     {
-        <MudStack Row="true"
-                  Class="mt-2" 
-                  Spacing="1">
+        <MudStack Row=@true 
+                  Justify=@Justify.SpaceBetween
+                  AlignItems=@AlignItems.Center 
+                  Class="mt-2">
 
-            @foreach (var assignee in Card.Assignees.Take(3))
-            {
-                <UserAvatar UserName=@assignee.UserName
-                            AvatarUrl=@assignee.AvatarUrl
-                            Size=@Size.Small
-                            SizeStyle="width: 28px; 
-                                       height: 28px; 
-                                       font-size: 12px;" />
-            }
+            <MudStack Row=@true 
+                      AlignItems=@AlignItems.Center 
+                      Spacing="3">
 
-            @if (Card.Assignees.Count > 3)
+                @if (Card.Assignees.Any())
+                {
+                    <MudStack Row=@true 
+                              Spacing="1">
+
+                        @foreach (var assignee in Card.Assignees.Take(3))
+                        {
+                            <UserAvatar UserName=@assignee.UserName
+                                        AvatarUrl=@assignee.AvatarUrl
+                                        Size=@Size.Small
+                                        SizeStyle="width: 24px; height: 24px; font-size: 11px;" />
+                        }
+                        @if (Card.Assignees.Count > 3)
+                        {
+                            <MudAvatar Style="width: 24px; height: 24px; font-size: 11px;
+                                            background-color: #6b778c; color: white;">
+                                +@(Card.Assignees.Count - 3)
+                            </MudAvatar>
+                        }
+
+                    </MudStack>
+                }
+
+                @if (Card.DueDate != default)
+                {
+                    <MudStack Row=@true 
+                              AlignItems=@AlignItems.Center 
+                              Spacing="1">
+
+                        <MudIcon Icon=@Icons.Material.Outlined.CalendarToday
+                                Size=@Size.Small
+                                Color=@GetDueDateColor()
+                                Style="font-size: 14px;" />
+
+                        <MudText Typo=@Typo.caption 
+                                 Style="color: #64748B;">
+                            @Card.DueDate?.ToString("d MMM", CultureInfo.InvariantCulture)
+                        </MudText>
+
+                    </MudStack>
+                }
+
+            </MudStack>
+
+            @if (!string.IsNullOrWhiteSpace(Card.Description))
             {
-                <MudAvatar Size=@Size.Small
-                           Style="width: 28px; height: 28px; font-size: 12px;
-                                background-color: #6b778c; color: white;">
-                                
-                    +@(Card.Assignees.Count - 3)
-                </MudAvatar>
+                <MudIcon Icon=@Icons.Material.Outlined.Notes
+                        Size=@Size.Small
+                        Style="font-size: 16px; color: #64748B;" />
             }
 
         </MudStack>
     }
+
+    @if (Card.ChecklistItems.Count > 0)
+    {
+        <ChecklistProgress Items=@Card.ChecklistItems 
+                           Class="mt-2" />
+    }
+
 </MudPaper>

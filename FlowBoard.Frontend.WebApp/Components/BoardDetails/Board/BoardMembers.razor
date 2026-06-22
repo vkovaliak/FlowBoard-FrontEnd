@@ -1,58 +1,93 @@
 @using FlowBoard.Frontend.WebApp.Components.Common
 
-<MudMenu Label=@($"{Members.Count} Members")
-         StartIcon=@Icons.Material.Filled.Group
-         Variant=@Variant.Outlined
-         Color=@Color.Default
-         AnchorOrigin=@Origin.BottomRight
-         TransformOrigin=@Origin.TopRight
-         Style="text-transform: none;">
+<div style="position: relative;">
 
-    <div style="min-width: 320px; 
-                max-height: 400px; 
-                overflow-y: auto;">
+    <div style="display: flex; align-items: center; cursor: pointer;"
+         @onclick=@ToggleOpen>
 
-        <MudText Typo=@Typo.subtitle2 Class="px-4 pt-2 pb-1 font-weight-bold">
-            Board Members (@Members.Count)
-        </MudText>
-
-        <MudDivider />
-
-        @foreach (var member in Members.OrderBy(m => m.Role))
+        @foreach (var member in Members.Take(4))
         {
-            <div class="d-flex align-center px-4 py-2" 
-                 style="gap: 12px;">
+            <div style="margin-left: -8px;">
 
                 <UserAvatar UserName=@member.UserName
                             AvatarUrl=@member.AvatarUrl
-                            Size=@Size.Medium />
+                            Size=@Size.Small
+                            SizeStyle="width: 32px; height: 32px;
+                                       font-size: 13px;
+                                       border: 2px solid white;" />
+            </div>
+        }
 
-                <div class="flex-grow-1" style="min-width: 0;">
-                    <MudText Typo=@Typo.body2
-                             Style="overflow: hidden; text-overflow: ellipsis;
-                                    white-space: nowrap;">
-                        @member.UserName
-                    </MudText>
-                    
-                    <MudText Typo=@Typo.caption 
-                             Color=@Color.Secondary
-                             Style="overflow: hidden; text-overflow: ellipsis;
-                                    white-space: nowrap;">
-                        @member.EmailAddress
-                    </MudText>
-                </div>
-
-                <MudChip T=@string
-                         Size=@Size.Small
-                         Variant=@Variant.Filled
-                         Color=@GetRoleColor(member.Role)
-                         Style="text-transform: none;">
-                    @member.Role.ToString()
-                </MudChip>
-
+        @if (Members.Count > 4)
+        {
+            <div style="margin-left: -8px;">
+                <MudAvatar Style="width: 32px; height: 32px; font-size: 12px;
+                                  background-color: #6b778c; color: white;
+                                  border: 2px solid white;">
+                    +@(Members.Count - 4)
+                </MudAvatar>d
             </div>
         }
 
     </div>
 
-</MudMenu>
+    <MudPopover Open=@_isOpen
+                AnchorOrigin=@Origin.BottomRight
+                TransformOrigin=@Origin.TopRight
+                Style="z-index: 1300;">
+
+        <MudPaper Elevation="4"
+                  Style="min-width: 320px; max-height: 400px;
+                         overflow-y: auto; padding: 4px 0;">
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="px-4 pt-2 pb-1 font-weight-bold">
+                Board Members (@Members.Count)
+            </MudText>
+
+            <MudDivider />
+
+            @foreach (var member in Members.OrderBy(m => m.Role))
+            {
+                <div class="d-flex align-center px-4 py-2" style="gap: 12px;">
+
+                    <UserAvatar UserName=@member.UserName
+                                AvatarUrl=@member.AvatarUrl
+                                Size=@Size.Medium />
+
+                    <div class="flex-grow-1" style="min-width: 0;">
+                        
+                        <MudText Typo=@Typo.body2
+                                 Style="overflow: hidden; text-overflow: ellipsis;
+                                        white-space: nowrap;">
+                            @member.UserName
+                        </MudText>
+
+                        <MudText Typo=@Typo.caption Color=@Color.Secondary
+                                 Style="overflow: hidden; text-overflow: ellipsis;
+                                        white-space: nowrap;">
+                            @member.EmailAddress
+                        </MudText>
+
+                    </div>
+
+                    <MudChip T=@string Size=@Size.Small Variant=@Variant.Filled
+                             Color=@GetRoleColor(member.Role)
+                             Style="text-transform: none;">
+                        @member.Role.ToString()
+                    </MudChip>
+
+                </div>
+            }
+
+        </MudPaper>
+
+    </MudPopover>
+
+</div>
+
+@if (_isOpen)
+{
+    <div style="position: fixed; inset: 0; z-index: 1200;"
+         @onclick=@Close></div>
+}
