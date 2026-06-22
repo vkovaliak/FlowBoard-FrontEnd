@@ -19,7 +19,6 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     private BoardDetailsDto? _board;
     private CardDto? _card;
-    private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,7 +34,6 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
             .SelectMany(l => l.Cards ?? [])
             .FirstOrDefault(c => c.Id == CardId);
 
-        _isLoading = false;
     }
 
     private async void HandleBoardUpdated(Guid updatedBoardId)

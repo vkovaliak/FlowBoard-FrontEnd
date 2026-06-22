@@ -61,14 +61,14 @@ public partial class TaskList
         var options = new DialogOptions
         {
             Position = DialogPosition.CenterRight,
-            CloseOnEscapeKey = true,
-            MaxWidth = MaxWidth.ExtraSmall,
+            MaxWidth = MaxWidth.False,
             FullWidth = false,
-            CloseButton = false
+            CloseButton = false,
+            NoHeader = false
         };
 
         var dialog = await DialogService.ShowAsync<EditCardDialog>(
-            "Edit Card", parameters, options);
+            null, parameters, options);
         var result = await dialog.Result;
 
         if (!result!.Canceled && result.Data is UpdateCardDto updateDto)

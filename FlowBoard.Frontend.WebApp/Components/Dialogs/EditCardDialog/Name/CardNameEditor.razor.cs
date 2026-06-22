@@ -14,36 +14,40 @@ public partial class CardNameEditor
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string Name { get; set; } = string.Empty;
 
-    private string _name = string.Empty;
+    private bool _isEditing;
+    private string _draft = string.Empty;
 
-    protected override void OnParametersSet()
+    private void StartEditing()
     {
-        if (_name != Name && !_isEditing)
-        {
-            _name = Name;
-        }
+        _draft = Name;
+        _isEditing = true;
     }
 
-    private bool _isEditing;
-
-    private async Task SaveNameAsync()
+    private void CancelEditing()
     {
         _isEditing = false;
+        _draft = string.Empty;
+    }
 
-        if (string.IsNullOrWhiteSpace(_name) || _name == Name)
+    private async Task SaveAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_draft) || _draft == Name)
         {
-            _name = Name;
+            CancelEditing();
             return;
         }
 
-        var dto = new RenameCardDto(_name);
+        var dto = new RenameCardDto(_draft);
         var success = await CardService.RenameAsync(
             BoardId, CardId, dto);
 
         if (!success)
         {
             Snackbar.Add("Failed to rename card", Severity.Error);
-            _name = Name;
+            return;
         }
+
+        _isEditing = false;
+        _draft = string.Empty;
     }
 }

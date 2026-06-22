@@ -6,9 +6,10 @@
               Justify=@Justify.SpaceBetween
               AlignItems=@AlignItems.Center>
 
-        <MudText Typo=@Typo.caption
-                 Color=@Color.Secondary
-                 Class="ml-1">
+        <MudText Typo=@Typo.subtitle2 
+             Color=@Color.Default 
+             Class="ml-1"
+             Style="font-weight: 500">
             Description
         </MudText>
 
@@ -26,19 +27,6 @@
                 </MudButton>
             }
 
-            <div style="position: relative; display: inline-flex;
-                        width: 36px; height: 36px;
-                        align-items: center; justify-content: center;
-                        border-radius: 50%; cursor: pointer;"
-                 title="Attach files">
-                 
-                <MudIcon Icon=@Icons.Material.Filled.AttachFile
-                         Color=@Color.Default Size=@Size.Small />
-
-                <InputFile OnChange=@HandleFilesSelected multiple
-                           style="position: absolute; inset: 0;
-                                  opacity: 0; cursor: pointer;" />
-            </div>
         </MudStack>
     </MudStack>
 

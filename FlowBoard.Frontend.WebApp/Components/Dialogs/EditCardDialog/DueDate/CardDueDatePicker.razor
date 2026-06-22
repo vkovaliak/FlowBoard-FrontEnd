@@ -1,8 +1,10 @@
+@using System.Globalization
 <MudStack Spacing="1">
 
-    <MudText Typo=@Typo.caption
-             Color=@Color.Secondary
-             Class="ml-1">
+    <MudText Typo=@Typo.subtitle2 
+             Color=@Color.Default 
+             Class="ml-1"
+             Style="font-weight: 500">
         Due date
     </MudText>
 
@@ -11,26 +13,17 @@
               Spacing="2">
 
         <MudDatePicker @bind-Date=@_date
+                       Color=@Color.Success
                        Variant=@Variant.Outlined
                        Margin=@Margin.Dense
                        Editable=@true
                        Clearable=@true
                        PickerVariant=@PickerVariant.Dialog
                        DateFormat="MMM dd, yyyy"
+                       Culture=@CultureInfo.InvariantCulture
                        Placeholder="Select due date"
                        AdornmentIcon=@Icons.Material.Filled.CalendarToday
                        Style="flex-grow: 1;" />
-
-        @if (_date is not null)
-        {
-            <MudChip T=@string
-                     Size=@Size.Small
-                     Variant=@Variant.Filled
-                     Color=@GetStatusColor()
-                     Style="text-transform: none;">
-                @GetStatusText()
-            </MudChip>
-        }
 
     </MudStack>
 

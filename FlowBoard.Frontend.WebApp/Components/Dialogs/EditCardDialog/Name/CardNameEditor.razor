@@ -1,15 +1,54 @@
-<MudStack Spacing="1">
+@if (!_isEditing)
+{
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center 
+              Spacing="2"
+              Style="min-width: 0;">
 
-    <MudText Typo=@Typo.caption 
-             Color=@Color.Secondary 
-             Class="ml-1">
-        Card name
-    </MudText>
+        <MudText Typo=@Typo.h6
+                 Style="overflow: hidden; text-overflow: ellipsis;
+                        white-space: nowrap; min-width: 0; font-weight: 600">
+            @Name
+        </MudText>
 
-    <MudTextField @bind-Value=@_name
-                  @bind-Value:after=@SaveNameAsync
-                  Variant=@Variant.Outlined
-                  Margin=@Margin.Dense
-                  Immediate=@false />
-                  
-</MudStack>
+        <MudButton Variant=@Variant.Text
+                   Color=@Color.Primary
+                   Size=@Size.Small
+                   OnClick=@StartEditing
+                   Style="text-transform: none; flex-shrink: 0;">
+            Edit
+        </MudButton>
+
+    </MudStack>
+}
+else
+{
+    <MudStack Spacing="2" Style="width: 100%;">
+
+        <MudTextField @bind-Value=@_draft
+                      Variant=@Variant.Outlined
+                      Margin=@Margin.Dense
+                      AutoFocus=@true
+                      Immediate=@true />
+
+        <MudStack Row=@true Justify=@Justify.FlexEnd Spacing="2">
+
+            <MudButton Variant=@Variant.Text
+                       Color=@Color.Secondary
+                       Size=@Size.Small
+                       OnClick=@CancelEditing>
+                Cancel
+            </MudButton>
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       Size=@Size.Small
+                       Disabled=@(string.IsNullOrWhiteSpace(_draft))
+                       OnClick=@SaveAsync>
+                Save
+            </MudButton>
+
+        </MudStack>
+
+    </MudStack>
+}

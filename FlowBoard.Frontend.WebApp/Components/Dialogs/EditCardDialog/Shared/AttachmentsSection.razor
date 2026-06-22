@@ -1,0 +1,43 @@
+<MudStack Spacing="2">
+
+    <MudStack Row=@true 
+              Justify=@Justify.SpaceBetween
+              AlignItems=@AlignItems.Center>
+
+        <MudText Typo=@Typo.subtitle2 
+                 Color=@Color.Default 
+                 Class="ml-1"
+                 Style="font-weight: 500">
+            Attachments
+        </MudText>
+
+        <div style="position: relative; display: inline-flex;">
+            <MudButton Variant=@Variant.Outlined
+                       Size=@Size.Small
+                       StartIcon=@Icons.Material.Filled.Add
+                       Style="text-transform: none;">
+                Add attachment
+            </MudButton>
+
+            <InputFile OnChange=@HandleFilesSelected multiple
+                       style="position: absolute; inset: 0;
+                              opacity: 0; cursor: pointer;" />
+        </div>
+
+    </MudStack>
+
+    @if (Attachments is not null && Attachments.Any())
+    {
+        <AttachmentList Attachments=@Attachments 
+                        OnDelete=@OnDelete />
+    }
+    else
+    {
+        <MudText Typo=@Typo.body2 
+                 Color=@Color.Secondary
+                 Style="font-style: italic;" Class="ml-1">
+            No attachments yet.
+        </MudText>
+    }
+
+</MudStack>
