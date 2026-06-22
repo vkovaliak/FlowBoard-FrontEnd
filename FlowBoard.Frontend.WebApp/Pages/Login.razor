@@ -1,59 +1,163 @@
 @page "/login"
 @layout AuthLayout
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
+<div class="auth-wrapper">
 
-    <MudPaper Elevation="6" Class="pa-6">
+    <div class="auth-container">
 
-        <MudText Typo=@Typo.h4 Class="mb-4">
-            Login
-        </MudText>
+        <div class="login-image-side">
 
-        <EditForm Model="@Model">
+            <div class="auth-image-overlay">
 
-            <DataAnnotationsValidator />
+                <MudStack Row=@true 
+                          AlignItems=@AlignItems.Center 
+                          Spacing="2">
 
-            <MudForm>
+                    <MudImage Src="images/logo.png" 
+                              Width="32" Height="32"
+                              Style="border-radius: 8px;" />
 
-                <MudTextField Label="Email"
-                            Variant=@Variant.Outlined
-                            Margin=@Margin.Dense
-                            InputType=@InputType.Email
-                            @bind-Value=@Model.Email 
-                            For=@(() => Model.Email)/>
+                    <MudText Typo=@Typo.h6 
+                             Style="color: #fff; font-weight: 700;">
+                        Flow Board
+                    </MudText>
 
-                <MudTextField Label="Password"
-                            Variant=@Variant.Outlined
-                            Margin=@Margin.Dense
-                            InputType=@InputType.Password
-                            Class="mt-3"
-                            @bind-Value=@Model.Password 
-                            For=@(() => Model.Password)/>
+                </MudStack>
 
-                <MudButton Variant=@Variant.Filled
-                        Color=@Color.Primary
-                        FullWidth=@true
-                        Class="mt-5"
-                        OnClick=@HandleLogin>
-                    Login
-                </MudButton>
+                <div class="auth-welcome-text">
 
-            </MudForm>
+                    <MudText Typo=@Typo.h4 
+                             Style="color: white; font-weight: 700;" 
+                             Class="mb-8">
+                        Welcome back!
+                    </MudText>
 
-        </EditForm>
+                    <MudText Typo=@Typo.body1 
+                             Style="color: rgba(255,255,255,0.8); 
+                                    margin-bottom: 14px;">
+                        Sign in to continue managing your projects and tasks.
+                    </MudText>
 
-    </MudPaper>
+                </div>
 
-    <MudText Typo=@Typo.body2 Class="mt-4 align-center">
-        Don't have an account ?
+            </div>
 
-        <MudLink Href="register" 
-                 Typo=@Typo.body2 
-                 Color=@Color.Primary 
-                 Class="font-weight-bold">
-            Create Account
-        </MudLink>
-        
-    </MudText>
+        </div>
 
-</MudContainer>
+        <div class="auth-form-side">
+
+            <div class="auth-form-box">
+
+                <MudText Class="mb-4" 
+                         Typo=@Typo.h4 
+                         Style="font-weight: 700; 
+                                align-items: center;">
+                    Sign in
+                </MudText>
+
+                <MudText Typo=@Typo.body2 
+                         Class="mb-10">
+                    Enter your credentials to access your account
+                </MudText>
+
+                <EditForm Model="@Model" OnValidSubmit=@HandleLogin>
+
+                    <DataAnnotationsValidator />
+
+                    <MudStack Spacing="4">
+
+                        <div>
+                            <MudText Typo=@Typo.body2 
+                                     Style="font-weight: 800;" 
+                                     Class="mb-3">
+                                Email address
+                            </MudText>
+
+                            <MudTextField Variant=@Variant.Outlined
+                                        InputType=@InputType.Email
+                                        Adornment=@Adornment.Start
+                                        AdornmentIcon=@Icons.Material.Outlined.Email
+                                        Placeholder="you@example.com"
+                                        @bind-Value=@Model.Email
+                                        For=@(() => Model.Email) 
+                                        Class="mb-4"/>
+                        </div>
+
+                        <div>
+                            <MudText Typo=@Typo.body2 
+                                     Style="font-weight: 800;"
+                                     Class="mb-3">
+                                Password
+                            </MudText>
+
+                            <div style="position: relative;">
+                                <MudTextField Variant=@Variant.Outlined
+                                            InputType=@(_showPassword ? InputType.Text : InputType.Password)
+                                            Adornment=@Adornment.Start
+                                            AdornmentIcon=@Icons.Material.Outlined.Lock
+                                            Placeholder="Enter your password"
+                                            @bind-Value=@Model.Password
+                                            For=@(() => Model.Password) />
+                                
+                                <MudIconButton Icon=@(_showPassword
+                                                ? Icons.Material.Outlined.Visibility
+                                                : Icons.Material.Outlined.VisibilityOff)
+                                                Size=@Size.Small
+                                                OnClick=@TogglePasswordVisibility
+                                                Style="position: absolute; right: 15px; top: 15px;" />
+                            </div>
+
+                        </div>
+
+                        <MudStack Row=@true 
+                                  Justify=@Justify.SpaceBetween 
+                                  AlignItems=@AlignItems.Center>
+
+                            <MudCheckBox @bind-Value=@_rememberMe
+                                        Label="Remember me"
+                                        Color=@Color.Primary
+                                        Size=@Size.Small />
+
+                            <MudLink Typo=@Typo.body2 
+                                     Color=@Color.Primary 
+                                     Style="font-weight: 600;">
+                                Forgot password?
+                            </MudLink>
+
+                        </MudStack>
+
+                        <MudButton ButtonType=@ButtonType.Submit
+                                Variant=@Variant.Filled
+                                Color=@Color.Primary
+                                FullWidth=@true
+                                Size=@Size.Large
+                                Class="mt-2">
+                            Sign in
+                        </MudButton>
+
+                    </MudStack>
+
+                </EditForm>
+
+                <MudText Typo=@Typo.body2 
+                         Align=@Align.Center 
+                         Class="mt-6">
+                    Don't have an account?
+
+                    <MudLink Href="register" 
+                             Typo=@Typo.body1 
+                             Color=@Color.Primary
+                             Class="ml-2" 
+                             Style="font-weight: 800;">
+                        Sign up
+                    </MudLink>
+
+                </MudText>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

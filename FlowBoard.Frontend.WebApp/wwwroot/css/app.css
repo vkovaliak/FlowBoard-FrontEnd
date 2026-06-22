@@ -119,3 +119,76 @@ transform: rotate(-90deg);
     font-size: 1.5rem !important;
     margin-inline-end: 16px !important;
 }
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+}
+
+.auth-container {
+    display: flex;
+    width: 55vw;
+    height: 85vh;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.login-image-side {
+    flex: 1 1 36%;
+    position: relative;
+
+    background-image: url('/images/login.png');
+    background-size: cover;   
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+
+.auth-image-overlay {
+    position: absolute;
+    inset: 0;
+    padding: 38px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 41, 0.295),
+        rgba(15, 23, 41, 0.517)
+    );
+}
+
+.auth-form-side {
+    flex: 1 1 64%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    padding: 48px;
+}
+
+.auth-form-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-form-box .mud-input-control .mud-input-slot {
+    border-radius: 3px;
+}
+
+.auth-form-box .mud-button-root {
+    border-radius: 3px;
+}
+
+.register-image-side {
+    flex: 1 1 36%;
+    position: relative;
+
+    background-image: url('/images/register.png');
+    background-size: cover;   
+    background-repeat: no-repeat;
+    background-position: left top;
+}

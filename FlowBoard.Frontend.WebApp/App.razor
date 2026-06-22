@@ -1,4 +1,11 @@
 ﻿@using FlowBoard.Frontend.WebApp.Components;
+@using FlowBoard.Frontend.WebApp.Theme
+
+<MudThemeProvider Theme="@_theme" @bind-IsDarkMode="@_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
@@ -14,3 +21,8 @@
         </Found>
     </Router>
 </CascadingAuthenticationState>
+
+@code{
+    private MudTheme _theme = AppTheme.Build();
+    private bool _isDarkMode = false;
+}

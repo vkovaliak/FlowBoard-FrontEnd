@@ -10,8 +10,6 @@ public partial class MainLayout
     [Inject] public IAuthService AuthService { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
 
-    private MudTheme _theme = AppTheme.Build();
-    private bool _isDarkMode = false;
     private bool _drawerOpen = true;
 
     private void ToggleDrawer()
