@@ -15,13 +15,12 @@ public partial class CommentComposer
 
     private AttachmentUploader _uploader = default!;
     private string _message = string.Empty;
-    private bool _isWriting;
+    private bool _useRichEditor;
     private bool _isSubmitting;
 
     private void Cancel()
     {
         _message = string.Empty;
-        _isWriting = false;
         _uploader?.Clear();
     }
 
@@ -51,5 +50,15 @@ public partial class CommentComposer
         await using var stream = file.OpenReadStream(50 * 1024 * 1024);
         await AttachmentService.UploadCommentAttachmentAsync(
             BoardId, CardId, commentId, stream, file.Name, file.ContentType);
+    }
+
+    private void EnableRichEditor()
+    {
+        _useRichEditor = true;
+    }
+
+    private void DisableRichEditor()
+    {
+        _useRichEditor = false;
     }
 }

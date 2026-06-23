@@ -1,20 +1,19 @@
-@using FlowBoard.Frontend.Domain.Constants
 @using FlowBoard.Frontend.WebApp.Components.Labels
 
 <MudStack Spacing="1">
 
-    <MudText Typo=@Typo.subtitle2 
-             Color=@Color.Default 
-             Class="ml-1"
-             Style="font-weight: 500">
+    <MudText Typo=@Typo.caption 
+             Color=@Color.Secondary 
+             Class="ml-1">
         Labels
     </MudText>
 
-    <MudStack Row=@true Spacing="1" Class="flex-wrap">
+    <MudStack Row=@true Spacing="1" 
+              Class="flex-wrap">
 
         @foreach (var label in AttachedLabels)
         {
-            <LabelChip Label=@label
+            <LabelChip Label=@label 
                        OnClose=@(() => DetachAsync(label)) />
         }
 
@@ -41,62 +40,51 @@
             <MudText Typo=@Typo.caption 
                      Color=@Color.Secondary 
                      Class="mb-2">
-                No labels yet. Create the first one below.
+                No labels yet.
             </MudText>
         }
 
         @foreach (var label in _boardLabels)
         {
-            <div style="display: flex; align-items: center; gap: 8px; 
-                        padding: 4px 0; cursor: pointer;"
-                 @onclick=@(() => ToggleAsync(label))>
-
-                <MudCheckBox T=@bool
-                             Value=@IsAttached(label)
-                             Size=@Size.Small
-                             Dense=@true
-                             ReadOnly=@true />
+            <div class="label-row" @onclick=@(() => ToggleAsync(label))>
 
                 <div style=@($"flex-grow:1; background-color:{label.Color}; " +
-                              "color:white; border-radius:4px; padding:2px 8px; " +
-                              "font-size:13px;")>
+                              "color:white; border-radius:4px; padding:4px 10px; " +
+                              "font-size:13px; font-weight:500;")>
                     @label.Name
                 </div>
+
+                @if (IsAttached(label))
+                {
+                    <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                             Color=@Color.Primary
+                             Size=@Size.Small />
+                }
             </div>
         }
 
         <MudDivider Class="my-2" />
 
-        <MudTextField @bind-Value=@_newName
-                      Placeholder="New label name"
-                      Variant=@Variant.Outlined
-                      Margin=@Margin.Dense
-                      Class="mb-2" />
-
-        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
-            @foreach (var color in LabelColors.Palette)
-            {
-                <div @onclick=@(() => SelectColor(color))
-                     style=@GetSwatchStyle(color)>
-                </div>
-            }
-        </div>
-
-        <MudStack Row=@true Spacing="2">
+        <MudStack Spacing="1">
 
             <MudButton Variant=@Variant.Text
-                       Size=@Size.Small
-                       OnClick=@TogglePopover>
-                Close
-            </MudButton>
-
-            <MudButton Variant=@Variant.Filled
                        Color=@Color.Primary
                        Size=@Size.Small
+                       StartIcon=@Icons.Material.Filled.Add
                        FullWidth=@true
-                       Disabled=@(string.IsNullOrWhiteSpace(_newName))
-                       OnClick=@CreateAndAttachAsync>
-                Create
+                       Style="justify-content: flex-start; text-transform: none;"
+                       OnClick=@OpenCreateAsync>
+                Add new label
+            </MudButton>
+
+            <MudButton Variant=@Variant.Text
+                       Color=@Color.Default
+                       Size=@Size.Small
+                       StartIcon=@Icons.Material.Filled.Settings
+                       FullWidth=@true
+                       Style="justify-content: flex-start; text-transform: none;"
+                       OnClick=@OpenManageAsync>
+                Manage labels
             </MudButton>
 
         </MudStack>

@@ -220,6 +220,18 @@ transform: rotate(-90deg);
     line-height: 1.5;
 }
 
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.label-row:hover {
+    background-color: #f1f5f9;
+}
+
 .card-side-panel {
     width: 660px !important;
     max-width: 95vw !important;
@@ -265,4 +277,59 @@ transform: rotate(-90deg);
 
 .edit-card-col {
     min-width: 0;
+}
+
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #F1F5F9;
+}
+
+.username {
+    font-size: 14px;
+}
+
+.arrow {
+    font-size: 10px;
+}
+
+.user-menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    width: 180px;
+    z-index: 3000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.item {
+    padding: 10px;
+    cursor: pointer;
+    color: #F1F5F9;
+}
+
+.item:hover {
+    background: #334155;
+}
+
+.item.danger {
+    color: #F87171;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 2000;
 }

@@ -18,7 +18,7 @@ public partial class Account
 
     private bool IsUserNameUnchanged
         => string.IsNullOrWhiteSpace(_userNameInput)
-           || _userNameInput.Trim() == _user?.UserName;
+           || _userNameInput == _user?.UserName;
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,7 +42,7 @@ public partial class Account
 
         _saving = true;
 
-        var userName = _userNameInput.Trim();
+        var userName = _userNameInput;
         var success = await UserService.UpdateUserNameAsync(userName);
 
         if (!success)
