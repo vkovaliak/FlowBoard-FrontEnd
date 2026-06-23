@@ -45,7 +45,7 @@ public partial class ChecklistSection
             return;
         }
 
-        var dto = new AddChecklistItemDto(_newText.Trim());
+        var dto = new AddChecklistItemDto(_newText);
         var newId = await ChecklistService.AddAsync(BoardId, CardId, dto);
 
         if (newId is null)

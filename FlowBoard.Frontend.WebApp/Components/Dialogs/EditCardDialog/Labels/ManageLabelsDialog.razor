@@ -1,0 +1,85 @@
+<MudDialog>
+
+    <TitleContent>
+
+        <MudStack Row=@true 
+                  Justify=@Justify.SpaceBetween
+                  AlignItems=@AlignItems.Center 
+                  Style="width: 100%;">
+
+            <MudText Typo=@Typo.h6>
+                Manage labels
+            </MudText>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Close
+                           Size=@Size.Small 
+                           OnClick=@Close />
+        </MudStack>
+
+    </TitleContent>
+
+    <DialogContent>
+
+        <div style="max-height: 360px; overflow-y: auto;">
+
+            @foreach (var label in _labels)
+            {
+                <MudStack Row=@true 
+                          AlignItems=@AlignItems.Center
+                          Justify=@Justify.SpaceBetween 
+                          Class="py-2">
+
+                    <MudStack Row=@true 
+                              AlignItems=@AlignItems.Center 
+                              Spacing="2">
+
+                        <div style=@($"width:14px; height:14px; border-radius:4px; " +
+                                      $"background-color:{label.Color};")>
+                        </div>
+                        
+                        <MudText Typo=@Typo.body2>
+                            @label.Name
+                        </MudText>
+
+                    </MudStack>
+
+                    <MudStack Row=@true Spacing="0">
+
+                        <MudIconButton Icon=@Icons.Material.Filled.Edit
+                                       Size=@Size.Small 
+                                       Color=@Color.Default
+                                       OnClick=@(() => EditAsync(label)) />
+
+                        <MudIconButton Icon=@Icons.Material.Filled.Delete
+                                       Size=@Size.Small 
+                                       Color=@Color.Default
+                                       OnClick=@(() => DeleteAsync(label)) />
+
+                    </MudStack>
+
+                </MudStack>
+            }
+
+            @if (_labels.Count == 0)
+            {
+                <MudText Typo=@Typo.body2 
+                         Color=@Color.Secondary 
+                         Class="pa-2">
+                    No labels yet.
+                </MudText>
+            }
+
+        </div>
+
+        <MudButton Variant=@Variant.Text 
+                   Color=@Color.Primary
+                   StartIcon=@Icons.Material.Filled.Add
+                   OnClick=@CreateAsync
+                   Class="mt-2"
+                   Style="text-transform: none;">
+            Add new label
+        </MudButton>
+
+    </DialogContent>
+
+</MudDialog>

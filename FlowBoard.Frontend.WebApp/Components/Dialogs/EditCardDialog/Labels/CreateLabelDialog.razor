@@ -1,0 +1,70 @@
+@using FlowBoard.Frontend.Domain.Constants
+
+<MudDialog>
+
+    <TitleContent>
+
+        <MudStack Row=@true 
+                  Justify=@Justify.SpaceBetween
+                  AlignItems=@AlignItems.Center 
+                  Style="width: 100%;">
+
+            <MudText Typo=@Typo.h6>
+                @(IsEdit ? "Edit label" : "Create new label")
+            </MudText>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Close
+                           Size=@Size.Small 
+                           OnClick=@Cancel />
+
+        </MudStack>
+
+    </TitleContent>
+
+    <DialogContent>
+
+        <MudText Typo=@Typo.caption 
+                 Color=@Color.Secondary 
+                 Class="mb-1">
+            Label name
+        </MudText>
+
+        <MudTextField @bind-Value=@_name
+                      Variant=@Variant.Outlined
+                      Margin=@Margin.Dense
+                      AutoFocus=@true
+                      Class="mb-3" />
+
+        <MudText Typo=@Typo.caption 
+                 Color=@Color.Secondary 
+                 Class="mb-1">
+            Label color
+        </MudText>
+
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            @foreach (var color in LabelColors.Palette)
+            {
+                <div @onclick=@(() => _color = color)
+                     style=@GetSwatchStyle(color)>
+                </div>
+            }
+        </div>
+
+    </DialogContent>
+
+    <DialogActions>
+        
+        <MudButton Variant=@Variant.Text 
+                   OnClick=@Cancel>Cancel
+        </MudButton>
+
+        <MudButton Variant=@Variant.Filled 
+                   Color=@Color.Primary
+                   Disabled=@(string.IsNullOrWhiteSpace(_name))
+                   OnClick=@Submit>
+            @(IsEdit ? "Save" : "Create")
+        </MudButton>
+
+    </DialogActions>
+
+</MudDialog>

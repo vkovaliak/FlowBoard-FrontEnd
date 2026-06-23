@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using FlowBoard.Frontend.WebApp.Components.Common
+@inherits LayoutComponentBase
 
 <MudLayout>
 
@@ -28,16 +29,56 @@
 
         <MudSpacer />
 
-        <MudButton Variant=@Variant.Text
-                   Color=@Color.Error
-                   StartIcon=@Icons.Material.Filled.Logout
-                   OnClick=@HandleLogoutAsync>
-            Logout
-        </MudButton>
+        @if (_currentUser != null)
+        {
+            <div class="user-menu">
+
+                <div class="user-menu-trigger" 
+                     @onclick=@ToggleUserMenu>
+
+                    <UserAvatar UserName=@_currentUser.UserName
+                                AvatarUrl=@_currentUser.AvatarUrl
+                                Size=@Size.Small
+                                SizeStyle="width:36px; height:36px;" />
+
+                    <span class="username">
+                        @_currentUser.UserName
+                    </span>
+
+                    <span class="arrow">▼</span>
+                </div>
+
+                @if (_isUserMenuOpen)
+                {
+                    <div class="user-menu-dropdown">
+
+                        <div class="item" 
+                             @onclick=@HandleProfileAsync>
+                            My Profile
+                        </div>
+
+                        <div class="item danger" 
+                             @onclick=@HandleLogoutAsync>
+                            Log out
+                        </div>
+
+                    </div>
+
+                    <div class="backdrop" 
+                         @onclick=@ToggleUserMenu></div>
+                }
+            </div>
+        }
+        else
+        {
+            <MudProgressCircular Color=@Color.Default
+                                 Indeterminate=@true
+                                 Size=@Size.Small />
+        }
 
     </MudAppBar>
 
-    <MudDrawer @bind-Open="@_drawerOpen"
+    <MudDrawer @bind-Open=@_drawerOpen
                Elevation="2"
                Variant=@DrawerVariant.Responsive
                ClipMode=@DrawerClipMode.Always>

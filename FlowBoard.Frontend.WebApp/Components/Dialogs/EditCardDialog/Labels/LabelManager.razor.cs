@@ -1,4 +1,3 @@
-using FlowBoard.Frontend.Domain.Constants;
 using FlowBoard.Frontend.Domain.DTOs.Labels;
 using FlowBoard.Frontend.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +8,7 @@ namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels;
 public partial class LabelManager
 {
     [Inject] private ILabelService LabelService { get; set; } = default!;
+    [Inject] private IDialogService DialogService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
@@ -16,9 +16,6 @@ public partial class LabelManager
     [Parameter] public List<LabelDto> AttachedLabels { get; set; } = [];
 
     private List<LabelDto> _boardLabels = [];
-
-    private string _newName = string.Empty;
-    private string _newColor = LabelColors.Default;
     private bool _isOpen;
 
     private bool IsAttached(LabelDto label)
@@ -31,7 +28,11 @@ public partial class LabelManager
 
     private void TogglePopover() => _isOpen = !_isOpen;
 
-    private void SelectColor(string color) => _newColor = color;
+    private async Task ReloadBoardLabelsAsync()
+    {
+        _boardLabels = await LabelService.GetByBoardIdAsync(BoardId);
+        StateHasChanged();
+    }
 
     private async Task ToggleAsync(LabelDto label)
     {
@@ -48,7 +49,6 @@ public partial class LabelManager
     private async Task AttachAsync(LabelDto label)
     {
         var success = await LabelService.AttachAsync(BoardId, CardId, label.Id);
-
         if (!success)
         {
             Snackbar.Add("Failed to attach label", Severity.Error);
@@ -58,45 +58,73 @@ public partial class LabelManager
     private async Task DetachAsync(LabelDto label)
     {
         var success = await LabelService.DetachAsync(BoardId, CardId, label.Id);
-
         if (!success)
         {
             Snackbar.Add("Failed to detach label", Severity.Error);
         }
     }
 
-    private async Task CreateAndAttachAsync()
+    private async Task OpenCreateAsync()
     {
-        if (string.IsNullOrWhiteSpace(_newName))
+        _isOpen = false;
+
+        var parameters = new DialogParameters<CreateLabelDialog>
         {
+            { x => x.IsEdit, false }
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateLabelDialog>(
+            null, parameters, SmallOptions());
+
+        var result = await dialog.Result;
+
+        if (result is null || result.Canceled) 
             return;
-        }
 
-        var dto = new CreateLabelDto(_newName.Trim(), _newColor);
-        var newLabelId = await LabelService.CreateAsync(BoardId, dto);
+        if (result.Data is not (string name, string color)) 
+            return;
 
-        if (newLabelId is null)
+        var dto = new CreateLabelDto(name, color);
+        var id = await LabelService.CreateAsync(BoardId, dto);
+
+        if (id is null)
         {
             Snackbar.Add("Failed to create label", Severity.Error);
             return;
         }
 
-        await LabelService.AttachAsync(BoardId, CardId, newLabelId.Value);
+        await LabelService.AttachAsync(BoardId, CardId, id.Value);
+        await ReloadBoardLabelsAsync();
+    }
 
-        _newName = string.Empty;
-        _newColor = LabelColors.Default;
+    private async Task OpenManageAsync()
+    {
         _isOpen = false;
 
-        _boardLabels = await LabelService.GetByBoardIdAsync(BoardId);
+        var parameters = new DialogParameters<ManageLabelsDialog>
+        {
+            { x => x.BoardId, BoardId }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseButton = false
+        };
+
+        var dialog = await DialogService.ShowAsync<ManageLabelsDialog>(
+            null, parameters, options);
+
+        await dialog.Result;
+        
+        await ReloadBoardLabelsAsync();
     }
 
-    private string GetSwatchStyle(string color)
+    private static DialogOptions SmallOptions() => new()
     {
-        var border = _newColor == color
-            ? "3px solid #172b4d"
-            : "1px solid #dfe1e6";
-
-        return $"width: 28px; height: 28px; border-radius: 6px; " +
-               $"background-color: {color}; cursor: pointer; border: {border};";
-    }
+        MaxWidth = MaxWidth.ExtraSmall,
+        FullWidth = true,
+        CloseButton = false
+    };
 }

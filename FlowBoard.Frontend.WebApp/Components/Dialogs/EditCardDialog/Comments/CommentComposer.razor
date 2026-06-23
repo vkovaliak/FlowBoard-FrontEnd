@@ -1,42 +1,61 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 
-@if (!_isWriting)
-{
-    <MudPaper Outlined=@true Class="pa-3" 
-              Style="cursor:pointer;"
-              @onclick=@(() => _isWriting = true)>
-        <MudText Color=@Color.Secondary>
-            Write a comment...
-        </MudText>
-    </MudPaper>
-}
-else
-{
-    <MudStack Spacing="2">
+<MudStack Spacing="2">
+
+    @if (_useRichEditor)
+    {
         <RichTextEditor @bind-Value=@_message />
+    }
+    else
+    {
+        <MudTextField T=@string
+                      @bind-Value=@_message
+                      Placeholder="Write a comment..."
+                      Variant=@Variant.Outlined
+                      Lines="1"
+                      Immediate=@true />
+    }
 
+    <MudStack Row=@true
+              Justify=@Justify.SpaceBetween
+              AlignItems=@AlignItems.Center>
+        
         <AttachmentUploader @ref=@_uploader />
+        
 
-        <MudStack Row=@true 
-                  Justify=@Justify.FlexEnd 
-                  Class="mt-2">
+        <MudStack Row=@true Spacing="1">
 
-            <MudButton Variant=@Variant.Text 
-                       OnClick=@Cancel Disabled=@_isSubmitting>
-                Cancel
-            </MudButton>
+            @if (!_useRichEditor)
+            {
+                <MudIconButton Icon=@Icons.Material.Outlined.EditAttributes
+                               OnClick=@EnableRichEditor
+                               Size=@Size.Medium/>
+            }
+            else
+            {
+                <MudIconButton Icon=@Icons.Material.Outlined.TextFields
+                               OnClick=@DisableRichEditor>
+                </MudIconButton>
+            }
+
             <MudButton Variant=@Variant.Filled
+                       Size=@Size.Medium
                        Color=@Color.Primary
                        Disabled=@(string.IsNullOrWhiteSpace(_message) || _isSubmitting)
                        OnClick=@SubmitAsync>
+
                 @if (_isSubmitting)
                 {
-                    <MudProgressCircular Size=@Size.Small 
-                                         Indeterminate=@true 
+                    <MudProgressCircular Size=@Size.Small
+                                         Indeterminate=@true
                                          Class="mr-2" />
                 }
+
                 Add
             </MudButton>
+
         </MudStack>
+
     </MudStack>
-}
+
+</MudStack>
