@@ -15,4 +15,7 @@ public interface IUserApi
     
     [Get("/api/users/me")]
     Task<ApiResponse<UserDto>> GetMeAsync();
+
+    [Delete("/api/users/avatar")]
+    Task<ApiResponse<bool>> DeleteAvatarAsync();
 }

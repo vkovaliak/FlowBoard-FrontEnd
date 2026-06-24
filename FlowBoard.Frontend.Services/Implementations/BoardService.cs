@@ -60,4 +60,20 @@ public class BoardService : IBoardService
         return response.IsSuccessStatusCode 
             && response.Content != false;
     }
+
+    public async Task<bool> RemoveMemberAsync(Guid boardId, Guid userId)
+    {
+        var response = await _boardApi.RemoveMemberAsync(boardId, userId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
+
+    public async Task<bool> LeaveBoardAsync(Guid boardId)
+    {
+        var response = await _boardApi.LeaveBoardAsync(boardId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
 }

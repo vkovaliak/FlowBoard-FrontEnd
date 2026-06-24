@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
+using FlowBoard.Frontend.Services.Providers;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -12,6 +13,9 @@ public partial class BoardDetails : IAsyncDisposable
 {
     [Parameter]
     public Guid Id { get; set; }
+
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
 
     [Inject] public IBoardService BoardService { get; set; } = default!;
     [Inject] public ICardService CardService { get; set; } = default!;
@@ -23,11 +27,14 @@ public partial class BoardDetails : IAsyncDisposable
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
+    private Guid _currentUserId;
 
     private DotNetObjectReference<BoardDetails>? _objRef;
 
     protected override async Task OnInitializedAsync()
     {
+        _currentUserId = await AuthStateProvider
+            .GetCurrentUserIdAsync();
         await RefreshBoardAsync();
 
         if (_board is null)
@@ -79,6 +86,21 @@ public partial class BoardDetails : IAsyncDisposable
             title, message,
             yesText: "Delete",
             cancelText: "Cancel") == true;
+    }
+
+    private async Task HandleMembersChangedAsync()
+    {
+        await RefreshBoardAsync();
+
+        var stillMember = _board?.Members.Any(
+            m => m.UserId == _currentUserId) ?? false;
+        if (!stillMember)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+
+        StateHasChanged();
     }
 
     public async ValueTask DisposeAsync()

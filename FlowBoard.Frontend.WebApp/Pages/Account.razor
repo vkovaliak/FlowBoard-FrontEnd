@@ -31,12 +31,30 @@
                       Class="mb-6">
 
                 <div style="position: relative; 
-                            display: inline-flex;">
+                            display: inline-flex;"
+                     @onmouseenter=@(() => _hoverAvatar = true)
+                     @onmouseleave=@(() => _hoverAvatar = false)>
 
                     <UserAvatar UserName=@_user.UserName
                                 AvatarUrl=@_user.AvatarUrl
                                 SizeStyle="width: 80px; height: 80px; 
                                            font-size: 32px;" />
+
+                    @if (!string.IsNullOrWhiteSpace(_user.AvatarUrl) && _hoverAvatar)
+                    {
+                        <div style="position: absolute; top: -4px; right: -4px;
+                                    width: 24px; height: 24px; border-radius: 50%;
+                                    background-color: var(--mud-palette-error);
+                                    display: flex; align-items: center;
+                                    justify-content: center; cursor: pointer;"
+                              title="Remove avatar"
+                              @onclick=@DeleteAvatarAsync>
+
+                            <MudIcon Icon=@Icons.Material.Filled.Close
+                                    Size=@Size.Small
+                                    Style="color: white; font-size: 16px;" />
+                        </div>
+                    }
 
                     <label for="avatar-input"
                            style="position: absolute; bottom: -4px; right: -4px;
