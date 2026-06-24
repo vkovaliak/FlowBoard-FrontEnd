@@ -15,6 +15,7 @@ public partial class Login
     private LoginModel Model { get; set; } = new();
     private bool _showPassword;
     private bool _rememberMe;
+    private bool _isLoading;
 
     private void TogglePasswordVisibility() 
         => _showPassword = !_showPassword;
@@ -32,6 +33,32 @@ public partial class Login
         else
         {
             Snackbar.Add("Login failed", Severity.Error);
+        }
+    }
+
+    private async Task SignInWithMicrosoft()
+    {
+        _isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            var success = await AuthService.LoginWithMicrosoftAsync();
+            
+            if (success)
+            {
+                Snackbar.Add("Microsoft login success!", Severity.Success);
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                Snackbar.Add("Microsoft login failed", Severity.Error);
+            }
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
         }
     }
 }
