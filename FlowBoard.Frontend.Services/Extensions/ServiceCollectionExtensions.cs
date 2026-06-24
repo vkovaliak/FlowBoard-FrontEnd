@@ -28,6 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentHubService, CommentHubService>();
         services.AddScoped<ILabelService, LabelService>();
         services.AddScoped<IListService, ListService>();
+        services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
@@ -63,6 +64,9 @@ public static class ServiceCollectionExtensions
                     client.BaseAddress = new Uri (apiOptions.BaseUrl);
                 });
         }
+
+        services.Configure<EntraIdOptions>(
+            configuration.GetSection(EntraIdOptions.SectionName));
         
         AddAuthenticatedRefitClient<IAttachmentApi>();
         AddAuthenticatedRefitClient<IBoardApi>();

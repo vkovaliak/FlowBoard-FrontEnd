@@ -16,4 +16,8 @@ public interface IAuthApi
 
     [Post("/api/auth/logout")]
     Task<ApiResponse<bool>> LogoutAsync([Body] RefreshTokenDto request);
+
+    [Post("/api/auth/external/microsoft")]
+    Task<ApiResponse<TokenDto>> ExternalMicrosoftAsync(
+        [Body] ExternalTokenDto dto);
 }

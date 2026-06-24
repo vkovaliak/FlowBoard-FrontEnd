@@ -10,14 +10,17 @@ public class AuthService : IAuthService
     private readonly IAuthApi _authApi;
     private readonly ITokenService _tokenService;
     private readonly CustomAuthStateProvider _authStateProvider;
+    private readonly IMicrosoftAuthService _microsoftAuthService;
 
     public AuthService(IAuthApi authApi, 
         ITokenService tokenService,
-        CustomAuthStateProvider authStateProvider)
+        CustomAuthStateProvider authStateProvider,
+        IMicrosoftAuthService microsoftAuthService)
     {
         _authApi = authApi;
         _tokenService = tokenService;
         _authStateProvider = authStateProvider;
+        _microsoftAuthService = microsoftAuthService;
     }
 
     public async Task<bool> LoginAsync(UserLoginDto dto)
@@ -62,6 +65,31 @@ public class AuthService : IAuthService
         _authStateProvider.NotifyUserLogout();
         
         return true;
+    }
 
+    public async Task<bool> LoginWithMicrosoftAsync()
+    {
+        var idToken = await _microsoftAuthService.GetIdTokenAsync();
+
+        if (string.IsNullOrEmpty(idToken))
+        {
+            return false; 
+        }
+
+        var dto = new ExternalTokenDto(idToken);
+        
+        var response = await _authApi.ExternalMicrosoftAsync(dto);
+
+        if (response.IsSuccessStatusCode && response.Content != null)
+        {
+            await _tokenService.SaveTokensAsync(response.Content);
+
+            _authStateProvider.NotifyUserAuthentication(
+                response.Content.AccessToken);
+
+            return true;
+        }
+
+        return false;
     }
 }

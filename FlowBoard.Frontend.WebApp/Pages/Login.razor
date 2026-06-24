@@ -135,6 +135,23 @@
                             Sign in
                         </MudButton>
 
+                        <MudText Typo=@Typo.body2 
+                                 Align=@Align.Center
+                                 Style="font-weight: 800;">
+                            OR
+                        </MudText>
+
+                        <MudButton Variant=@Variant.Outlined
+                                FullWidth=@true
+                                Size=@Size.Large
+                                StartIcon=@Icons.Custom.Brands.Microsoft
+                                Disabled=@_isLoading
+                                OnClick=@SignInWithMicrosoft
+                                Style="text-transform: none;">
+                            Sign in with Microsoft
+                        </MudButton>
+
+
                     </MudStack>
 
                 </EditForm>
