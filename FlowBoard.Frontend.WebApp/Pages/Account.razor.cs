@@ -15,6 +15,8 @@ public partial class Account
     private string _userNameInput = string.Empty;
     private bool _loading = true;
     private bool _saving;
+    private bool _hoverAvatar;
+
 
     private bool IsUserNameUnchanged
         => string.IsNullOrWhiteSpace(_userNameInput)
@@ -84,5 +86,19 @@ public partial class Account
 
         _user = _user! with { AvatarUrl = newUrl };
         Snackbar.Add("Avatar updated", Severity.Success);
+    }
+
+    private async Task DeleteAvatarAsync()
+    {
+        var success = await UserService.DeleteAvatarAsync();
+
+        if (!success)
+        {
+            Snackbar.Add("Failed to remove avatar", Severity.Error);
+            return;
+        }
+
+        _user = await UserService.GetMeAsync();
+        Snackbar.Add("Avatar removed", Severity.Success);
     }
 }

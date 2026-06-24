@@ -10,4 +10,6 @@ public interface IBoardService
     Task<bool> UpdateAsync(Guid boardId, UpdateBoardDto dto);
     Task<bool> DeleteAsync(Guid boardId);
     Task<bool> InviteMemberAsync(Guid boardId, InviteMemberDto dto);
+    Task<bool> RemoveMemberAsync(Guid boardId, Guid userId);
+    Task<bool> LeaveBoardAsync(Guid boardId);
 }

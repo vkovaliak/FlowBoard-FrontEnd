@@ -18,7 +18,12 @@
         <BoardHeader BoardName=@_board.Name
                      IsPublic=@_board.IsPublic
                      Members=@_board.Members
-                     OnInviteClick=@OpenInviteDialogAsync/>
+                     BoardId=@_board.Id
+                     CreatedBy=@_board.CreatedBy
+                     CurrentUserId=@_currentUserId
+                     CurrentUserRole=@_board.UserRole
+                     OnInviteClick=@OpenInviteDialogAsync
+                     OnMembersChanged=@HandleMembersChangedAsync />
 
         <MudPaper Elevation="2" 
                   Class="pa-4"

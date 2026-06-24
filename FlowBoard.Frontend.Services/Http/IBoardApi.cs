@@ -22,4 +22,10 @@ public interface IBoardApi
 
     [Post("/api/boards/{id}/invite")]
     Task<ApiResponse<bool>> InviteMemberAsync(Guid id, [Body] InviteMemberDto dto);
+
+    [Delete("/api/boards/{boardId}/members/{userId}")]
+    Task<ApiResponse<bool>> RemoveMemberAsync(Guid boardId, Guid userId);
+
+    [Delete("/api/boards/{boardId}/leave")]
+    Task<ApiResponse<bool>> LeaveBoardAsync(Guid boardId);
 }

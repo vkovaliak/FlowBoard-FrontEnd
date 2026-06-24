@@ -31,7 +31,12 @@
 
     <MudSpacer />
 
-    <BoardMembers Members=@Members />
+    <BoardMembers Members=@Members
+                  BoardId=@BoardId
+                  CreatedBy=@CreatedBy
+                  CurrentUserId=@CurrentUserId
+                  CurrentUserRole=@CurrentUserRole
+                  OnMembersChanged=@OnMembersChanged />
 
     <MudButton Variant=@Variant.Outlined
                Color=@Color.Primary

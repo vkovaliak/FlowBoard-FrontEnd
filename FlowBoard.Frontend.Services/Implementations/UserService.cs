@@ -41,4 +41,12 @@ public class UserService : IUserService
             ? response.Content
             : null;
     }
+
+    public async Task<bool> DeleteAvatarAsync()
+    {
+        var response = await _userApi.DeleteAvatarAsync();
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
 }

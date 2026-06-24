@@ -77,6 +77,22 @@
                         @member.Role.ToString()
                     </MudChip>
 
+                    @if (CanRemove(member))
+                    {
+                        <MudIconButton Icon=@Icons.Material.Filled.Close
+                                       Size=@Size.Small
+                                       Color=@Color.Error
+                                       OnClick=@(() => RemoveMemberAsync(member.UserId)) />
+                    }
+
+                    @if (CanLeave(member))
+                    {
+                        <MudIconButton Icon=@Icons.Material.Filled.Logout
+                                       Size=@Size.Small
+                                       Color=@Color.Error
+                                       OnClick=@LeaveBoardAsync />
+                    }
+
                 </div>
             }
 
