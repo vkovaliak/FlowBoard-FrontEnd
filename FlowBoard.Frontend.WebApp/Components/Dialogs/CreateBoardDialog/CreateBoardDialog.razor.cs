@@ -3,7 +3,7 @@ using MudBlazor;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 
-namespace FlowBoard.Frontend.WebApp.Components.Dialogs;
+namespace FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 
 public partial class CreateBoardDialog : ComponentBase
 {

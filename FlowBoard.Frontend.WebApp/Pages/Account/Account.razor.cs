@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
-namespace FlowBoard.Frontend.WebApp.Pages;
+namespace FlowBoard.Frontend.WebApp.Pages.Account;
 
 public partial class Account
 {

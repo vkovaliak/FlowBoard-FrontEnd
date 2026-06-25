@@ -1,0 +1,33 @@
+<MudPaper Elevation="0"
+          Style="background-color: white; 
+                 border-radius: 12px;
+                 overflow: hidden;">
+
+    <div style="display: grid; 
+                grid-template-columns: repeat(7, 1fr);
+                background-color: #fff;">
+
+        @foreach (var day in _dayNames)
+        {
+            <div style="padding: 8px; text-align: center;
+                        font-size: 17px; font-weight: 600;
+                        border-bottom: 1px solid var(--mud-palette-divider);">
+                @day
+            </div>
+        }
+    </div>
+
+    <div style="display: grid;
+                grid-template-columns: repeat(7, 1fr);">
+                
+        @foreach (var date in _days)
+        {
+            <CalendarDay Date=@date
+                         IsCurrentMonth=@(date.Month == CurrentMonth.Month)
+                         IsToday=@(date.Date == DateTime.Today)
+                         Tasks=@GetTasksForDay(date)
+                         OnTaskClick=@OnTaskClick />
+        }
+    </div>
+
+</MudPaper>

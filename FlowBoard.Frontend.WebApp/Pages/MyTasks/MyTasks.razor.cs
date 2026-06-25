@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FlowBoard.Frontend.WebApp.Pages;
+namespace FlowBoard.Frontend.WebApp.Pages.MyTasks;
 
 [Authorize]
 public partial class MyTasks
