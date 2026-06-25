@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
 using MudBlazor;
-using FlowBoard.Frontend.WebApp.Components.Dialogs;
 using FlowBoard.Frontend.Domain.Models.Boards;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 
-namespace FlowBoard.Frontend.WebApp.Pages;
+namespace FlowBoard.Frontend.WebApp.Pages.Home;
 
 [Authorize]
 public partial class Home

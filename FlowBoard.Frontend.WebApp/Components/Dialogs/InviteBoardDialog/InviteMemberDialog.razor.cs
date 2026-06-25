@@ -3,7 +3,7 @@ using FlowBoard.Frontend.Domain.Enums;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FlowBoard.Frontend.WebApp.Components.Dialogs;
+namespace FlowBoard.Frontend.WebApp.Components.Dialogs.InviteBoardDialog;
 
 public partial class InviteMemberDialog
 {

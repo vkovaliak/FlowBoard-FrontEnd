@@ -4,7 +4,7 @@ using FlowBoard.Frontend.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FlowBoard.Frontend.WebApp.Pages;
+namespace FlowBoard.Frontend.WebApp.Pages.Login;
 
 public partial class Login
 {

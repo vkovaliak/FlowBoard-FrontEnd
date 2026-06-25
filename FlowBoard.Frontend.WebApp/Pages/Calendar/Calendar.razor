@@ -1,0 +1,48 @@
+@page "/calendar"
+@attribute [Authorize]
+@using FlowBoard.Frontend.WebApp.Components.Calendar
+
+<div style="background-color: #F8F9FB; 
+            min-height: 100vh;">
+
+    <MudContainer MaxWidth=@MaxWidth.ExtraLarge 
+                 Class="pt-3 pb-3">
+
+        <div class="mb-6">
+
+            <MudText Typo=@Typo.h4 
+                     Style="font-weight: 700;">
+                Calendar
+            </MudText>
+
+            <MudText Typo=@Typo.body1 
+                     Color=@Color.Secondary>
+                View and manage your tasks by due date.
+            </MudText>
+
+        </div>
+
+        @if (_loading)
+        {
+            <MudProgressCircular Indeterminate=@true />
+        }
+        else
+        {
+            <MudPaper Class="pa-6 mt-4 rounded-lg" 
+                      Elevation="1">
+
+                <CalendarToolbar CurrentMonth=@_currentMonth
+                                 OnToday=@GoToday
+                                 OnPrevious=@PreviousMonth
+                                 OnNext=@NextMonth />
+
+                <CalendarMonth CurrentMonth=@_currentMonth
+                               Tasks=@_tasks
+                               OnTaskClick=@OpenCardAsync />
+
+            </MudPaper>
+        }
+
+    </MudContainer>
+
+</div>

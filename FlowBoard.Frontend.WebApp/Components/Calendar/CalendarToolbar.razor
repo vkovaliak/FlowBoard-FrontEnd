@@ -1,0 +1,60 @@
+@using System.Globalization
+
+<div class="d-flex align-center mb-4" 
+     style="gap: 16px; flex-wrap: wrap;">
+
+    <div style="display: inline-flex; 
+                padding: 6px; 
+                background-color: #fff;
+                border-radius: 12px; 
+                border: 2px solid #b4b4b43c; 
+                gap: 12px;">
+
+        @foreach (var view in _views)
+        {
+            <div @onclick=@(() => OnViewChange.InvokeAsync(view))
+                 style=@GetViewStyle(view)>
+                @view
+            </div>
+        }
+
+    </div>
+
+    <MudButton Class="ml-5" 
+               Variant=@Variant.Outlined 
+               Style="color: var(--mud-palette-text-secondary); 
+                      font-size: 18px; 
+                      border: 2px solid #b4b4b43c; 
+                      padding: 8px 15px" 
+                Size=@Size.Large
+               OnClick=@(() => OnToday.InvokeAsync())>
+        Today
+    </MudButton>
+
+    <MudIconButton Icon=@Icons.Material.Filled.ChevronLeft
+                    Class="ml-4"
+                    Style="border-radius: 12px;
+                            font-size: 12px; 
+                            border: 2px solid #b4b4b43c; 
+                            padding: 6px 10px" 
+                   Size=@Size.Large
+                   OnClick=@(() => OnPrevious.InvokeAsync()) />
+
+    <MudIconButton Icon=@Icons.Material.Filled.ChevronRight
+                   Size=@Size.Large
+                   Style="border-radius: 12px;
+                            font-size: 12px; 
+                            border: 2px solid #b4b4b43c; 
+                            padding: 6px 10px" 
+                   OnClick=@(() => OnNext.InvokeAsync()) />
+
+    <MudText Typo=@Typo.h5 
+             Style="font-weight: 700;" 
+             Class="ml-20">
+        @CurrentMonth.ToString(
+            "MMMM yyyy", CultureInfo.InvariantCulture)
+    </MudText>
+
+    <MudSpacer />
+
+</div>

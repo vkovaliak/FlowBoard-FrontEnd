@@ -1,6 +1,6 @@
 using MudBlazor;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
-using FlowBoard.Frontend.WebApp.Components.Dialogs;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.InviteBoardDialog;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
