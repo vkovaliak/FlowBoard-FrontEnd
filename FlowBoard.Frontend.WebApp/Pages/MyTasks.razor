@@ -1,0 +1,75 @@
+@page "/my-tasks"
+@attribute [Authorize]
+@using FlowBoard.Frontend.WebApp.Components.MyTasks
+
+<MudContainer MaxWidth=@MaxWidth.ExtraLarge 
+              Class="mt-6" >
+
+    <div class="mb-6">
+        <MudText Typo=@Typo.h4 
+                 Style="font-weight: 700;">
+            My Tasks
+        </MudText>
+
+        <MudText Typo=@Typo.body1>
+            Here's what you need to focus on
+        </MudText>
+    </div>
+
+    @if (_loading)
+    {
+        <MudProgressCircular Indeterminate=@true />
+    }
+    else
+    {
+        @if (_dueToday.Count > 0)
+        {
+            <MyTasksStats DueTodayCount=@_dueToday.Count
+                        OverdueCount=@_overdue.Count
+                        ThisWeekCount=@_thisWeekCount
+                        CompletedCount=@_completedCount />
+        }
+
+        <MudPaper Class="pa-6 mt-4 rounded-lg" 
+                  Elevation="1">
+
+            @if (_overdue.Count > 0)
+            {
+                <MyTasksGroup Title="Overdue"
+                            Icon=@Icons.Material.Filled.AccessTime
+                            IconColor=@Color.Error
+                            Tasks=@_overdue
+                            OnTaskClick=@OpenBoardAsync />
+            }
+
+            @if (_dueToday.Count > 0)
+            {
+                <MyTasksGroup Title="Due Today"
+                            Icon=@Icons.Material.Filled.WbSunny
+                            IconColor=@Color.Warning
+                            Tasks=@_dueToday
+                            OnTaskClick=@OpenBoardAsync />
+            }
+
+            @if (_upcoming.Count > 0)
+            {
+                <MyTasksGroup Title="Upcoming"
+                            Icon=@Icons.Material.Filled.CalendarMonth
+                            IconColor=@Color.Primary
+                            Tasks=@_upcoming
+                            OnTaskClick=@OpenBoardAsync />
+            }
+
+            @if (_noDate.Count > 0)
+            {
+                <MyTasksGroup Title="No Due Date"
+                            Icon=@Icons.Material.Filled.Inbox
+                            IconColor=@Color.Default
+                            Tasks=@_noDate
+                            OnTaskClick=@OpenBoardAsync />
+            }
+
+        </MudPaper>
+    }
+
+</MudContainer>

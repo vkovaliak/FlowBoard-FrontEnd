@@ -1,0 +1,77 @@
+<MudGrid Spacing="14" Class="mb-8">
+
+    <MudItem xs="12" sm="6" md="3">
+        @StatCard("Due Today", DueTodayCount,
+                  Icons.Material.Outlined.CalendarToday, 
+                  Color.Primary)
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        @StatCard("Overdue", OverdueCount,
+                  Icons.Material.Outlined.AccessTime, 
+                  Color.Error)
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        @StatCard("This Week", ThisWeekCount,
+                  Icons.Material.Outlined.DateRange, 
+                  Color.Info)
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        @StatCard("Completed", CompletedCount,
+                  Icons.Material.Outlined.CheckCircle, 
+                  Color.Success)
+    </MudItem>
+
+</MudGrid>
+@code {
+    private RenderFragment StatCard(string title, int count, 
+                                    string icon, Color color) =>
+        @<MudPaper Elevation="0"
+                   Outlined=@true
+                   Class="pa-6"
+                   Style="border-radius:16px; 
+                          height:100%;">
+
+            <div class="d-flex align-center" 
+                 style="gap:20px;">
+
+                <div class=@GetIconClass(color)>
+
+                    <MudIcon Icon=@icon
+                             Color=@color
+                             Size=@Size.Large />
+
+                </div>
+
+                <div>
+
+                    <MudText Typo=@Typo.body1
+                             Class="mb-2"
+                             Style="font-weight:500;">
+                        @title
+                    </MudText>
+
+                    <div class="d-flex align-end" 
+                         style="gap:8px;">
+
+                        <MudText Typo=@Typo.h3
+                                 Style="font-weight:700;
+                                        line-height:1;">
+                            @count
+                        </MudText>
+
+                        <MudText Typo=@Typo.body2
+                                 Style="padding-bottom:4px;">
+                            tasks
+                        </MudText>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </MudPaper>;
+}
