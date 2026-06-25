@@ -114,6 +114,20 @@ public partial class Home
         }
     }
 
+    private async Task ToggleFavoriteAsync(BoardDto board)
+    {
+        var success = await BoardService.ToggleFavoriteAsync(board.Id);
+
+        if (success)
+        {
+            _boards = await BoardService.GetMyBoardsAsync();
+        }
+        else
+        {
+            Snackbar.Add("Failed to update favorite", Severity.Error);
+        }
+    }
+
     private void NavigateToBoard(Guid boardId)
     {
         NavigationManager.NavigateTo($"/boards/{boardId}");

@@ -19,6 +19,13 @@
         <MudText Typo=@Typo.h6 Style="font-weight: 700; color: #1E293B;">
             @BoardName
         </MudText>
+
+        <MudIconButton Icon=@(IsFavorite
+                            ? Icons.Material.Filled.Star
+                            : Icons.Material.Outlined.StarBorder)
+                       Color=@(IsFavorite ? Color.Warning : Color.Default)
+                       Size=@Size.Small
+                       OnClick=@(() => OnToggleFavorite.InvokeAsync()) />
         
     </MudStack>
     

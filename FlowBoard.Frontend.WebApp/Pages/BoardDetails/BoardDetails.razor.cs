@@ -28,11 +28,30 @@ public partial class BoardDetails : IAsyncDisposable
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
     private Guid _currentUserId;
+    private Guid _loadedBoardId;
+
 
     private DotNetObjectReference<BoardDetails>? _objRef;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        if (Id == _loadedBoardId)
+        {
+            return;
+        }
+
+        if (_loadedBoardId != Guid.Empty)
+        {
+            BoardHub.OnBoardUpdated -= HandleBoardHubUpdate;
+            await BoardHub.LeaveBoardAsync(_loadedBoardId);
+            _objRef?.Dispose();
+            _objRef = null;
+        }
+
+        _loadedBoardId = Id;
+        _isNotFound = false;
+        _board = null;
+
         _currentUserId = await AuthStateProvider
             .GetCurrentUserIdAsync();
         await RefreshBoardAsync();
@@ -109,5 +128,22 @@ public partial class BoardDetails : IAsyncDisposable
         
         BoardHub.OnBoardUpdated -= HandleBoardHubUpdate;
         await BoardHub.LeaveBoardAsync(Id);
+    }
+
+    private async Task ToggleFavoriteAsync()
+    {
+        if (_board is null) return;
+
+        var success = await BoardService.ToggleFavoriteAsync(_board.Id);
+
+        if (success)
+        {
+            await RefreshBoardAsync();
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Failed to update favorite", Severity.Error);
+        }
     }
 }

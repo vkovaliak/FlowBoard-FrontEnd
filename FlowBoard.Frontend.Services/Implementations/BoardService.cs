@@ -76,4 +76,12 @@ public class BoardService : IBoardService
         return response.IsSuccessStatusCode
             && response.Content != false;
     }
+
+    public async Task<bool> ToggleFavoriteAsync(Guid boardId)
+    {
+        var response = await _boardApi.ToggleFavoriteAsync(boardId);
+
+        return response.IsSuccessStatusCode
+            && response.Content != false;
+    }
 }

@@ -17,12 +17,14 @@
     {
         <BoardHeader BoardName=@_board.Name
                      IsPublic=@_board.IsPublic
+                     IsFavorite=@_board.IsFavorite
                      Members=@_board.Members
                      BoardId=@_board.Id
                      CreatedBy=@_board.CreatedBy
                      CurrentUserId=@_currentUserId
                      CurrentUserRole=@_board.UserRole
                      OnInviteClick=@OpenInviteDialogAsync
+                     OnToggleFavorite=@ToggleFavoriteAsync
                      OnMembersChanged=@HandleMembersChangedAsync />
 
         <MudPaper Elevation="2" 
