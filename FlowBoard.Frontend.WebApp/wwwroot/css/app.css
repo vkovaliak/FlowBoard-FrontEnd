@@ -220,6 +220,16 @@ transform: rotate(-90deg);
     line-height: 1.5;
 }
 
+.big-card-label {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
 .label-row {
     display: flex;
     align-items: center;
@@ -332,4 +342,55 @@ transform: rotate(-90deg);
     inset: 0;
     background: transparent;
     z-index: 2000;
+}
+
+.task-row {
+    padding: 20px 30px;
+    gap: 24px;
+    border-bottom: 1px solid var(--mud-palette-divider);
+    cursor: pointer;
+}
+
+.stat-icon-primary {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(105, 92, 254, 0.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.stat-icon-error {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(255, 82, 82, 0.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.stat-icon-info {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(33, 150, 243, 0.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.stat-icon-success {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background: rgba(46, 125, 50, 0.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }

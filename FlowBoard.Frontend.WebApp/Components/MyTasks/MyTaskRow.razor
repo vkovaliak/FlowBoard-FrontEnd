@@ -1,0 +1,106 @@
+@using FlowBoard.Frontend.WebApp.Components.Common
+
+<div class="task-row d-flex align-center"
+     style="gap: 16px; 
+            border-bottom: 1px solid var(--mud-palette-divider);
+            cursor: pointer;"
+     @onclick=@(() => OnClick.InvokeAsync(Task))>
+
+    <div style="flex: 3; min-width:0;">
+
+        <MudText Typo=@Typo.body1 
+                 Class="mb-4"
+                 Style="font-weight: 600;
+                        overflow: hidden; text-overflow: ellipsis; 
+                        white-space: nowrap;">
+            @Task.Name
+        </MudText>
+
+        @if (!string.IsNullOrWhiteSpace(Task.Description))
+        {
+            <MudText Typo=@Typo.body2
+                     Class="task-description"
+                     Style="overflow: hidden; display: -webkit-box;;
+                            -webkit-line-clamp: 2;-webkit-box-orient: vertical;">
+                @((MarkupString)Task.Description)
+            </MudText>
+        }
+    </div>
+
+    <div style="flex:2; min-width:0;">
+
+        <MudStack Row=@true 
+                  Spacing="1" 
+                  Class="flex-wrap mt-2">
+
+            @foreach (var label in Task.Labels)
+            {
+                <span class="big-card-label"
+                      style=@($"background-color: {label.Color};")>
+                    @label.Name
+                </span>
+            }
+
+        </MudStack>
+    </div>
+
+    <div class="d-flex align-center" 
+         style="flex:1;">
+
+        <MudIcon Icon=@Icons.Material.Filled.Dashboard
+                 Size=@Size.Medium 
+                 Color=@Color.Secondary />
+
+        <MudText Typo=@Typo.body1 
+                 Class="ml-2" 
+                 Color=@Color.Secondary>
+            @Task.BoardName
+        </MudText>
+
+    </div>
+
+    <div class="d-flex align-center"
+         style="flex:1;">
+        @if (Task.DueDate.HasValue)
+        {
+            <MudIcon Icon=@Icons.Material.Filled.CalendarToday
+                     Size=@Size.Medium 
+                     Color=@GetDateColor() />
+
+            <MudText Typo=@Typo.body1 
+                     Class="ml-2" 
+                     Color=@GetDateColor()>
+                @FormatDate(Task.DueDate.Value)
+            </MudText>
+        }
+    </div>
+
+    <div style="flex:1;"
+         class="d-flex justify-end">
+        @foreach (var assignee in Task.Assignees.Take(3))
+        {
+            <div style="margin-left: -8px;">
+                
+                <UserAvatar UserName=@assignee.UserName
+                            AvatarUrl=@assignee.AvatarUrl
+                            Size=@Size.Medium
+                            SizeStyle="width: 32px; height: 32px; 
+                                       font-size: 15px;
+                                       border: 2px solid white;" />
+            </div>
+        }
+        @if (Task.Assignees.Count > 3)
+        {
+            <div style="margin-left: -8px;">
+
+                <MudAvatar Style="width: 28px; height: 28px; font-size: 11px;
+                                  background-color: #6b778c; color: white;
+                                  border: 2px solid white;">
+                    +@(Task.Assignees.Count - 3)
+                </MudAvatar>
+                
+            </div>
+        }
+    </div>
+
+</div>

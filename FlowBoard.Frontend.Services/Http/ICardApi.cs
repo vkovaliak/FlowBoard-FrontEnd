@@ -37,4 +37,7 @@ public interface ICardApi
     [Put("/api/boards/{boardId}/cards/{cardId}/due-date")]
     Task<ApiResponse<bool>> SetDueDateAsync(
         Guid boardId, Guid cardId, [Body] SetCardDueDateDto dto);
+
+    [Get("/api/my-tasks")]
+    Task<ApiResponse<List<MyCardDto>>> GetMyTasksAsync();
 }

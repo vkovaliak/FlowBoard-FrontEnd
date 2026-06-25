@@ -15,4 +15,6 @@ public interface ICardService
     Task<bool> UpdateDescriptionAsync(
         Guid boardId, Guid cardId, UpdateCardDescriptionDto dto);
     Task<bool> SetDueDateAsync(Guid boardId, Guid cardId, SetCardDueDateDto dto);
+
+    Task<List<MyCardDto>> GetMyTasksAsync();
 }

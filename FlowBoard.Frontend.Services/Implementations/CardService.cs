@@ -98,4 +98,13 @@ public class CardService : ICardService
         return response.IsSuccessStatusCode 
             && response.Content != false;
     }
+
+    public async Task<List<MyCardDto>> GetMyTasksAsync()
+    {
+        var response = await _cardApi.GetMyTasksAsync();
+
+        return response.IsSuccessStatusCode && response.Content != null
+            ? response.Content
+            : [];
+    }
 }
