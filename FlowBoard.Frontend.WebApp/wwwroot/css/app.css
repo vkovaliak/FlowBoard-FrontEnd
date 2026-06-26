@@ -394,3 +394,6 @@ transform: rotate(-90deg);
     align-items:center;
     justify-content:center;
 }
+
+.dialog-title-tight { padding-bottom: 0 !important; }
+.dialog-content-tight { padding-top: 0 !important; }
