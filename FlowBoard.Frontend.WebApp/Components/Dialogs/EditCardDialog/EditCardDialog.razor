@@ -10,22 +10,16 @@
 
 @if (_card != null)
 {
-    <MudDialog Class="card-side-panel">
+    <MudDialog Class="card-side-panel"
+               TitleClass="dialog-title-tight"
+               ContentClass="dialog-content-tight">
 
         <TitleContent>
 
             <MudStack Row=@true 
-                      Justify=@Justify.SpaceBetween
+                      Justify=@Justify.FlexEnd
                       AlignItems=@AlignItems.Center 
-                      Style="width: 100%;" 
-                      Class="mt-5">
-
-                <div style="flex-grow: 1; min-width: 0;">
-
-                    <CardNameEditor BoardId=@BoardId 
-                                    CardId=@CardId 
-                                    Name=@_card.Name />
-                </div>
+                      Style="width: 100%;">
 
                 <MudIconButton Icon=@Icons.Material.Filled.Close
                                Size=@Size.Small 
@@ -35,6 +29,14 @@
         </TitleContent>
 
         <DialogContent>
+
+            <div style="flex-grow: 1; min-width: 0;" 
+                 class="mb-4">
+
+                <CardNameEditor BoardId=@BoardId
+                                CardId=@CardId
+                                Name=@_card.Name />
+            </div>
 
             
             <div class="edit-card-toprow mb-4">

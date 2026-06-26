@@ -15,21 +15,24 @@ public partial class CardDueDatePicker
     [Parameter] public DateTime? DueDate { get; set; }
     [Parameter] public bool IsCompleted { get; set; }
 
-    private DateTime? _date
+    private DateTime? _date; 
+
+    protected override void OnParametersSet()
     {
-        get => DueDate;
-        set => _ = SetDateAsync(value);
+        _date = DueDate;
     }
 
-    private async Task SetDateAsync(DateTime? value)
+    private async Task OnDateChangedAsync(DateTime? value)
     {
+        _date = value;
+
         var dto = new SetCardDueDateDto(value);
-        var success = await CardService.SetDueDateAsync(
-            BoardId, CardId, dto);
+        var success = await CardService.SetDueDateAsync(BoardId, CardId, dto);
 
         if (!success)
         {
             Snackbar.Add("Failed to update due date", Severity.Error);
+            _date = DueDate;
         }
     }
 }

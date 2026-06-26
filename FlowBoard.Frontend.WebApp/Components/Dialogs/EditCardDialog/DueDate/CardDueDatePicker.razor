@@ -12,7 +12,8 @@
               AlignItems=@AlignItems.Center
               Spacing="2">
 
-        <MudDatePicker @bind-Date=@_date
+        <MudDatePicker Date=@_date
+                       DateChanged=@OnDateChangedAsync
                        Color=@Color.Success
                        Variant=@Variant.Outlined
                        Margin=@Margin.Dense
