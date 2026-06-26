@@ -9,6 +9,7 @@ using FlowBoard.Frontend.Services.Configurations;
 using Microsoft.Extensions.Configuration;
 using FlowBoard.Frontend.Services.Providers;
 using Microsoft.AspNetCore.Components.Authorization;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.Services.Extensions;
 
@@ -20,12 +21,14 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<UserState>();
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<IBoardHubService, BoardHubService>();
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<IChecklistService, ChecklistService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICommentHubService, CommentHubService>();
+        services.AddScoped<FavoritesState>();
         services.AddScoped<ILabelService, LabelService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();

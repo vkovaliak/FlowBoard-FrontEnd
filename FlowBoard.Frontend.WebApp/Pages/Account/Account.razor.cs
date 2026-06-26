@@ -1,5 +1,6 @@
 using FlowBoard.Frontend.Domain.DTOs.Users;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.State;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
@@ -10,6 +11,7 @@ public partial class Account
 {
     [Inject] private IUserService UserService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
+    [Inject] private UserState UserState { get; set; } = default!;
 
     private UserDto? _user;
     private string _userNameInput = string.Empty;
@@ -55,6 +57,7 @@ public partial class Account
         }
 
         _user = _user! with { UserName = userName };
+        UserState.NotifyChanged();
         Snackbar.Add("Username updated", Severity.Success);
         _saving = false;
     }
@@ -85,6 +88,7 @@ public partial class Account
         }
 
         _user = _user! with { AvatarUrl = newUrl };
+        UserState.NotifyChanged();
         Snackbar.Add("Avatar updated", Severity.Success);
     }
 
@@ -99,6 +103,7 @@ public partial class Account
         }
 
         _user = await UserService.GetMeAsync();
+        UserState.NotifyChanged();
         Snackbar.Add("Avatar removed", Severity.Success);
     }
 }
