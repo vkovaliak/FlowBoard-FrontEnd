@@ -18,12 +18,24 @@ public partial class Register
     private bool HasMinLength 
         => Model.Password.Length >= 6;
 
+    private bool HasUppercase
+        => Model.Password.Any(c => c is >= 'A' and <= 'Z');
+
+    private bool HasDigit
+        => Model.Password.Any(char.IsDigit);
+
+    private bool HasSpecialChar
+        => Model.Password.Any(c => !char.IsLetterOrDigit(c));
+    
+    private bool IsPasswordValid
+        => HasMinLength && HasUppercase && HasDigit && HasSpecialChar;
+
     private void TogglePasswordVisibility() 
         => _showPassword = !_showPassword;
 
     private async Task HandleRegister()
     {
-        if (!HasMinLength)
+        if (!IsPasswordValid)
         {
             Snackbar.Add(
                 "Password does not meet requirements", Severity.Warning);
