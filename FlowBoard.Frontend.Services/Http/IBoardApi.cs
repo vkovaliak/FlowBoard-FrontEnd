@@ -28,4 +28,7 @@ public interface IBoardApi
 
     [Delete("/api/boards/{boardId}/leave")]
     Task<ApiResponse<bool>> LeaveBoardAsync(Guid boardId);
+
+    [Put("/api/boards/{boardId}/favorite")]
+    Task<ApiResponse<bool>> ToggleFavoriteAsync(Guid boardId);
 }

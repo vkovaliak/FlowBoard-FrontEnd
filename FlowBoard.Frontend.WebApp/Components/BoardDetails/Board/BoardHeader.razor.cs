@@ -14,7 +14,7 @@ public partial class BoardHeader
     [Parameter] public Guid CurrentUserId { get; set; }
     [Parameter] public BoardRole CurrentUserRole { get; set; }
     [Parameter] public EventCallback OnMembersChanged { get; set; }
-    
-    [Parameter] 
-    public EventCallback OnInviteClick { get; set; }
+    [Parameter] public bool IsFavorite { get; set; }
+    [Parameter] public EventCallback OnToggleFavorite { get; set; }
+    [Parameter] public EventCallback OnInviteClick { get; set; }
 }

@@ -12,4 +12,5 @@ public interface IBoardService
     Task<bool> InviteMemberAsync(Guid boardId, InviteMemberDto dto);
     Task<bool> RemoveMemberAsync(Guid boardId, Guid userId);
     Task<bool> LeaveBoardAsync(Guid boardId);
+    Task<bool> ToggleFavoriteAsync(Guid boardId);
 }

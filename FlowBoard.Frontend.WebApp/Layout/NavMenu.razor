@@ -16,4 +16,29 @@
         <MudText Typo=@Typo.body1 Class="font-weight-medium">Calendar</MudText>
     </MudNavLink>
 
+    @if (_favorites.Any())
+    {
+        <MudText Typo=@Typo.caption
+                 Class="px-4 mt-4 mb-2"
+                 Style="color: #94A3B8; font-weight: 600;
+                        letter-spacing: 0.5px; 
+                        text-transform: uppercase;">
+            Favorites
+        </MudText>
+
+        @foreach (var board in _favorites)
+        {
+            <MudNavLink Href=@($"/boards/{board.Id}")
+                        Icon=@Icons.Material.Filled.Star
+                        IconColor=@Color.Warning>
+
+                <MudText Typo=@Typo.body1 
+                         Class="font-weight-medium">
+                    @board.Name
+                </MudText>
+                
+            </MudNavLink>
+        }
+    }
+
 </MudNavMenu>
