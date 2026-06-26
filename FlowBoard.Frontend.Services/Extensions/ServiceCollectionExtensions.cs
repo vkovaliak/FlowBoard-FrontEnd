@@ -21,20 +21,21 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<UserState>();
         services.AddScoped<IBoardService, BoardService>();
         services.AddScoped<IBoardHubService, BoardHubService>();
         services.AddScoped<ICardService, CardService>();
         services.AddScoped<IChecklistService, ChecklistService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICommentHubService, CommentHubService>();
-        services.AddScoped<FavoritesState>();
         services.AddScoped<ILabelService, LabelService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<FavoritesState>();
+        services.AddScoped<UserState>();
 
         services.AddScoped<AuthenticationStateProvider>(provider => 
             provider.GetRequiredService<CustomAuthStateProvider>());
