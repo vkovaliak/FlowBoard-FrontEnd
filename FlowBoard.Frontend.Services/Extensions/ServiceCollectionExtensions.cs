@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IListService, ListService>();
         services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();
         services.AddScoped<CustomAuthStateProvider>();
+        services.AddScoped<ISearchService, SearchService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
 
@@ -79,6 +80,7 @@ public static class ServiceCollectionExtensions
         AddAuthenticatedRefitClient<ICommentApi>();
         AddAuthenticatedRefitClient<IListApi>();
         AddAuthenticatedRefitClient<ILabelApi>();
+        AddAuthenticatedRefitClient<ISearchApi>();
         AddAuthenticatedRefitClient<IUserApi>();
         
         return services;

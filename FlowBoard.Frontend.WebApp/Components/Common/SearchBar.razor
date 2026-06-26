@@ -1,0 +1,93 @@
+<div class="search-bar-wrapper">
+
+    <MudTextField @bind-Value=@_query
+                  Immediate=@true
+                  DebounceInterval="300"
+                  OnDebounceIntervalElapsed=@OnSearchAsync
+                  Placeholder="Search boards, tasks..."
+                  Variant=@Variant.Filled
+                  Margin=@Margin.Dense
+                  Adornment=@Adornment.End
+                  AdornmentIcon=@Icons.Material.Filled.Search
+                  Class="search-input"
+                  Style="background-color: #1e293bc6; 
+                         border-radius: 8px; 
+                         border: 1px solid #64748b;"
+                  @onfocus=@OnFocus />
+
+    @if (_showDropdown 
+        && (_results.Boards.Count > 0 
+            || _results.Cards.Count > 0))
+    {
+        <div class="search-dropdown">
+
+            @if (_results.Boards.Count > 0)
+            {
+                <div class="search-section-title">
+                    Boards
+                </div>
+
+                @foreach (var board in _results.Boards)
+                {
+                    <div class="search-item" 
+                         @onclick=@(() => GoToBoard(board.Id))>
+
+                        <MudIcon Icon=@Icons.Material.Filled.Dashboard
+                                 Size=@Size.Small 
+                                 Class="mr-2" />
+
+                        <span>@board.Name</span>
+
+                    </div>
+                }
+            }
+
+            @if (_results.Cards.Count > 0)
+            {
+                <div class="search-section-title">
+                    Cards
+                </div>
+
+                @foreach (var card in _results.Cards)
+                {
+                    <div class="search-item" 
+                         @onclick=@(() => GoToBoard(card.BoardId))>
+
+                        <MudIcon Icon=@Icons.Material.Filled.Assignment
+                                 Size=@Size.Small 
+                                 Class="mr-2" />
+
+                        <div class="search-item-text">
+
+                            <span>@card.Name</span>
+
+                            <span class="search-item-sub">
+                                in @card.BoardName
+                            </span>
+
+                        </div>
+
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="search-backdrop" 
+             @onclick=@CloseDropdown>
+        </div>
+    }
+    else if (_showDropdown && _hasSearched)
+    {
+        <div class="search-dropdown">
+            <div class="search-empty">
+                No results found
+            </div>
+
+        </div>
+
+        <div class="search-backdrop" 
+             @onclick=@CloseDropdown>
+        </div>
+    }
+
+</div>

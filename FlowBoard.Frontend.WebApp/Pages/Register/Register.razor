@@ -119,6 +119,15 @@
                             <PasswordRequirement IsMet=@HasMinLength 
                                                  Text="At least 6 characters" />
                             
+                            <PasswordRequirement IsMet=@HasUppercase
+                                                 Text="At least one uppercase letter" />
+
+                            <PasswordRequirement IsMet=@HasDigit
+                                                 Text="At least one number" />
+
+                            <PasswordRequirement IsMet=@HasSpecialChar
+                                                 Text="At least one special character" />
+                            
                         </MudStack>
 
                         <MudButton ButtonType=@ButtonType.Submit
