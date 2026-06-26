@@ -37,19 +37,22 @@
                               Style="cursor: pointer; min-height: 120px;
                                      position: relative"
                               @onclick=@(() => NavigateToBoard(board.Id))>
-                        
-                        <div @onclick:stopPropagation=@true
-                            style="position: absolute; 
-                                   top: 8px; right: 8px; z-index: 2;">
 
-                            <MudIconButton Icon=@(board.IsFavorite
-                                                ? Icons.Material.Filled.Star
-                                                : Icons.Material.Outlined.StarBorder)
-                                            Color=@(board.IsFavorite ? Color.Warning : Color.Default)
-                                            Size=@Size.Small
-                                            OnClick=@(() => ToggleFavoriteAsync(board)) />
+                        <MudStack Justify=@Justify.FlexEnd Style="min-height: 50px;">
                         
-                        </div>
+                            <div @onclick:stopPropagation=@true
+                                style="position: absolute; 
+                                    top: 8px; right: 8px; z-index: 2;">
+
+                                <MudIconButton Icon=@(board.IsFavorite
+                                                    ? Icons.Material.Filled.Star
+                                                    : Icons.Material.Outlined.StarBorder)
+                                                Color=@(board.IsFavorite ? Color.Warning : Color.Default)
+                                                Size=@Size.Medium
+                                                OnClick=@(() => ToggleFavoriteAsync(board)) />
+                            
+                            </div>
+                        </MudStack>
                                         
                         <MudStack Justify=@Justify.SpaceBetween Style="min-height: 110px;">
 

@@ -5,6 +5,7 @@ using FlowBoard.Frontend.Services.Abstractions;
 using MudBlazor;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.WebApp.Pages.Home;
 
@@ -15,6 +16,7 @@ public partial class Home
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public FavoritesState FavoritesState { get; set; } = default!;
 
     private IEnumerable<BoardDto>? _boards;
 
@@ -121,6 +123,7 @@ public partial class Home
         if (success)
         {
             _boards = await BoardService.GetMyBoardsAsync();
+            FavoritesState.NotifyChanged();
         }
         else
         {

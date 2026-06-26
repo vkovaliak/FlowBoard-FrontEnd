@@ -5,6 +5,7 @@ using MudBlazor;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Providers;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -24,6 +25,7 @@ public partial class BoardDetails : IAsyncDisposable
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public IJSRuntime JsRuntime { get; set; } = default!;
     [Inject] public IBoardHubService BoardHub { get; set; } = default!;
+    [Inject] public FavoritesState FavoritesState { get; set; } = default!;
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
@@ -139,7 +141,7 @@ public partial class BoardDetails : IAsyncDisposable
         if (success)
         {
             await RefreshBoardAsync();
-            StateHasChanged();
+            FavoritesState.NotifyChanged();
         }
         else
         {

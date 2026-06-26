@@ -9,6 +9,7 @@ using FlowBoard.Frontend.Services.Configurations;
 using Microsoft.Extensions.Configuration;
 using FlowBoard.Frontend.Services.Providers;
 using Microsoft.AspNetCore.Components.Authorization;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.Services.Extensions;
 
@@ -32,6 +33,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<FavoritesState>();
+        services.AddScoped<UserState>();
 
         services.AddScoped<AuthenticationStateProvider>(provider => 
             provider.GetRequiredService<CustomAuthStateProvider>());
