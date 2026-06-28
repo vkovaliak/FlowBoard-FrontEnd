@@ -32,11 +32,11 @@ public partial class CardListSelector
         var newPosition = targetList.Cards?.Count ?? 0;
 
         var dto = new MoveCardDto(newListId, newPosition);
-        var success = await CardService.MoveAsync(BoardId, CardId, dto);
+        var result = await CardService.MoveAsync(BoardId, CardId, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to move card", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 }

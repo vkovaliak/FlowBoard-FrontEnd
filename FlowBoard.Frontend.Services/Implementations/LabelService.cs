@@ -1,5 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Labels;
+using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Helpers;
 using FlowBoard.Frontend.Services.Http;
 
 namespace FlowBoard.Frontend.Services.Implementations;
@@ -13,7 +15,7 @@ public class LabelService : ILabelService
         _labelApi = labelApi;
     }
 
-    public async Task<Guid?> CreateAsync(
+    public async Task<OperationResult<Guid?>> CreateAsync(
         Guid boardId, CreateLabelDto dto)
     {
         var response = await _labelApi.CreateAsync(boardId, dto);
@@ -21,48 +23,64 @@ public class LabelService : ILabelService
         if (response.IsSuccessStatusCode 
             && response.Content != Guid.Empty)
         {
-            return response.Content;
+            return OperationResult<Guid?>.Ok(response.Content);
         }
 
-        return null;
+        return OperationResult<Guid?>.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> UpdateAsync(
+    public async Task<OperationResult> UpdateAsync(
         Guid boardId, Guid labelId, UpdateLabelDto dto)
     {
         var response = await _labelApi.UpdateAsync(
             boardId, labelId, dto);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DeleteAsync(Guid boardId, Guid labelId)
+    public async Task<OperationResult> DeleteAsync(Guid boardId, Guid labelId)
     {
         var response = await _labelApi.DeleteAsync(boardId, labelId);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> AttachAsync(
+    public async Task<OperationResult> AttachAsync(
         Guid boardId, Guid cardId, Guid labelId)
     {
         var response = await _labelApi.AttachAsync(
             boardId, cardId, labelId);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DetachAsync(
+    public async Task<OperationResult> DetachAsync(
         Guid boardId, Guid cardId, Guid labelId)
     {
         var response = await _labelApi.DetachAsync(
             boardId, cardId, labelId);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
     public async Task<List<LabelDto>> GetByBoardIdAsync(Guid boardId)

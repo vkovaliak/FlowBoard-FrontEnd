@@ -25,14 +25,14 @@ public partial class Login
         var loginDto = new UserLoginDto(Model.Email, Model.Password);
         var result = await AuthService.LoginAsync(loginDto);
 
-        if (result)
+        if (result.Success)
         {
             Snackbar.Add("Login success!", Severity.Success);
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            Snackbar.Add("Login failed", Severity.Error);
+            Snackbar.Add($"Login failed: {result.Error}", Severity.Error);
         }
     }
 
@@ -43,16 +43,16 @@ public partial class Login
 
         try
         {
-            var success = await AuthService.LoginWithMicrosoftAsync();
+            var result = await AuthService.LoginWithMicrosoftAsync();
             
-            if (success)
+            if (result.Success)
             {
                 Snackbar.Add("Microsoft login success!", Severity.Success);
                 NavigationManager.NavigateTo("/");
             }
             else
             {
-                Snackbar.Add("Microsoft login failed", Severity.Error);
+                Snackbar.Add($"Microsoft login failed: {result.Error}", Severity.Error);
             }
         }
         finally

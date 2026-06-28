@@ -46,11 +46,11 @@ public partial class ChecklistSection
         }
 
         var dto = new AddChecklistItemDto(_newText);
-        var newId = await ChecklistService.AddAsync(BoardId, CardId, dto);
+        var result = await ChecklistService.AddAsync(BoardId, CardId, dto);
 
-        if (newId is null)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to add item", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed to add item", Severity.Error);
             return;
         }
 
@@ -60,21 +60,23 @@ public partial class ChecklistSection
 
     private async Task ToggleAsync(ChecklistItemDto item)
     {
-        var success = await ChecklistService.ToggleAsync(BoardId, CardId, item.Id);
+        var result = await ChecklistService.ToggleAsync(
+            BoardId, CardId, item.Id);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to update item", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 
     private async Task DeleteAsync(ChecklistItemDto item)
     {
-        var success = await ChecklistService.DeleteAsync(BoardId, CardId, item.Id);
+        var result = await ChecklistService.DeleteAsync(
+            BoardId, CardId, item.Id);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to delete item", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 }

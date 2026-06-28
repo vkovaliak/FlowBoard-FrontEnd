@@ -1,5 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Auth;
+using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Helpers;
 using FlowBoard.Frontend.Services.Http;
 using FlowBoard.Frontend.Services.Providers;
 
@@ -23,7 +25,7 @@ public class AuthService : IAuthService
         _microsoftAuthService = microsoftAuthService;
     }
 
-    public async Task<bool> LoginAsync(UserLoginDto dto)
+    public async Task<OperationResult> LoginAsync(UserLoginDto dto)
     {
         var response = await _authApi.LoginAsync(dto);
 
@@ -31,13 +33,13 @@ public class AuthService : IAuthService
         {
             await _tokenService.SaveTokensAsync(response.Content);
             _authStateProvider.NotifyUserAuthentication(response.Content.AccessToken);
-            return true;
+            return OperationResult.Ok();
         }
 
-        return false;
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> RegisterAsync(UserRegisterDto dto)
+    public async Task<OperationResult> RegisterAsync(UserRegisterDto dto)
     {
         var response = await _authApi.RegisterAsync(dto);
 
@@ -45,35 +47,40 @@ public class AuthService : IAuthService
         {
             await _tokenService.SaveTokensAsync(response.Content);
             _authStateProvider.NotifyUserAuthentication(response.Content.AccessToken);
-            return true;
+            return OperationResult.Ok();
         }
         
-        return false;
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> LogoutAsync()
+    public async Task<OperationResult> LogoutAsync()
     {
         var refreshToken = await _tokenService.GetRefreshTokenAsync();
-        if(refreshToken == null)
+        if (refreshToken == null)
         {
-            return false;
+           return OperationResult.Fail("Refresh token not found.");
         }
         var request = new RefreshTokenDto(refreshToken);
-        await _authApi.LogoutAsync(request);
+        var response = await _authApi.LogoutAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return OperationResult.Fail(response.GetErrorMessage());
+        }
 
         await _tokenService.RemoveTokensAsync();
         _authStateProvider.NotifyUserLogout();
         
-        return true;
+        return OperationResult.Ok();
     }
 
-    public async Task<bool> LoginWithMicrosoftAsync()
+    public async Task<OperationResult> LoginWithMicrosoftAsync()
     {
         var idToken = await _microsoftAuthService.GetIdTokenAsync();
 
         if (string.IsNullOrEmpty(idToken))
         {
-            return false; 
+            return OperationResult.Fail("Failed to retrieve Microsoft ID token.");
         }
 
         var dto = new ExternalTokenDto(idToken);
@@ -87,9 +94,9 @@ public class AuthService : IAuthService
             _authStateProvider.NotifyUserAuthentication(
                 response.Content.AccessToken);
 
-            return true;
+            return OperationResult.Ok();
         }
 
-        return false;
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 }

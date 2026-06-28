@@ -27,11 +27,11 @@ public partial class CardDueDatePicker
         _date = value;
 
         var dto = new SetCardDueDateDto(value);
-        var success = await CardService.SetDueDateAsync(BoardId, CardId, dto);
+        var result = await CardService.SetDueDateAsync(BoardId, CardId, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to update due date", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             _date = DueDate;
         }
     }

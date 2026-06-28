@@ -11,11 +11,13 @@ window.initKanbanSortable = (dotNetHelper) => {
             invertSwap: true,
 
             onStart: function (evt) {
+                document.body.classList.add('is-dragging');
                 evt.item._nextSibling = evt.item.nextElementSibling;
                 evt.item._parent = evt.item.parentNode;
             },
 
             onEnd: function (evt) {
+                document.body.classList.add('is-dragging');
                 if (evt.oldIndex === evt.newIndex) 
                     return;
 
@@ -39,11 +41,13 @@ window.initKanbanSortable = (dotNetHelper) => {
             invertSwap: true,
 
             onStart: function (evt) {
+                document.body.classList.add('is-dragging');
                 evt.item._nextSibling = evt.item.nextElementSibling;
                 evt.item._parent = evt.item.parentNode;
             },
 
             onEnd: function (evt) {
+                document.body.classList.remove('is-dragging');
                 const cardId = evt.item.getAttribute('data-card-id');
                 const toListId = evt.to.getAttribute('data-list-id');
                 const newIndex = evt.newIndex;

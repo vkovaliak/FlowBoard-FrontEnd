@@ -48,19 +48,19 @@ public partial class LabelManager
 
     private async Task AttachAsync(LabelDto label)
     {
-        var success = await LabelService.AttachAsync(BoardId, CardId, label.Id);
-        if (!success)
+        var result = await LabelService.AttachAsync(BoardId, CardId, label.Id);
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to attach label", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 
     private async Task DetachAsync(LabelDto label)
     {
-        var success = await LabelService.DetachAsync(BoardId, CardId, label.Id);
-        if (!success)
+        var result = await LabelService.DetachAsync(BoardId, CardId, label.Id);
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to detach label", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 
@@ -76,24 +76,24 @@ public partial class LabelManager
         var dialog = await DialogService.ShowAsync<CreateLabelDialog>(
             null, parameters, SmallOptions());
 
-        var result = await dialog.Result;
+        var dialogResult = await dialog.Result;
 
-        if (result is null || result.Canceled) 
+        if (dialogResult is null || dialogResult.Canceled) 
             return;
 
-        if (result.Data is not (string name, string color)) 
+        if (dialogResult.Data is not (string name, string color)) 
             return;
 
         var dto = new CreateLabelDto(name, color);
-        var id = await LabelService.CreateAsync(BoardId, dto);
+        var result = await LabelService.CreateAsync(BoardId, dto);
 
-        if (id is null)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to create label", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 
-        await LabelService.AttachAsync(BoardId, CardId, id.Value);
+        await LabelService.AttachAsync(BoardId, CardId, result.Value ?? Guid.Empty);
         await ReloadBoardLabelsAsync();
     }
 

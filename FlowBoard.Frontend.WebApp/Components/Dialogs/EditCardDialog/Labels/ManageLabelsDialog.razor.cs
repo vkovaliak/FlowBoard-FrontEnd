@@ -68,17 +68,19 @@ public partial class ManageLabelsDialog
         var dialog = await DialogService.ShowAsync<CreateLabelDialog>(
             null, parameters, SmallOptions());
 
-        var result = await dialog.Result;
-        if (result is null || result.Canceled) return;
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled) 
+            return;
 
-        if (result.Data is not (string name, string color)) return;
+        if (dialogResult.Data is not (string name, string color)) 
+            return;
 
         var dto = new UpdateLabelDto(name, color);
-        var success = await LabelService.UpdateAsync(BoardId, label.Id, dto);
+        var result = await LabelService.UpdateAsync(BoardId, label.Id, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to update label", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 
@@ -87,11 +89,11 @@ public partial class ManageLabelsDialog
 
     private async Task DeleteAsync(LabelDto label)
     {
-        var success = await LabelService.DeleteAsync(BoardId, label.Id);
+        var result = await LabelService.DeleteAsync(BoardId, label.Id);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to delete label", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 

@@ -1,11 +1,12 @@
 using FlowBoard.Frontend.Domain.DTOs.Auth;
+using FlowBoard.Frontend.Domain.Models.Common;
 
 namespace FlowBoard.Frontend.Services.Abstractions;
 
 public interface IAuthService
 {
-    Task<bool> RegisterAsync(UserRegisterDto dto);
-    Task<bool> LoginAsync(UserLoginDto dto);
-    Task<bool> LogoutAsync();
-    Task<bool> LoginWithMicrosoftAsync();
+    Task<OperationResult> RegisterAsync(UserRegisterDto dto);
+    Task<OperationResult> LoginAsync(UserLoginDto dto);
+    Task<OperationResult> LogoutAsync();
+    Task<OperationResult> LoginWithMicrosoftAsync();
 }

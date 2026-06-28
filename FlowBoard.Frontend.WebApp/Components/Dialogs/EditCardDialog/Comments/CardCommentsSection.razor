@@ -14,9 +14,28 @@
     <MudStack Spacing="2" Style="overflow-y: auto;" Class="mt-2">
         @if (_isLoading)
         {
-            <MudProgressCircular Color=@Color.Primary 
-                                 Indeterminate=@true 
-                                 Size=@Size.Small />
+            <div style="overflow: hidden; max-height: 100%;">
+
+                <MudStack AlignItems=@AlignItems.End>
+
+                    <MudSkeleton SkeletonType=@SkeletonType.Text 
+                                Height=20px Width=42%/>
+
+                </MudStack>
+
+                <MudSkeleton SkeletonType=@SkeletonType.Text 
+                             Height="20px" Width=50%/>
+
+                <MudSkeleton SkeletonType=@SkeletonType.Text 
+                             Height="20px" Width=32%/>
+
+                <MudStack AlignItems=@AlignItems.End>
+
+                    <MudSkeleton SkeletonType=@SkeletonType.Text 
+                                Height="20px" Width=50%/>
+
+                </MudStack>
+            </div>
         }
         else if (!_comments.Any())
         {
@@ -36,4 +55,5 @@
             }
         }
     </MudStack>
+    
 </MudStack>

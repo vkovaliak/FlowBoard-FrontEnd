@@ -16,12 +16,12 @@ public partial class BoardDetails
         StateHasChanged();
 
         var dto = new MoveListDto(NewPosition: newIndex);
-        var success = await ListService.MoveAsync(Id, listGuid, dto);
+        var result = await ListService.MoveAsync(Id, listGuid, dto);
 
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to save list position", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             await RefreshBoardAsync();
             await InvokeAsync(StateHasChanged);
         }
@@ -40,11 +40,11 @@ public partial class BoardDetails
             NewListId: toListGuid,
             NewPosition: newIndex);
 
-        var success = await CardService.MoveAsync(Id, cardGuid, dto);
+        var result = await CardService.MoveAsync(Id, cardGuid, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to save card position", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             await RefreshBoardAsync();
             await InvokeAsync(StateHasChanged);
         }

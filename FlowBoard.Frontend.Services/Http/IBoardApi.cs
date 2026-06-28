@@ -15,7 +15,7 @@ public interface IBoardApi
     Task<ApiResponse<Guid>> CreateAsync([Body] CreateBoardDto dto);
 
     [Put("/api/boards/{id}")]
-    Task<ApiResponse<bool>> UpdateAsync(Guid id, [Body] UpdateBoardDto dto);
+    Task<ApiResponse<Guid>> UpdateAsync(Guid id, [Body] UpdateBoardDto dto);
 
     [Delete("/api/boards/{id}")]
     Task<ApiResponse<bool>> DeleteAsync(Guid id);

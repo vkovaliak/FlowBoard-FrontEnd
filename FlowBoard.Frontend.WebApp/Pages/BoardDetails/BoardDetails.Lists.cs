@@ -14,11 +14,11 @@ public partial class BoardDetails
         }
 
         var newList = new CreateListDto(Name: listName);
-        var success = await ListService.CreateAsync(Id, newList);
+        var result = await ListService.CreateAsync(Id, newList);
 
-        ShowResult(success,
+        ShowResult(result.Success,
             "List created successfully!",
-            "Failed to create list");
+            result.Error ?? "Failed");
     }
 
     private async Task HandleRenameListAsync((Guid ListId, string NewName) args)
@@ -30,11 +30,11 @@ public partial class BoardDetails
         }
 
         var updateDto = new UpdateListDto(Name: args.NewName);
-        var success = await ListService.UpdateAsync(Id, args.ListId, updateDto);
+        var result = await ListService.UpdateAsync(Id, args.ListId, updateDto);
 
-        ShowResult(success,
+        ShowResult(result.Success,
             "List renamed successfully!",
-            "Failed to rename list");
+            result.Error ?? "Failed");
     }
 
     private async Task HandleDeleteListAsync((Guid ListId, string ListName) args)
@@ -46,10 +46,10 @@ public partial class BoardDetails
         if (!confirmed)
             return;
 
-        var success = await ListService.DeleteAsync(Id, args.ListId);
+        var result = await ListService.DeleteAsync(Id, args.ListId);
 
-        ShowResult(success,
+        ShowResult(result.Success,
             $"List '{args.ListName}' deleted",
-            "Failed to delete list");
+            result.Error ?? "Failed");
     }
 }

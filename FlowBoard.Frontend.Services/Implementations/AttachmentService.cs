@@ -1,5 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Attachments;
+using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Helpers;
 using Refit;
 
 namespace FlowBoard.Frontend.Services.Http;
@@ -13,7 +15,7 @@ public class AttachmentService : IAttachmentService
         _attachmentApi = attachmentApi;
     }
 
-    public async Task<AttachmentResponseDto?> UploadCardAttachmentAsync(
+    public async Task<OperationResult<AttachmentResponseDto?>> UploadCardAttachmentAsync(
         Guid boardId, Guid cardId, Stream fileStream, string fileName, string contentType)
     {
         var streamPart = new StreamPart(fileStream, fileName, contentType);
@@ -23,13 +25,13 @@ public class AttachmentService : IAttachmentService
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
-            return response.Content;
+            return OperationResult<AttachmentResponseDto?>.Ok(response.Content);
         }
 
-        return null;
+        return OperationResult<AttachmentResponseDto?>.Fail(response.GetErrorMessage());
     }
 
-    public async Task<AttachmentResponseDto?> UploadCommentAttachmentAsync(
+    public async Task<OperationResult<AttachmentResponseDto?>> UploadCommentAttachmentAsync(
         Guid boardId, Guid cardId, Guid commentId, Stream fileStream, string fileName, string contentType)
     {
         var streamPart = new StreamPart(fileStream, fileName, contentType);
@@ -39,21 +41,31 @@ public class AttachmentService : IAttachmentService
 
         if (response.IsSuccessStatusCode && response.Content != null)
         {
-            return response.Content;
+            return OperationResult<AttachmentResponseDto?>.Ok(response.Content);
         }
 
-        return null;
+        return OperationResult<AttachmentResponseDto?>.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DeleteCardAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
+    public async Task<OperationResult> DeleteCardAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
     {
         var response = await _attachmentApi.DeleteCardAttachmentAsync(boardId, cardId, attachmentId);
-        return response.IsSuccessStatusCode;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DeleteCommentAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
+    public async Task<OperationResult> DeleteCommentAttachmentAsync(Guid boardId, Guid cardId, Guid attachmentId)
     {
         var response = await _attachmentApi.DeleteCommentAttachmentAsync(boardId, cardId, attachmentId);
-        return response.IsSuccessStatusCode;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 }

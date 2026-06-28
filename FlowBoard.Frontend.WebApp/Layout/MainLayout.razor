@@ -33,6 +33,17 @@
 
         <MudSpacer />
 
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   StartIcon=@Icons.Material.Filled.Add
+                   Size=@Size.Large
+                   OnClick=@OpenCreateBoardDialogAsync
+                   Class="mr-10"
+                   Style="text-transform: none; font-weight: 500; 
+                          border-radius: 6px">
+            Create
+        </MudButton>
+
         @if (_currentUser != null)
         {
             <div class="user-menu">

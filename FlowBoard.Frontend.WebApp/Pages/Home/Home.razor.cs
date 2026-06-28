@@ -6,6 +6,7 @@ using MudBlazor;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 using FlowBoard.Frontend.Services.State;
+using FlowBoard.Frontend.Domain.Models.Common;
 
 namespace FlowBoard.Frontend.WebApp.Pages.Home;
 
@@ -55,7 +56,7 @@ public partial class Home
             Data: CreateBoardModel model 
             })
         {
-            bool isSuccess;
+            OperationResult<Guid> isSuccess;
             string successMessage;
             string errorMessage;
 
@@ -67,7 +68,8 @@ public partial class Home
 
                 isSuccess = await BoardService.CreateAsync(createDto);
                 successMessage = "Board created!";
-                errorMessage = "Board failed to create";
+                NavigateToBoard(isSuccess.Value);
+                errorMessage = $"Failed to create board: {isSuccess.Error}";
             }
             else 
             {
@@ -77,10 +79,10 @@ public partial class Home
 
                 isSuccess = await BoardService.UpdateAsync(currentBoard.Id, updateDto);
                 successMessage = "Board updated successfully!";
-                errorMessage = "Failed to update board";
+                errorMessage = $"Failed to update board: {isSuccess.Error}";
             }
 
-            if (isSuccess)
+            if (isSuccess.Success)
             {
                 Snackbar.Add(successMessage, Severity.Success);
                 _boards = await BoardService.GetMyBoardsAsync();
@@ -104,30 +106,30 @@ public partial class Home
         {   
             var isDeleted = await BoardService.DeleteAsync(board.Id);
 
-            if (isDeleted)
+            if (isDeleted.Success)
             {
                 Snackbar.Add($"Board '{board.Name}' deleted", Severity.Success);
                 _boards = await BoardService.GetMyBoardsAsync();
             }
             else
             {
-                Snackbar.Add("Failed to delete board", Severity.Error);
+                Snackbar.Add(isDeleted.Error ?? "Failed", Severity.Error);
             }
         }
     }
 
     private async Task ToggleFavoriteAsync(BoardDto board)
     {
-        var success = await BoardService.ToggleFavoriteAsync(board.Id);
+        var result = await BoardService.ToggleFavoriteAsync(board.Id);
 
-        if (success)
+        if (result.Success)
         {
             _boards = await BoardService.GetMyBoardsAsync();
             FavoritesState.NotifyChanged();
         }
         else
         {
-            Snackbar.Add("Failed to update favorite", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 

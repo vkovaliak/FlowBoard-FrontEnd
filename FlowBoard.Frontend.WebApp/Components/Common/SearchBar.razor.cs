@@ -1,6 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Search;
 using FlowBoard.Frontend.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.Common;
 
@@ -38,8 +39,10 @@ public partial class SearchBar
             return;
         }
 
-        _results = await SearchService.SearchAsync(
+        var result = await SearchService.SearchAsync(
             trimmed);
+
+        _results = result.Value!;
         _hasSearched = true;
         _showDropdown = true;
     }

@@ -1,5 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Comments;
+using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Helpers;
 using FlowBoard.Frontend.Services.Http;
 
 namespace FlowBoard.Frontend.Services.Implementations;
@@ -21,26 +23,39 @@ public class CommentService : ICommentService
             && response.Content != null ? response.Content : [];
     }
 
-    public async Task<Guid> CreateAsync(Guid boardId, Guid cardId, CreateCommentDto comment)
+    public async Task<OperationResult<Guid>> CreateAsync(Guid boardId, Guid cardId, CreateCommentDto comment)
     {
         var response = await _commentApi.CreateAsync(boardId, cardId, comment);
 
-        return response.Content;
+        if (response.IsSuccessStatusCode && response.Content != Guid.Empty)
+        {
+            return OperationResult<Guid>.Ok(response.Content);
+        }
+
+        return OperationResult<Guid>.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> UpdateAsync(Guid boardId, Guid cardId, Guid commentId, UpdateCommentDto comment)
+    public async Task<OperationResult> UpdateAsync(Guid boardId, Guid cardId, Guid commentId, UpdateCommentDto comment)
     {
         var response = await _commentApi.UpdateAsync(boardId, cardId, commentId, comment);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DeleteAsync(Guid boardId, Guid cardId, Guid commentId)
+    public async Task<OperationResult> DeleteAsync(Guid boardId, Guid cardId, Guid commentId)
     {
         var response = await _commentApi.DeleteAsync(boardId, cardId, commentId);
 
-        return response.IsSuccessStatusCode
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 }

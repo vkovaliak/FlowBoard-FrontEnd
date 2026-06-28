@@ -83,8 +83,15 @@ transform: rotate(-90deg);
     opacity: 0.5;
     background-color: #e2e4e9 !important;
     border: 1px dashed #a5adba !important;
-    height: 60px;
     box-shadow: none !important;
+}
+
+body.is-dragging .cards-drop-zone {
+    overflow: hidden !important;
+}
+
+body.is-dragging .board-lists-container {
+    overflow: hidden !important;
 }
 
 .board-scroll-wrapper {
@@ -397,3 +404,11 @@ transform: rotate(-90deg);
 
 .dialog-title-tight { padding-bottom: 0 !important; }
 .dialog-content-tight { padding-top: 0 !important; }
+
+.tox-tinymce-aux {
+    z-index: 99999 !important;
+}
+.tox .tox-menu,
+.tox-collection {
+    z-index: 99999 !important;
+}
