@@ -2,6 +2,7 @@
           Class="pa-3 d-flex flex-column"
           Style="flex: 1; min-width: 23%;
                  background-color: #f4f5f7;
+                 max-height: 70vh;
                  border-radius: 8px;">
 
     <TaskListHeader ListName=@List.Name
@@ -12,7 +13,7 @@
 
     <MudStack Spacing="2"
               Class="flex-grow-1 cards-drop-zone"
-              Style="overflow-y: auto; max-height: 60vh; min-height: 15px;"
+              Style="overflow-y: auto; max-height: 70vh; min-height: 15px;"
               data-list-id=@List.Id>
 
         @if (List.Cards != null && List.Cards.Any())
@@ -27,9 +28,10 @@
                 </div>
             }
         }
+
     </MudStack>
 
     <CreateCardForm @ref=@_createCardForm
-                    OnCreate=@CreateCardAsync />
+                    OnCreate=@CreateCardAsync />    
                     
 </MudPaper>

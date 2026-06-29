@@ -33,12 +33,12 @@ public partial class BoardMembers
 
     private async Task RemoveMemberAsync(Guid userId)
     {
-        var success = await BoardService.RemoveMemberAsync(
+        var result = await BoardService.RemoveMemberAsync(
             BoardId, userId);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to remove member", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 
@@ -48,11 +48,11 @@ public partial class BoardMembers
 
     private async Task LeaveBoardAsync()
     {
-        var success = await BoardService.LeaveBoardAsync(BoardId);
+        var result = await BoardService.LeaveBoardAsync(BoardId);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to leave board", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 

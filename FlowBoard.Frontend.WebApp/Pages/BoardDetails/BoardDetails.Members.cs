@@ -27,10 +27,10 @@ public partial class BoardDetails
 
     private async Task HandleInviteMemberAsync(InviteMemberDto inviteDto)
     {
-        var success = await BoardService.InviteMemberAsync(Id, inviteDto);
+        var result = await BoardService.InviteMemberAsync(Id, inviteDto);
 
-        ShowResult(success,
+        ShowResult(result.Success,
             $"User {inviteDto.Email} successfully invited!",
-            "Failed to invite user.");
+            result.Error ?? "Failed");
     }
 }

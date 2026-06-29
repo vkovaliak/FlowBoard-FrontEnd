@@ -47,11 +47,11 @@ public partial class Account
         _saving = true;
 
         var userName = _userNameInput;
-        var success = await UserService.UpdateUserNameAsync(userName);
+        var result = await UserService.UpdateUserNameAsync(userName);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to update username", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             _saving = false;
             return;
         }
@@ -87,18 +87,18 @@ public partial class Account
             return;
         }
 
-        _user = _user! with { AvatarUrl = newUrl };
+        _user = _user! with { AvatarUrl = newUrl.Value };
         UserState.NotifyChanged();
         Snackbar.Add("Avatar updated", Severity.Success);
     }
 
     private async Task DeleteAvatarAsync()
     {
-        var success = await UserService.DeleteAvatarAsync();
+        var result = await UserService.DeleteAvatarAsync();
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to remove avatar", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 

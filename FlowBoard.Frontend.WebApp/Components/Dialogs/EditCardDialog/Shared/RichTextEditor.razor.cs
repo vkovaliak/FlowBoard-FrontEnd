@@ -17,20 +17,27 @@ public partial class RichTextEditor
         _internalValue = Value;
     }
 
-    private async Task OnInternalChanged(string? value)
-    {
-        _internalValue = value;
-        await ValueChanged.InvokeAsync(value);
-    }
-
     private readonly Dictionary<string, object> _config = new()
     {
         ["height"] = 100,
+        [ "auto_focus"] = true,
         ["menubar"] = false,
         ["statusbar"] = false,
-        ["plugins"] = "lists link autoresize image",
-        ["toolbar"] =
-            "blocks | bold italic underline | " +
-            "bullist numlist | alignleft aligncenter alignright | link"
+        ["plugins"] = "lists link autoresize",
+        ["toolbar"] = 
+            "blocks | bold italic underline" +
+            "| bullist numlist " +
+            "| alignleft aligncenter alignright "+
+            "| link",
+        ["content_style"] =
+            "body { " +
+                "font-family: Inter, sans-serif; " +
+                "font-size: 14px; " +
+                "word-wrap: break-word; " + 
+                "overflow-wrap: break-word; " + 
+                "white-space: normal; " +  
+                "overflow-x: hidden; " + 
+                "max-width: 100%; " +
+            "}",
     };
 }

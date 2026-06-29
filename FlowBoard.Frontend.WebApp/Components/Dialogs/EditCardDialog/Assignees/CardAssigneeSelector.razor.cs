@@ -57,22 +57,22 @@ public partial class CardAssigneeSelector
 
         foreach (var userId in selectedIds.Except(currentIds))
         {
-            var success = await CardService.AssignMemberAsync(
+            var result = await CardService.AssignMemberAsync(
                 BoardId, CardId, userId);
-            if (!success)
+            if (!result.Success)
             {
-                Snackbar.Add("Failed to assign member", Severity.Error);
+                Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             }
         }
 
         foreach (var userId in currentIds.Except(selectedIds))
         {
-            var success = await CardService.UnassignMemberAsync(
+            var result = await CardService.UnassignMemberAsync(
                 BoardId, CardId, userId);
 
-            if (!success)
+            if (!result.Success)
             {
-                Snackbar.Add("Failed to remove member", Severity.Error);
+                Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             }
         }
     }

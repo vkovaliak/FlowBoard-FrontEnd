@@ -34,12 +34,12 @@ public partial class CardDescriptionEditor
     private async Task SaveAsync()
     {
         var dto = new UpdateCardDescriptionDto(_draft);
-        var success = await CardService.UpdateDescriptionAsync(
+        var result = await CardService.UpdateDescriptionAsync(
             BoardId, CardId, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to update description", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 

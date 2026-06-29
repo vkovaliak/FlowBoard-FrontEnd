@@ -1,5 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Lists;
+using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Helpers;
 using FlowBoard.Frontend.Services.Http;
 
 namespace FlowBoard.Frontend.Services.Implementations;
@@ -13,35 +15,51 @@ public class ListService : IListService
         _listApi = listApi;
     }
 
-    public async Task<bool> CreateAsync(Guid boardId, CreateListDto list)
+    public async Task<OperationResult> CreateAsync(Guid boardId, CreateListDto list)
     {
         var response = await _listApi.CreateAsync(boardId, list);
 
-        return response.IsSuccessStatusCode 
-            && response.Content != Guid.Empty;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> UpdateAsync(Guid boardId, Guid listId, UpdateListDto list)
+    public async Task<OperationResult> UpdateAsync(Guid boardId, Guid listId, UpdateListDto list)
     {
         var response = await _listApi.UpdateAsync(boardId, listId, list);
 
-        return response.IsSuccessStatusCode 
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> DeleteAsync(Guid boardId, Guid listId)
+    public async Task<OperationResult> DeleteAsync(Guid boardId, Guid listId)
     {
         var response = await _listApi.DeleteAsync(boardId, listId);
 
-        return response.IsSuccessStatusCode 
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
-    public async Task<bool> MoveAsync(Guid boardId, Guid listId, MoveListDto list)
+    public async Task<OperationResult> MoveAsync(Guid boardId, Guid listId, MoveListDto list)
     {
         var response = await _listApi.MoveAsync(boardId, listId, list);
 
-        return response.IsSuccessStatusCode 
-            && response.Content != false;
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 }

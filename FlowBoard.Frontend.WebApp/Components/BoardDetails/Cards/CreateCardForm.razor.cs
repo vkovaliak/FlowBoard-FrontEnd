@@ -27,6 +27,6 @@ public partial class CreateCardForm
         }
         
         await OnCreate.InvokeAsync(_form.Name);
-        Close();
+        _form.Name = string.Empty;
     }
 }

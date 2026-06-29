@@ -38,12 +38,12 @@ public partial class CardNameEditor
         }
 
         var dto = new RenameCardDto(_draft);
-        var success = await CardService.RenameAsync(
+        var result = await CardService.RenameAsync(
             BoardId, CardId, dto);
 
-        if (!success)
+        if (!result.Success)
         {
-            Snackbar.Add("Failed to rename card", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             return;
         }
 

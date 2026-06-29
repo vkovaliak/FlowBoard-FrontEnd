@@ -49,14 +49,14 @@ public partial class Register
 
         var result = await AuthService.RegisterAsync(registerDto);
 
-        if (result)
+        if (result.Success)
         {
             Snackbar.Add("Register success!", Severity.Success);
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            Snackbar.Add("Register failed", Severity.Error);
+            Snackbar.Add($"Register failed: {result.Error}", Severity.Error);
         }
     }
 }

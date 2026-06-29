@@ -136,16 +136,16 @@ public partial class BoardDetails : IAsyncDisposable
     {
         if (_board is null) return;
 
-        var success = await BoardService.ToggleFavoriteAsync(_board.Id);
+        var result = await BoardService.ToggleFavoriteAsync(_board.Id);
 
-        if (success)
+        if (result.Success)
         {
             await RefreshBoardAsync();
             FavoritesState.NotifyChanged();
         }
         else
         {
-            Snackbar.Add("Failed to update favorite", Severity.Error);
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
 }
