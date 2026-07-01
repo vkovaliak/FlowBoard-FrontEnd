@@ -6,6 +6,7 @@ namespace FlowBoard.Frontend.Services.Abstractions;
 public interface IBoardService
 {
     Task<IEnumerable<BoardDto>> GetMyBoardsAsync();
+    Task<IEnumerable<BoardDto>> GetArchivedBoardsAsync();
     Task<BoardDetailsDto?> GetDetailsAsync(Guid boardId);
     Task<OperationResult<Guid>> CreateAsync(CreateBoardDto dto);
     Task<OperationResult<Guid>> UpdateAsync(Guid boardId, UpdateBoardDto dto);
@@ -14,4 +15,5 @@ public interface IBoardService
     Task<OperationResult> RemoveMemberAsync(Guid boardId, Guid userId);
     Task<OperationResult> LeaveBoardAsync(Guid boardId);
     Task<OperationResult> ToggleFavoriteAsync(Guid boardId);
+    Task<OperationResult> ArchiveBoardAsync(Guid boardId);
 }

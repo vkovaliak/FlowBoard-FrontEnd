@@ -23,6 +23,14 @@ public class BoardService : IBoardService
             && response.Content != null ? response.Content : [];
     }
 
+    public async Task<IEnumerable<BoardDto>> GetArchivedBoardsAsync()
+    {
+        var response = await _boardApi.GetArchivedBoardsAsync();
+
+        return response.IsSuccessStatusCode 
+            && response.Content != null ? response.Content : [];
+    }
+
     public async Task<BoardDetailsDto?> GetDetailsAsync(Guid boardId)
     {
         var response = await _boardApi.GetDetailsAsync(boardId);
@@ -112,5 +120,17 @@ public class BoardService : IBoardService
         }
 
         return OperationResult.Fail(response.GetErrorMessage());
+    }
+
+    public async Task<OperationResult> ArchiveBoardAsync(Guid boardId)
+    {
+        var respone = await _boardApi.ArchiveBoardAsync(boardId);
+
+        if (respone.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(respone.GetErrorMessage());
     }
 }

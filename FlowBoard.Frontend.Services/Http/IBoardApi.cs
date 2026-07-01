@@ -8,6 +8,9 @@ public interface IBoardApi
     [Get("/api/boards")]
     Task<ApiResponse<IEnumerable<BoardDto>>> GetMyBoardsAsync();
 
+    [Get("/api/boards/archived")]
+    Task<ApiResponse<IEnumerable<BoardDto>>> GetArchivedBoardsAsync();
+
     [Get("/api/boards/{id}")]
     Task<ApiResponse<BoardDetailsDto>> GetDetailsAsync(Guid id);
 
@@ -31,4 +34,7 @@ public interface IBoardApi
 
     [Put("/api/boards/{boardId}/favorite")]
     Task<ApiResponse<bool>> ToggleFavoriteAsync(Guid boardId);
+
+    [Patch("/api/boards/{boardId}/archive")]
+    Task<ApiResponse<bool>> ArchiveBoardAsync(Guid boardId);
 }

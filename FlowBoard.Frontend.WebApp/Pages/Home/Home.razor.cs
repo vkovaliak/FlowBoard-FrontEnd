@@ -20,10 +20,12 @@ public partial class Home
     [Inject] public FavoritesState FavoritesState { get; set; } = default!;
 
     private IEnumerable<BoardDto>? _boards;
+    private IEnumerable<BoardDto>? _archivedBoards;
 
     protected override async Task OnInitializedAsync()
     {
         _boards = await BoardService.GetMyBoardsAsync();
+        _archivedBoards = await BoardService.GetArchivedBoardsAsync();
     }
 
     private Task OpenCreateBoardDialog() 
@@ -114,6 +116,36 @@ public partial class Home
             else
             {
                 Snackbar.Add(isDeleted.Error ?? "Failed", Severity.Error);
+            }
+        }
+    }
+
+    private async Task OnRestoreBoard(BoardDto board)
+    {
+        Snackbar.Add("Restore will be available later", Severity.Info);
+        await Task.CompletedTask;
+    }
+
+    private async Task OpenArchiveConfirmation(BoardDto board)
+    {
+        bool? result = await DialogService.ShowMessageBoxAsync(
+            "Archive Board", 
+            $"Are you sure you want to archive board '{board.Name}'?", 
+            yesText: "Archive", 
+            cancelText: "Cancel");
+
+        if (result == true)
+        {   
+            var isArchived = await BoardService.ArchiveBoardAsync(board.Id);
+
+            if (isArchived.Success)
+            {
+                Snackbar.Add($"Board '{board.Name}' archived", Severity.Success);
+                _boards = await BoardService.GetMyBoardsAsync();
+            }
+            else
+            {
+                Snackbar.Add(isArchived.Error ?? "Failed", Severity.Error);
             }
         }
     }

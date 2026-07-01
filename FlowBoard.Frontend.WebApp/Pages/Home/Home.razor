@@ -1,110 +1,54 @@
 ﻿@page "/"
+@using FlowBoard.Frontend.WebApp.Components.Home
 
 <PageTitle>Home</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8">
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" 
+              Class="mt-8">
 
-    <MudText Typo=@Typo.h4 Class="mb-6">
-        My Boards
-    </MudText>
+    <MudStack Row="true" 
+              AlignItems="AlignItems.Center" 
+              Justify="Justify.SpaceBetween" 
+              Class="mb-4">
 
-    <MudButton Variant=@Variant.Filled
-               Color=@Color.Primary
-               OnClick=@OpenCreateBoardDialog>
-        Create Board
-    </MudButton>
+        <MudText Typo="Typo.h4" 
+                 Class="font-weight-bold">
+            Your Boards
+        </MudText>
 
-    <br>
-    <br>
-    
-    @if (_boards == null || !_boards.Any())
-    {
-        <MudAlert Severity=@Severity.Info 
-                  Variant=@Variant.Outlined>
-            You don't have any boards yet. Create your first one!
-        </MudAlert>
-    }
-    else
-    {
-        <MudGrid>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="OpenCreateBoardDialog">
+            New Board
+        </MudButton>
 
-            @foreach (var board in _boards)
-            {
-                <MudItem xs="12" sm="6" md="4">
+    </MudStack>
 
-                    <MudPaper Elevation="4" 
-                              Class="pa-4 hoverable-card" 
-                              Style="cursor: pointer; min-height: 120px;
-                                     position: relative"
-                              @onclick=@(() => NavigateToBoard(board.Id))>
+    <MudTabs Elevation="0" 
+             Color="Color.Transparent" 
+             Rounded="false"
+             ApplyEffectsToContainer="true" 
+             PanelClass="pt-4">
 
-                        <MudStack Justify=@Justify.FlexEnd Style="min-height: 50px;">
-                        
-                            <div @onclick:stopPropagation=@true
-                                style="position: absolute; 
-                                    top: 8px; right: 8px; z-index: 2;">
+        <MudTabPanel Text="All Boards">
+            <BoardsGrid Boards="_boards"
+                        EmptyMessage="You don't have any boards yet. Create your first one!"
+                        OnClick="NavigateToBoard"
+                        OnToggleFavorite="ToggleFavoriteAsync"
+                        OnEdit="OpenEditBoardDialog"
+                        OnArchive="OpenArchiveConfirmation" />
+        </MudTabPanel>
 
-                                <MudIconButton Icon=@(board.IsFavorite
-                                                    ? Icons.Material.Filled.Star
-                                                    : Icons.Material.Outlined.StarBorder)
-                                                Color=@(board.IsFavorite ? Color.Warning : Color.Default)
-                                                Size=@Size.Medium
-                                                OnClick=@(() => ToggleFavoriteAsync(board)) />
-                            
-                            </div>
-                        </MudStack>
-                                        
-                        <MudStack Justify=@Justify.SpaceBetween Style="min-height: 110px;">
+        <MudTabPanel Text="Archived">
 
-                            <MudStack Row=@true AlignItems=@AlignItems.Center 
-                                      Justify=@Justify.SpaceBetween>
+            <BoardsGrid Boards="_archivedBoards"
+                        EmptyMessage="No archived boards yet."
+                        IsArchived="true"
+                        OnRestore="OnRestoreBoard"
+                        OnDelete="OpenDeleteConfirmation" />
+        </MudTabPanel>
 
-                                <MudText Typo=@Typo.h6 
-                                        Class="font-weight-bold">
-                                    @board.Name
-                                </MudText>
-
-                                <MudStack Row=@true Spacing="1" AlignItems=@AlignItems.Center>
-
-                                    <MudIconButton Icon=@Icons.Material.Filled.Edit 
-                                            Color=@Color.Default 
-                                            Size=@Size.Small 
-                                            OnClick=@(() => OpenEditBoardDialog(board)) />
-                                            
-                                    <MudIconButton Icon=@Icons.Material.Filled.Delete 
-                                                Color=@Color.Error 
-                                                Size=@Size.Small 
-                                                OnClick=@(() => OpenDeleteConfirmation(board)) />
-
-                                </MudStack>
-
-                            </MudStack>
-                                    
-                            <MudStack Row=@true AlignItems=@AlignItems.Center>
-
-                                <MudChip T="string" 
-                                            Color=@(board.IsPublic 
-                                                ? Color.Primary : Color.Tertiary) 
-                                            Size=@Size.Small>
-                                    @(board.IsPublic ? "Public" : "Private")
-                                </MudChip>
-                        
-                                <MudSpacer />
-                                
-                                <MudText Typo=@Typo.caption 
-                                        Color=@Color.Secondary>
-                                    Created: @board.CreatedAt.ToShortDateString()
-                                </MudText>
-
-                            </MudStack>
-
-                        </MudStack>
-
-                    </MudPaper>
-
-                </MudItem>
-            }
-        </MudGrid>
-    }
+    </MudTabs>
 
 </MudContainer>
