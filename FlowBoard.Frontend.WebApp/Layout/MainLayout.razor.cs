@@ -23,6 +23,7 @@ public partial class MainLayout : IDisposable
     private UserDto? _currentUser;
     private bool _isUserMenuOpen;
 
+    private bool _isChatOpen;
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,5 +102,10 @@ public partial class MainLayout : IDisposable
     public void Dispose()
     {
         UserState.OnChanged -= HandleUserChanged;
+    }
+
+    private void ToggleChat()
+    {
+        _isChatOpen = !_isChatOpen;
     }
 }

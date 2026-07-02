@@ -1,0 +1,78 @@
+<MudDrawer @bind-Open=@IsOpen
+           Anchor=@Anchor.Right
+           Elevation="4"
+           Variant=@DrawerVariant.Temporary
+           Width="420px"
+           Style="background-color: #0F172A; 
+                  color: #F1F5F9;">
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <div class="chat-header-title">
+
+                <MudIcon Icon=@Icons.Material.Filled.SmartToy
+                         Size=@Size.Medium />
+                <span>FlowBoard Assistant</span>
+            </div>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Close
+                           Color=@Color.Inherit
+                           Size=@Size.Small
+                           OnClick=@Close />
+        </div>
+
+        <div class="chat-messages" 
+             id="chat-messages">
+
+            @if (_messages.Count == 0)
+            {
+                <div class="chat-empty">
+
+                    <MudIcon Icon=@Icons.Material.Filled.WavingHand
+                             Size=@Size.Large />
+
+                    <p>Hi! Ask me anything about FlowBoard.</p>
+
+                </div>
+            }
+
+            @foreach (var msg in _messages)
+            {
+                <div class="chat-bubble @(msg.IsUser 
+                            ? "user" : "assistant")">
+                    @msg.Text
+                </div>
+            }
+
+            @if (_isLoading)
+            {
+                <div class="chat-bubble assistant typing">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            }
+        </div>
+
+        <div class="chat-input">
+
+            <MudTextField @bind-Value=@_input
+                          Placeholder="Type your question..."
+                          Variant=@Variant.Outlined
+                          Immediate=@true
+                          OnKeyDown=@HandleKeyDown
+                          Disabled=@_isLoading
+                          Class="chat-textfield"/>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Send
+                           Color=@Color.Default
+                           OnClick=@SendAsync
+                           Disabled=@(_isLoading 
+                           || string.IsNullOrWhiteSpace(_input)) />
+        </div>
+
+    </div>
+
+</MudDrawer>
