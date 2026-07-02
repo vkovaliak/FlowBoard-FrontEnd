@@ -18,11 +18,23 @@ public partial class Account
     private bool _loading = true;
     private bool _saving;
     private bool _hoverAvatar;
-
+    private string _currentPassword = string.Empty;
+    private string _newPassword = string.Empty;
+    private string _confirmPassword = string.Empty;
+    private bool _showCurrent;
+    private bool _showNew;
+    private bool _changingPassword;
 
     private bool IsUserNameUnchanged
         => string.IsNullOrWhiteSpace(_userNameInput)
            || _userNameInput == _user?.UserName;
+    
+    private bool CanChangePassword
+        => !string.IsNullOrWhiteSpace(_currentPassword)
+            && !string.IsNullOrWhiteSpace(_newPassword)
+            && _newPassword.Length >= 6
+            && _newPassword == _confirmPassword
+            && _newPassword != _currentPassword;
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,5 +117,35 @@ public partial class Account
         _user = await UserService.GetMeAsync();
         UserState.NotifyChanged();
         Snackbar.Add("Avatar removed", Severity.Success);
+    }
+
+    private async Task ChangePasswordAsync()
+    {
+        if (!CanChangePassword)
+        {
+            return;
+        }
+
+        _changingPassword = true;
+
+        var dto = new ChangePasswordDto(
+            _currentPassword, _newPassword, _confirmPassword);
+
+        var result = await UserService.ChangePasswordAsync(dto);
+
+        _changingPassword = false;
+
+        if (!result.Success)
+        {
+            Snackbar.Add(result.Error ?? 
+                "Failed to change password", Severity.Error);
+            return;
+        }
+
+        _currentPassword = string.Empty;
+        _newPassword = string.Empty;
+        _confirmPassword = string.Empty;
+
+        Snackbar.Add("Password changed successfully", Severity.Success);
     }
 }

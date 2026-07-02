@@ -128,6 +128,50 @@
                           Margin=@Margin.Dense
                           ReadOnly=@true
                           Disabled=@true />
+            
+            <MudDivider Class="my-4" />
+
+            <MudText Typo=@Typo.subtitle1 
+                     Class="mb-3" 
+                     Style="font-weight:600;">
+                Change Password
+            </MudText>
+
+            <MudTextField @bind-Value=@_currentPassword
+                          Label="Current Password"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@(_showCurrent ? InputType.Text : InputType.Password)
+                          Adornment=@Adornment.End
+                          AdornmentIcon=@(_showCurrent ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                          OnAdornmentClick=@(() => _showCurrent = !_showCurrent)
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value=@_newPassword
+                          Label="New Password"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@(_showNew ? InputType.Text : InputType.Password)
+                          Adornment=@Adornment.End
+                          AdornmentIcon=@(_showNew ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                          OnAdornmentClick=@(() => _showNew = !_showNew)
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value=@_confirmPassword
+                          Label="Confirm New Password"
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          InputType=@InputType.Password
+                          Error=@(!string.IsNullOrEmpty(_confirmPassword) && _newPassword != _confirmPassword)
+                          ErrorText="Passwords do not match"
+                          Class="mb-3" />
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       Disabled=@(!CanChangePassword || _changingPassword)
+                       OnClick=@ChangePasswordAsync>
+                @(_changingPassword ? "Changing..." : "Change Password")
+            </MudButton>
 
         </MudPaper>
     }
