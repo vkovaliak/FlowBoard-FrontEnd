@@ -3,6 +3,7 @@ using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using MudBlazor;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Assignees;
 
@@ -11,6 +12,7 @@ public partial class CardAssigneeSelector
     [Inject] public ICardService CardService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;
+    [Inject] public TasksState TasksState { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
@@ -63,6 +65,7 @@ public partial class CardAssigneeSelector
             {
                 Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             }
+            TasksState.NotifyChanged();
         }
 
         foreach (var userId in currentIds.Except(selectedIds))
@@ -74,6 +77,7 @@ public partial class CardAssigneeSelector
             {
                 Snackbar.Add(result.Error ?? "Failed", Severity.Error);
             }
+            TasksState.NotifyChanged();
         }
     }
 }

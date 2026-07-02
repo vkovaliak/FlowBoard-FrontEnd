@@ -1,10 +1,13 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
+using FlowBoard.Frontend.Services.State;
+using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
 public partial class BoardDetails
 {
+    [Inject] public TasksState TasksState { get; set; } = default!;
     private async Task HandleCreateCardAsync(CreateCardDto dto)
     {
         if (_board == null)
@@ -56,5 +59,6 @@ public partial class BoardDetails
         {
             Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
+        TasksState.NotifyChanged();
     }
 }
