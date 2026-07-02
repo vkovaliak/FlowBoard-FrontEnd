@@ -9,4 +9,5 @@ public interface IUserService
     Task<OperationResult> UpdateUserNameAsync(string userName);
     Task<UserDto?> GetMeAsync();
     Task<OperationResult> DeleteAvatarAsync(); 
+    Task<OperationResult> ChangePasswordAsync(ChangePasswordDto dto);
 }

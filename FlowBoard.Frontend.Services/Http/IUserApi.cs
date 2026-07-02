@@ -18,4 +18,7 @@ public interface IUserApi
 
     [Delete("/api/users/avatar")]
     Task<ApiResponse<bool>> DeleteAvatarAsync();
+
+    [Put("/api/users/change-password")]
+    Task<ApiResponse<bool>> ChangePasswordAsync(ChangePasswordDto dto);
 }

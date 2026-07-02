@@ -62,4 +62,16 @@ public class UserService : IUserService
 
         return OperationResult.Fail(response.GetErrorMessage());
     }
+
+    public async Task<OperationResult> ChangePasswordAsync(ChangePasswordDto dto)
+    {
+        var response = await _userApi.ChangePasswordAsync(dto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
+    }
 }
