@@ -37,6 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<FavoritesState>();
+        services.AddScoped<TasksState>();
         services.AddScoped<UserState>();
 
         services.AddScoped<AuthenticationStateProvider>(provider => 
