@@ -133,4 +133,32 @@ public class BoardService : IBoardService
 
         return OperationResult.Fail(respone.GetErrorMessage());
     }
+
+    public async Task<OperationResult> TransferOwnershipAsync(
+        Guid boardId, TransferOwnershipDto dto)
+    {
+        var respone = await _boardApi.TransferOwnershipAsync(
+            boardId, dto);
+
+        if (respone.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(respone.GetErrorMessage());
+    }
+
+    public async Task<OperationResult> ChangeMemberRoleAsync(
+        Guid boardId, Guid userId, ChangeMemberRoleDto dto)
+    {
+        var respone = await _boardApi.ChangeMemberRoleAsync(
+            boardId, userId, dto);
+
+        if (respone.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(respone.GetErrorMessage());
+    }
 }

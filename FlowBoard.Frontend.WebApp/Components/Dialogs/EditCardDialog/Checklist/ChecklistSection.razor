@@ -24,52 +24,56 @@
         @foreach (var item in Items.OrderBy(x => x.Position))
         {
             <ChecklistItemRow Item=@item
+                              CanEdit=@CanEdit
                               OnToggle=@(() => ToggleAsync(item))
                               OnDelete=@(() => DeleteAsync(item)) />
         }
     </MudStack>
 
-    @if (_isAdding)
+    @if (CanEdit)
     {
-        <MudStack Spacing="1">
+        @if (_isAdding)
+        {
+            <MudStack Spacing="1">
 
-            <MudTextField @bind-Value=@_newText
-                          Placeholder="Add an item"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          AutoFocus=@true
-                          OnKeyDown=@OnKeyDown
-                          Immediate=@true />
+                <MudTextField @bind-Value=@_newText
+                            Placeholder="Add an item"
+                            Variant=@Variant.Outlined
+                            Margin=@Margin.Dense
+                            AutoFocus=@true
+                            OnKeyDown=@OnKeyDown
+                            Immediate=@true />
 
-            <MudStack Row=@true Spacing="2">
+                <MudStack Row=@true Spacing="2">
 
-                <MudButton Variant=@Variant.Filled
-                           Color=@Color.Primary
-                           Size=@Size.Small
-                           Disabled=@(string.IsNullOrWhiteSpace(_newText))
-                           OnClick=@AddAsync>
-                    Add
-                </MudButton>
+                    <MudButton Variant=@Variant.Filled
+                            Color=@Color.Primary
+                            Size=@Size.Small
+                            Disabled=@(string.IsNullOrWhiteSpace(_newText))
+                            OnClick=@AddAsync>
+                        Add
+                    </MudButton>
 
-                <MudButton Variant=@Variant.Text
-                           Size=@Size.Small
-                           OnClick=@CancelAdd>
-                    Cancel
-                </MudButton>
+                    <MudButton Variant=@Variant.Text
+                            Size=@Size.Small
+                            OnClick=@CancelAdd>
+                        Cancel
+                    </MudButton>
 
+                </MudStack>
+                
             </MudStack>
-            
-        </MudStack>
-    }
-    else
-    {
-        <MudButton Variant=@Variant.Outlined
-                   Size=@Size.Small
-                   StartIcon=@Icons.Material.Filled.Add
-                   OnClick=@StartAdd
-                   Style="align-self: flex-start;">
-            Add an item
-        </MudButton>
+        }
+        else
+        {
+            <MudButton Variant=@Variant.Outlined
+                    Size=@Size.Small
+                    StartIcon=@Icons.Material.Filled.Add
+                    OnClick=@StartAdd
+                    Style="align-self: flex-start;">
+                Add an item
+            </MudButton>
+        }
     }
 
 </MudStack>

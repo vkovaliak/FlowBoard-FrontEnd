@@ -1,3 +1,5 @@
+using FlowBoard.Frontend.Domain.Enums;
+
 namespace FlowBoard.Frontend.Domain.DTOs.Boards;
 
 public record BoardDto(
@@ -6,4 +8,5 @@ public record BoardDto(
     bool IsPublic,
     Guid CreatedBy,
     DateTime CreatedAt,
-    bool IsFavorite);
+    bool IsFavorite,
+    BoardRole UserRole);

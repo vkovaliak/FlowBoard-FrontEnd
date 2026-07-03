@@ -13,6 +13,7 @@ public partial class CardNameEditor
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public string Name { get; set; } = string.Empty;
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private bool _isEditing;
     private string _draft = string.Empty;

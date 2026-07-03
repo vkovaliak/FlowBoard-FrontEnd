@@ -7,9 +7,12 @@
         Comments
     </MudText>
 
-    <CommentComposer BoardId=@BoardId
-                     OnCreateComment=@CreateCommentAsync
-                     CardId=@CardId />
+    @if (CanEdit)
+    {
+        <CommentComposer BoardId=@BoardId
+                         OnCreateComment=@CreateCommentAsync
+                         CardId=@CardId />
+    }
 
     <MudStack Spacing="2" Style="overflow-y: auto;" Class="mt-2">
         @if (_isLoading)

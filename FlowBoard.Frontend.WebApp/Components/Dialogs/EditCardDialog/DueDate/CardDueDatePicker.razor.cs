@@ -14,6 +14,7 @@ public partial class CardDueDatePicker
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public DateTime? DueDate { get; set; }
     [Parameter] public bool IsCompleted { get; set; }
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private DateTime? _date; 
 

@@ -10,6 +10,7 @@ public partial class TaskListHeader
     [Parameter] public EventCallback OnAddCardClick { get; set; }
     [Parameter] public EventCallback OnDeleteClick { get; set; }
     [Parameter] public EventCallback<string> OnRename { get; set; }
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private bool _isEditingName;
     private string _editedName = string.Empty;

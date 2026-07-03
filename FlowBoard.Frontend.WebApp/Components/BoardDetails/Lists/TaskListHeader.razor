@@ -27,33 +27,34 @@
 
         </MudStack>
 
-        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="0">
+        @if (CanEdit)
+        {
+            <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="0">
 
-            <MudIconButton Icon=@Icons.Material.Filled.Add
-                           Size=@Size.Small
-                           Color=@Color.Default
-                           OnClick=@(() => OnAddCardClick.InvokeAsync())
-                           Style="color: #42526e; padding: 4px;" />
+                <MudIconButton Icon=@Icons.Material.Filled.Add
+                            Size=@Size.Small
+                            Color=@Color.Default
+                            OnClick=@(() => OnAddCardClick.InvokeAsync())
+                            Style="color: #42526e; padding: 4px;" />
 
-            <MudMenu Icon=@Icons.Material.Filled.MoreVert
-                     Size=@Size.Small Dense=@true
-                     AnchorOrigin=@Origin.BottomRight
-                     TransformOrigin=@Origin.TopRight>
+                <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                        Size=@Size.Small Dense=@true
+                        AnchorOrigin=@Origin.BottomRight
+                        TransformOrigin=@Origin.TopRight>
 
-                <MudMenuItem Icon=@Icons.Material.Filled.Edit
-                             OnClick=@StartRename>
-                    Rename
-                </MudMenuItem>
+                    <MudMenuItem Icon=@Icons.Material.Filled.Edit
+                                OnClick=@StartRename>
+                        Rename
+                    </MudMenuItem>
 
-                <MudMenuItem Icon=@Icons.Material.Filled.Delete
-                             IconColor=@Color.Error
-                             OnClick=@(() => OnDeleteClick.InvokeAsync())>
-                    Delete
-                </MudMenuItem>
-
-            </MudMenu>
-
-        </MudStack>
+                    <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                                IconColor=@Color.Error
+                                OnClick=@(() => OnDeleteClick.InvokeAsync())>
+                        Delete
+                    </MudMenuItem>
+                </MudMenu>
+            </MudStack>
+        }
     }
     else
     {

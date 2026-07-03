@@ -7,6 +7,7 @@ using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 using FlowBoard.Frontend.Services.State;
 using FlowBoard.Frontend.Domain.Models.Common;
+using FlowBoard.Frontend.Services.Providers;
 
 namespace FlowBoard.Frontend.WebApp.Pages.Home;
 
@@ -18,12 +19,16 @@ public partial class Home
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public FavoritesState FavoritesState { get; set; } = default!;
+    [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
+
+    private Guid _currentUserId;
 
     private IEnumerable<BoardDto>? _boards;
     private IEnumerable<BoardDto>? _archivedBoards;
 
     protected override async Task OnInitializedAsync()
     {
+        _currentUserId = await AuthStateProvider.GetCurrentUserIdAsync();
         _boards = await BoardService.GetMyBoardsAsync();
         _archivedBoards = await BoardService.GetArchivedBoardsAsync();
     }

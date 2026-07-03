@@ -15,6 +15,7 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private IEnumerable<CommentDto> _comments = [];
     private bool _isLoading;

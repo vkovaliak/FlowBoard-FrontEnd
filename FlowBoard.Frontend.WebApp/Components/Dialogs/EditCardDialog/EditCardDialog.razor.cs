@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using FlowBoard.Frontend.Domain.Authorization;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
-using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
+using FlowBoard.Frontend.Services.Abstractions;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 
@@ -19,6 +20,9 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     private BoardDetailsDto? _board;
     private CardDto? _card;
+
+    private bool CanEdit => _board is not null
+        && BoardPermissions.CanModifyContent(_board.UserRole);
 
     protected override async Task OnInitializedAsync()
     {

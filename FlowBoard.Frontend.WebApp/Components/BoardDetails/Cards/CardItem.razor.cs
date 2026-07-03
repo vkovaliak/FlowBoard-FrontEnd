@@ -18,6 +18,9 @@ public partial class CardItem
     [Parameter]
     public EventCallback<CardDto> OnToggleComplete { get; set; }
 
+    [Parameter] 
+    public bool CanEdit { get; set; } = true;
+
     private string GetTitleStyle()
     {
         var baseStyle = "word-break: break-word; font-size: 16px; font-weight:600";

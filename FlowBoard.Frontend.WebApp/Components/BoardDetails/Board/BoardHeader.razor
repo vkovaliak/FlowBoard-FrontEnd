@@ -45,12 +45,15 @@
                   CurrentUserRole=@CurrentUserRole
                   OnMembersChanged=@OnMembersChanged />
 
-    <MudButton Variant=@Variant.Outlined
-               Color=@Color.Primary
-               StartIcon=@Icons.Material.Filled.PersonAdd
-               Style="text-transform: none;"
-               OnClick=@(() => OnInviteClick.InvokeAsync())>
-        Invite
-    </MudButton>
+    @if (CanInvite)
+    {
+        <MudButton Variant=@Variant.Outlined
+                Color=@Color.Primary
+                StartIcon=@Icons.Material.Filled.PersonAdd
+                Style="text-transform: none;"
+                OnClick=@(() => OnInviteClick.InvokeAsync())>
+            Invite
+        </MudButton>
+    }
 
 </MudStack>

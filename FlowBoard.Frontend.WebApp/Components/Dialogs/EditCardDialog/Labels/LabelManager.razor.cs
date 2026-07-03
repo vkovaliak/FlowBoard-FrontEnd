@@ -14,6 +14,7 @@ public partial class LabelManager
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<LabelDto> AttachedLabels { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private List<LabelDto> _boardLabels = [];
     private bool _isOpen;
@@ -26,7 +27,15 @@ public partial class LabelManager
         _boardLabels = await LabelService.GetByBoardIdAsync(BoardId);
     }
 
-    private void TogglePopover() => _isOpen = !_isOpen;
+    private void TogglePopover()
+    {
+        if (!CanEdit)
+        {
+            return;
+        }
+
+        _isOpen = !_isOpen;
+    }
 
     private async Task ReloadBoardLabelsAsync()
     {

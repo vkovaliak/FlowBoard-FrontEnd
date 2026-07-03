@@ -15,6 +15,7 @@ public partial class CardListSelector
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public Guid CurrentListId { get; set; }
     [Parameter] public List<ListDto> Lists { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private async Task OnListChangedAsync(Guid newListId)
     {

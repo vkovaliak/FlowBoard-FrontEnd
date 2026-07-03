@@ -14,6 +14,7 @@ public partial class ChecklistSection
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<ChecklistItemDto> Items { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private bool _isAdding;
     private string _newText = string.Empty;
