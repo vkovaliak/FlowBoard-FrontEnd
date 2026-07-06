@@ -6,12 +6,18 @@ namespace FlowBoard.Frontend.WebApp.Components.BoardDetails.Cards;
 public partial class CreateCardForm
 {
     [Parameter] public EventCallback<string> OnCreate { get; set; }
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private bool _isCreating;
     private CreateCardModel _form = new();
 
     public void Open()
     {
+        if (!CanEdit)
+        {
+            return;
+        }
+        
         _isCreating = true;
         _form = new CreateCardModel();
         StateHasChanged();

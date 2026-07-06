@@ -11,14 +11,16 @@
             @Name
         </MudText>
 
-        <MudButton Variant=@Variant.Text
-                   Color=@Color.Primary
-                   Size=@Size.Small
-                   OnClick=@StartEditing
-                   Style="text-transform: none; flex-shrink: 0;">
-            Edit
-        </MudButton>
-
+        @if (CanEdit)
+        {
+            <MudButton Variant=@Variant.Text
+                       Color=@Color.Primary
+                       Size=@Size.Small
+                       OnClick=@StartEditing
+                       Style="text-transform: none; flex-shrink: 0;">
+                Edit
+            </MudButton>
+        }
     </MudStack>
 }
 else

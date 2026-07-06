@@ -1,5 +1,6 @@
 @page "/boards/{Id:guid}"
 @namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
+@using FlowBoard.Frontend.Domain.Authorization
 
 <MudContainer MaxWidth=@MaxWidth.False
               Class="mt-6"
@@ -37,9 +38,14 @@
 
             <div class="board-scroll-wrapper">
 
+                @{
+                    var canEdit = BoardPermissions
+                        .CanModifyContent(_board.UserRole);
+                }
+
                 <div class="d-flex flex-row flex-nowrap board-lists-container" 
-                        style="gap: 24px; height: 100%; align-items: flex-start;">
-                
+                     style="gap: 24px; height: 100%; align-items: flex-start;">
+                    
                     @foreach (var list in _board.Lists.OrderBy(l => l.Position))
                     {
                         <div class="list-draggable-item" 
@@ -52,22 +58,27 @@
                                     BoardId=@_board.Id
                                     AllLists=@_board.Lists
                                     BoardMembers=@_board.Members
+                                    CanEdit=@canEdit
                                     OnRenameList=@HandleRenameListAsync
                                     OnDeleteList=@HandleDeleteListAsync
                                     OnCreateCard=@HandleCreateCardAsync
-                                    OnUpdateCard=@HandleUpdateCardAsync 
+                                    OnUpdateCard=@HandleUpdateCardAsync
                                     OnDeleteCard=@HandleDeleteCardAsync
-                                    OnToggleCardComplete=@HandleToggleCardCompleteAsync /> 
+                                    OnToggleCardComplete=@HandleToggleCardCompleteAsync />
                         </div>
                     }
-                    <div class="flex-shrink-0" style="width: 280px;">
-                        
-                        <CreateListButtons BoardId=@_board.Id 
-                                        OnListCreate=@CreateListAsync />
-                    </div>
 
+                    @if (canEdit)
+                    {
+                        <div class="flex-shrink-0" 
+                             style="width: 280px;">
+
+                            <CreateListButtons BoardId=@_board.Id 
+                                            OnListCreate=@CreateListAsync />
+
+                        </div>
+                    }
                 </div>
-
             </div>
             
         </MudPaper>

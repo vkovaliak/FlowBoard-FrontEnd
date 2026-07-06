@@ -17,8 +17,9 @@
                        Color=@Color.Success
                        Variant=@Variant.Outlined
                        Margin=@Margin.Dense
-                       Editable=@true
-                       Clearable=@true
+                       Editable=@CanEdit
+                       Clearable=@CanEdit
+                       ReadOnly=@(!CanEdit)
                        PickerVariant=@PickerVariant.Dialog
                        DateFormat="MMM dd, yyyy"
                        Culture=@CultureInfo.InvariantCulture

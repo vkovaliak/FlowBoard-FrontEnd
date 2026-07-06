@@ -6,6 +6,7 @@ using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Providers;
 using FlowBoard.Frontend.Services.State;
+using FlowBoard.Frontend.Domain.Authorization;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -73,7 +74,8 @@ public partial class BoardDetails : IAsyncDisposable
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_board != null && _objRef is null)
+        if (_board != null && _objRef is null
+            && BoardPermissions.CanModifyContent(_board.UserRole))
         {
             _objRef = DotNetObjectReference.Create(this);
             await JsRuntime.InvokeVoidAsync("initKanbanSortable", _objRef);

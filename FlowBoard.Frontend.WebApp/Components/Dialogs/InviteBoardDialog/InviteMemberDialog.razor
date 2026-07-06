@@ -2,35 +2,20 @@
 
 <MudDialog>
 
-    <TitleContent>
-
-        <MudText Typo=@Typo.h6>
-
-            <MudIcon Icon=@Icons.Material.Filled.PersonAdd 
-                     Class="mr-2" />
-            Invite to Board
-        </MudText>
-        
-    </TitleContent>
-
     <DialogContent>
 
-        <MudText Typo=@Typo.body2 
-                 Class="mb-4" 
-                 Color=@Color.Secondary>
-            Enter the email address and choose a role for the user
-            you want to invite to this board.
-        </MudText>
+        <EditForm Model=@_model>
 
-        <MudStack Spacing="3">
+            <DataAnnotationsValidator />
 
-            <MudTextField @bind-Value=@_email
-                          Label="Email Address"
+            <MudTextField @bind-Value=@_model.Email
+                          Label="Email address"
                           Variant=@Variant.Outlined
-                          InputType=@InputType.Email
+                          Margin=@Margin.Dense
                           Adornment=@Adornment.Start
                           AdornmentIcon=@Icons.Material.Filled.Email
-                          Autofocus=@true />
+                          For=@(() => _model.Email)
+                          Class="mb-3" />
 
             <MudSelect @bind-Value=@_role
                        Label="Role"
@@ -38,73 +23,47 @@
                        Adornment=@Adornment.Start
                        AdornmentIcon=@Icons.Material.Filled.AdminPanelSettings>
 
-                <MudSelectItem Value=@BoardRole.Member>
+                @foreach (var role in AvailableRoles)
+                {
+                    <MudSelectItem T=@BoardRole Value=@role>
 
-                    <MudStack Row=@true 
-                              AlignItems=@AlignItems.Center 
-                              Spacing="2">
+                        <MudStack Row=@true 
+                                  AlignItems=@AlignItems.Center 
+                                  Spacing="2">
 
-                        <MudIcon Icon=@Icons.Material.Filled.Edit 
-                                 Size=@Size.Small />
-                        <div>
+                            <MudIcon Icon=@GetRoleIcon(role)
+                                     Size=@Size.Small />
 
-                            <MudText Typo=@Typo.body2>
-                                Member
-                            </MudText>
+                            <div>
+                                <MudText Typo=@Typo.body2>
+                                    @role.ToString()
+                                </MudText>
 
-                            <MudText Typo=@Typo.caption 
-                                      Color=@Color.Secondary>
-                                Can view and edit the board
-                            </MudText>
+                                <MudText Typo=@Typo.caption
+                                         Color=@Color.Secondary>
+                                    @GetRoleDescription(role)
+                                </MudText>
+                            </div>
 
-                        </div>
+                        </MudStack>
 
-                    </MudStack>
-
-                </MudSelectItem>
-
-                <MudSelectItem Value=@BoardRole.Viewer>
-
-                    <MudStack Row=@true 
-                              AlignItems=@AlignItems.Center 
-                              Spacing="2">
-
-                        <MudIcon Icon=@Icons.Material.Filled.Visibility 
-                                 Size=@Size.Small />
-                        <div>
-
-                            <MudText Typo=@Typo.body2>
-                                Viewer
-                            </MudText>
-                            
-                            <MudText Typo=@Typo.caption 
-                                     Color=@Color.Secondary>
-                                Can only view the board
-                            </MudText>
-
-                        </div>
-                    </MudStack>
-                </MudSelectItem>
+                    </MudSelectItem>
+                }
 
             </MudSelect>
 
-        </MudStack>
+        </EditForm>
 
     </DialogContent>
 
     <DialogActions>
 
-        <MudButton OnClick=@Cancel 
-                   Style="text-transform: none;">
-            Cancel
-        </MudButton>
+        <MudButton OnClick=@Cancel>Cancel</MudButton>
 
         <MudButton Color=@Color.Primary
                    Variant=@Variant.Filled
-                   OnClick=@Submit
-                   Disabled=@string.IsNullOrWhiteSpace(_email)
-                   Style="text-transform: none;">
-            Invite
+                   OnClick=@Submit>
+            Send Invite
         </MudButton>
 
     </DialogActions>

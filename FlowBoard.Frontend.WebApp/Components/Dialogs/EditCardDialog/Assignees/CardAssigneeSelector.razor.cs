@@ -18,6 +18,7 @@ public partial class CardAssigneeSelector
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public List<CardAssigneeDto> Assignees { get; set; } = [];
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     private async Task OpenAssignDialogAsync()
     {

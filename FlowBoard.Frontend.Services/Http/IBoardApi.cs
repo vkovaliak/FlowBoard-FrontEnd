@@ -37,4 +37,12 @@ public interface IBoardApi
 
     [Patch("/api/boards/{boardId}/archive")]
     Task<ApiResponse<bool>> ArchiveBoardAsync(Guid boardId);
+
+    [Post("/api/boards/{boardId}/transfer-ownership")]
+    Task<ApiResponse<bool>> TransferOwnershipAsync(
+        Guid boardId, TransferOwnershipDto dto);
+
+    [Patch("/api/boards/{boardId}/members/{userId}/role")]
+    Task<ApiResponse<bool>> ChangeMemberRoleAsync(
+        Guid boardId, Guid userId, ChangeMemberRoleDto dto);
 }

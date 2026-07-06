@@ -3,49 +3,51 @@
 
 <PageTitle>Home</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.ExtraLarge" 
+<MudContainer MaxWidth=@MaxWidth.ExtraLarge
               Class="mt-8">
 
-    <MudStack Row="true" 
-              AlignItems="AlignItems.Center" 
-              Justify="Justify.SpaceBetween" 
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center
+              Justify=@Justify.SpaceBetween
               Class="mb-4">
 
-        <MudText Typo="Typo.h4" 
+        <MudText Typo=@Typo.h4
                  Class="font-weight-bold">
             Your Boards
         </MudText>
 
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   OnClick="OpenCreateBoardDialog">
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   StartIcon=@Icons.Material.Filled.Add
+                   OnClick=@OpenCreateBoardDialog>
             New Board
         </MudButton>
 
     </MudStack>
 
     <MudTabs Elevation="0" 
-             Color="Color.Transparent" 
-             Rounded="false"
-             ApplyEffectsToContainer="true">
+             Color=@Color.Transparent
+             Rounded=@false
+             ApplyEffectsToContainer=@true>
 
         <MudTabPanel Text="All Boards">
-            <BoardsGrid Boards="_boards"
-                        EmptyMessage="You don't have any boards yet. Create your first one!"
-                        OnClick="NavigateToBoard"
-                        OnToggleFavorite="ToggleFavoriteAsync"
-                        OnEdit="OpenEditBoardDialog"
-                        OnArchive="OpenArchiveConfirmation" />
+            <BoardsGrid Boards=@_boards
+                        CurrentUserId=@_currentUserId
+                        EmptyMessage="You don't have any boards yet. 
+                                      Create your first one!"
+                        OnClick=@NavigateToBoard
+                        OnToggleFavorite=@ToggleFavoriteAsync
+                        OnEdit=@OpenEditBoardDialog
+                        OnArchive=@OpenArchiveConfirmation />
         </MudTabPanel>
 
         <MudTabPanel Text="Archived">
 
-            <BoardsGrid Boards="_archivedBoards"
+            <BoardsGrid Boards=@_archivedBoards
                         EmptyMessage="No archived boards yet."
-                        IsArchived="true"
-                        OnRestore="OnRestoreBoard"
-                        OnDelete="OpenDeleteConfirmation" />
+                        IsArchived=@true
+                        OnRestore=@OnRestoreBoard
+                        OnDelete=@OpenDeleteConfirmation />
         </MudTabPanel>
 
     </MudTabs>

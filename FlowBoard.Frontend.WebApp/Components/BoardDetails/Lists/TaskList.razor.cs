@@ -16,6 +16,8 @@ public partial class TaskList
     [Parameter] public List<ListDto> AllLists { get; set; } = [];
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
+
 
     [Parameter] public EventCallback<(Guid ListId, string NewName)> OnRenameList { get; set; }
     [Parameter] public EventCallback<(Guid ListId, string ListName)> OnDeleteList { get; set; }

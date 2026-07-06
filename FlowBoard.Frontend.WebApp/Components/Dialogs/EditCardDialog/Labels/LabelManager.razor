@@ -13,15 +13,25 @@
 
         @foreach (var label in AttachedLabels)
         {
-            <LabelChip Label=@label 
-                       OnClose=@(() => DetachAsync(label)) />
+            @if (CanEdit)
+            {
+                <LabelChip Label=@label 
+                           OnClose=@(() => DetachAsync(label)) />
+            }
+            else
+            {
+                <LabelChip Label=@label />
+            }
         }
 
-        <MudIconButton Icon=@Icons.Material.Filled.Add
-                       Size=@Size.Small
-                       Variant=@Variant.Outlined
-                       Style="border-radius: 6px; padding: 4px;"
-                       OnClick=@TogglePopover />
+        @if (CanEdit)
+        {
+            <MudIconButton Icon=@Icons.Material.Filled.Add
+                        Size=@Size.Small
+                        Variant=@Variant.Outlined
+                        Style="border-radius: 6px; padding: 4px;"
+                        OnClick=@TogglePopover />
+        }
 
     </MudStack>
 

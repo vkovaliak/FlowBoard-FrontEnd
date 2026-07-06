@@ -12,6 +12,7 @@ public partial class AttachmentsSection
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public IReadOnlyList<AttachmentResponseDto> Attachments { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
     [Parameter] public EventCallback<Guid> OnDelete { get; set; }
 
     private async Task HandleFilesSelected(InputFileChangeEventArgs e)

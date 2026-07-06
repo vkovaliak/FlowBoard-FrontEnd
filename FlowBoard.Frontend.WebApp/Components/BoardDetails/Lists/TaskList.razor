@@ -7,6 +7,7 @@
 
     <TaskListHeader ListName=@List.Name
                     CardsCount=@(List.Cards?.Count ?? 0)
+                    CanEdit=@CanEdit
                     OnAddCardClick=@OpenCreateCardForm
                     OnDeleteClick=@DeleteListClickAsync
                     OnRename=@RenameListAsync />
@@ -22,6 +23,7 @@
             {
                 <div data-card-id="@card.Id" style="width: 100%;">
                     <CardItem Card=@card
+                              CanEdit=@CanEdit
                               OnDelete=@DeleteCardClickAsync
                               OnEdit=@OpenCardDetailsAsync 
                               OnToggleComplete=@ToggleCardCompleteAsync/>
@@ -32,6 +34,7 @@
     </MudStack>
 
     <CreateCardForm @ref=@_createCardForm
+                    CanEdit=@CanEdit
                     OnCreate=@CreateCardAsync />    
                     
 </MudPaper>

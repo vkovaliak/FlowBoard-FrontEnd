@@ -16,17 +16,15 @@
         <MudStack Row=@true 
                   AlignItems=@AlignItems.Center 
                   Spacing="1">
-
-            @if (!_isEditing)
+            @if (!_isEditing && CanEdit)
             {
                 <MudButton Variant=@Variant.Text
-                           Color=@Color.Primary
-                           Size=@Size.Small
-                           OnClick=@StartEditing>
+                        Color=@Color.Primary
+                        Size=@Size.Small
+                        OnClick=@StartEditing>
                     Edit
                 </MudButton>
             }
-
         </MudStack>
     </MudStack>
 

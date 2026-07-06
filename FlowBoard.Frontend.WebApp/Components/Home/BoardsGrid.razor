@@ -1,12 +1,12 @@
 @if (Boards is null)
 {
-    <MudProgressCircular Indeterminate="true" 
+    <MudProgressCircular Indeterminate=@true
                          Class="mt-4" />
 }
 else if (!Boards.Any())
 {
-    <MudAlert Severity="Severity.Info" 
-              Variant="Variant.Outlined" 
+    <MudAlert Severity=@Severity.Info 
+              Variant=@Variant.Outlined
               Class="mt-4">
         @EmptyMessage
     </MudAlert>
@@ -19,14 +19,15 @@ else
         <MudGrid>
             @foreach (var board in Boards)
             {
-                <BoardCard Board="board"
-                        IsArchived="IsArchived"
-                        OnClick="OnClick"
-                        OnToggleFavorite="OnToggleFavorite"
-                        OnEdit="OnEdit"
-                        OnArchive="OnArchive"
-                        OnRestore="OnRestore"
-                        OnDelete="OnDelete" />
+                <BoardCard Board=@board
+                        IsArchived=@IsArchived
+                        CurrentUserId=@CurrentUserId
+                        OnClick=@OnClick
+                        OnToggleFavorite=@OnToggleFavorite
+                        OnEdit=@OnEdit
+                        OnArchive=@OnArchive
+                        OnRestore=@OnRestore
+                        OnDelete=@OnDelete />
             }
         </MudGrid>
         

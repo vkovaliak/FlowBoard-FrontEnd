@@ -23,14 +23,17 @@
             </div>
         }
 
-        <div style="margin-left: 4px;">
-            <MudIconButton Icon=@Icons.Material.Filled.Add
-                           Size=@Size.Small
-                           Variant=@Variant.Outlined
-                           Style="border-radius: 50%; width: 32px; height: 32px;
-                                  border: 1px dashed #cbd5e1;"
-                           OnClick=@OpenAssignDialogAsync />
-        </div>
+        @if (CanEdit)
+        {
+            <div style="margin-left: 4px;">
+                <MudIconButton Icon=@Icons.Material.Filled.Add
+                            Size=@Size.Small
+                            Variant=@Variant.Outlined
+                            Style="border-radius: 50%; width: 32px; height: 32px;
+                                    border: 1px dashed #cbd5e1;"
+                            OnClick=@OpenAssignDialogAsync />
+            </div>
+        }
 
     </div>
 

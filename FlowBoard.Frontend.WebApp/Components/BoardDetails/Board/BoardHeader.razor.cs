@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.Authorization;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Domain.Enums;
 using Microsoft.AspNetCore.Components;
@@ -17,4 +18,7 @@ public partial class BoardHeader
     [Parameter] public bool IsFavorite { get; set; }
     [Parameter] public EventCallback OnToggleFavorite { get; set; }
     [Parameter] public EventCallback OnInviteClick { get; set; }
+
+    private bool CanInvite 
+        => BoardPermissions.CanInviteMembers(CurrentUserRole);
 }

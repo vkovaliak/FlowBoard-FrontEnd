@@ -9,6 +9,7 @@ public partial class AttachmentList
     [Inject] public IJSRuntime Js { get; set; } = default!;
 
     [Parameter] public IReadOnlyList<AttachmentResponseDto> Attachments { get; set; } = [];
+    [Parameter] public bool CanEdit { get; set; } = true;
 
     [Parameter] public EventCallback<Guid> OnDelete { get; set; }
 

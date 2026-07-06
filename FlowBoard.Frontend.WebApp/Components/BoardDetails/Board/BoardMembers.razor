@@ -25,10 +25,9 @@
                                   background-color: #6b778c; color: white;
                                   border: 2px solid white;">
                     +@(Members.Count - 4)
-                </MudAvatar>d
+                </MudAvatar>
             </div>
         }
-
     </div>
 
     <MudPopover Open=@_isOpen
@@ -37,13 +36,31 @@
                 Style="z-index: 1300;">
 
         <MudPaper Elevation="4"
-                  Style="min-width: 320px; max-height: 400px;
+                  Style="min-width: 360px; max-height: 440px;
                          overflow-y: auto; padding: 4px 0;">
 
-            <MudText Typo=@Typo.subtitle2 
-                     Class="px-4 pt-2 pb-1 font-weight-bold">
-                Board Members (@Members.Count)
-            </MudText>
+            <MudStack Row=@true
+                      Justify=@Justify.SpaceBetween
+                      AlignItems=@AlignItems.Center
+                      Class="px-4 pt-2 pb-1">
+
+                <MudText Typo=@Typo.subtitle2 
+                         Class="font-weight-bold">
+                    Board Members (@Members.Count)
+                </MudText>
+
+                @if (CanTransfer)
+                {
+                    <MudButton Variant=@Variant.Text
+                               Color=@Color.Primary
+                               Size=@Size.Small
+                               StartIcon=@Icons.Material.Filled.SwapHoriz
+                               Style="text-transform: none;"
+                               OnClick=@OpenTransferOwnershipDialogAsync>
+                        Transfer
+                    </MudButton>
+                }
+            </MudStack>
 
             <MudDivider />
 
@@ -56,11 +73,14 @@
                                 Size=@Size.Medium />
 
                     <div class="flex-grow-1" style="min-width: 0;">
-                        
                         <MudText Typo=@Typo.body2
                                  Style="overflow: hidden; text-overflow: ellipsis;
                                         white-space: nowrap;">
                             @member.UserName
+                            @if (member.UserId == CurrentUserId)
+                            {
+                                <span style="color:#94A3B8;"> (you)</span>
+                            }
                         </MudText>
 
                         <MudText Typo=@Typo.caption Color=@Color.Secondary
@@ -68,7 +88,6 @@
                                         white-space: nowrap;">
                             @member.EmailAddress
                         </MudText>
-
                     </div>
 
                     <MudChip T=@string Size=@Size.Small Variant=@Variant.Filled
@@ -77,12 +96,31 @@
                         @member.Role.ToString()
                     </MudChip>
 
-                    @if (CanRemove(member))
+                    @if (CanChangeRole(member) || CanRemove(member))
                     {
-                        <MudIconButton Icon=@Icons.Material.Filled.Close
-                                       Size=@Size.Small
-                                       Color=@Color.Error
-                                       OnClick=@(() => RemoveMemberAsync(member.UserId)) />
+                        <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                                 Size=@Size.Small
+                                 Dense=@true
+                                 AnchorOrigin=@Origin.BottomRight
+                                 TransformOrigin=@Origin.TopRight>
+
+                            @if (CanChangeRole(member))
+                            {
+                                <MudMenuItem Icon=@Icons.Material.Filled.ManageAccounts
+                                             OnClick=@(() => OpenChangeRoleDialogAsync(member))>
+                                    Change role
+                                </MudMenuItem>
+                            }
+
+                            @if (CanRemove(member))
+                            {
+                                <MudMenuItem Icon=@Icons.Material.Filled.PersonRemove
+                                             IconColor=@Color.Error
+                                             OnClick=@(() => RemoveMemberAsync(member.UserId))>
+                                    Remove
+                                </MudMenuItem>
+                            }
+                        </MudMenu>
                     }
 
                     @if (CanLeave(member))

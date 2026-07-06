@@ -8,6 +8,8 @@
                  ValueChanged=@OnToggleAsync
                  Size=@Size.Small
                  Dense=@true
+                 ReadOnly=@(!CanEdit)
+                 Disabled=@(!CanEdit)
                  Color=@Color.Primary />
 
     <MudText Typo=@Typo.body2
@@ -16,9 +18,12 @@
         @Item.Text
     </MudText>
 
-    <MudIconButton Icon=@Icons.Material.Filled.Close
-                   Size=@Size.Small
-                   Style="color: #6b778c;"
-                   OnClick=@OnDeleteAsync />
+    @if (CanEdit)
+    {
+        <MudIconButton Icon=@Icons.Material.Filled.Close
+                       Size=@Size.Small
+                       Style="color: #6b778c;"
+                       OnClick=@OnDeleteAsync />
+    }
 
 </MudStack>

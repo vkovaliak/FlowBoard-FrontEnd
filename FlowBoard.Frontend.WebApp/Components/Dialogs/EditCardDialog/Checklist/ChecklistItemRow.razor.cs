@@ -6,6 +6,8 @@ namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist;
 public partial class ChecklistItemRow
 {
     [Parameter] public ChecklistItemDto Item { get; set; } = default!;
+    [Parameter] public bool CanEdit { get; set; } = true;
+    
     [Parameter] public EventCallback OnToggle { get; set; }
     [Parameter] public EventCallback OnDelete { get; set; }
 

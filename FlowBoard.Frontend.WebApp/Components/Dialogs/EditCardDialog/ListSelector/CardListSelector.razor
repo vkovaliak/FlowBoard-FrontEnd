@@ -8,11 +8,13 @@
     </MudText>
 
     <MudSelect T=@Guid
-               Value=@CurrentListId
-               ValueChanged=@OnListChangedAsync
-               Variant=@Variant.Outlined
-               Margin=@Margin.Dense
-               Dense=@true>
+            Value=@CurrentListId
+            ValueChanged=@OnListChangedAsync
+            Variant=@Variant.Outlined
+            Margin=@Margin.Dense
+            Dense=@true
+            ReadOnly=@(!CanEdit)
+            Disabled=@(!CanEdit)>
 
         @foreach (var list in Lists)
         {
@@ -20,7 +22,6 @@
                 @list.Name
             </MudSelectItem>
         }
-
     </MudSelect>
 
 </MudStack>
