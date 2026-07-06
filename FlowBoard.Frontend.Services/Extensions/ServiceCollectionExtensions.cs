@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();
 
@@ -44,6 +45,8 @@ public static class ServiceCollectionExtensions
             provider.GetRequiredService<CustomAuthStateProvider>());
         
         services.AddTransient<AuthHeaderHandler>();
+        
+        services.AddScoped<UpgradeHandler>();
 
         services.AddBlazoredLocalStorage();
         services.AddAuthorizationCore();
@@ -84,6 +87,7 @@ public static class ServiceCollectionExtensions
         AddAuthenticatedRefitClient<IListApi>();
         AddAuthenticatedRefitClient<ILabelApi>();
         AddAuthenticatedRefitClient<ISearchApi>();
+        AddAuthenticatedRefitClient<ISubscriptionApi>();
         AddAuthenticatedRefitClient<IUserApi>();
         
         return services;

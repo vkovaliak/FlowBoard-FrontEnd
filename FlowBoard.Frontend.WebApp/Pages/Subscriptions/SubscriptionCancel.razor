@@ -1,0 +1,47 @@
+@page "/subscription/cancel"
+
+<MudContainer MaxWidth=@MaxWidth.Small 
+              Class="mt-16">
+
+    <MudPaper Class="pa-8 text-center" 
+              Elevation="2" 
+              Style="border-radius: 16px;">
+
+        <MudIcon Icon=@Icons.Material.Filled.Cancel
+                 Color=@Color.Error 
+                 Style="font-size: 5rem;" />
+
+        <MudText Typo=@Typo.h4 
+                 Class="mt-4" 
+                 Style="font-weight: 600;">
+            Payment Cancelled
+        </MudText>
+
+        <MudText Typo=@Typo.body1 
+                 Class="mt-2" 
+                 Color=@Color.Secondary>
+            No charge was made. You can upgrade to Pro anytime.
+        </MudText>
+
+        <MudStack Row=@true 
+                  Justify=@Justify.Center 
+                  Spacing="3" 
+                  Class="mt-6">
+
+            <MudButton Variant=@Variant.Outlined 
+                       OnClick=@GoToBoards>
+                Back to Boards
+            </MudButton>
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       OnClick=@TryAgain
+                       Disabled=@_loading>
+                Try Again
+            </MudButton>
+
+        </MudStack>
+
+    </MudPaper>
+    
+</MudContainer>

@@ -12,6 +12,7 @@ public record BoardDetailsDto(
     DateTime CreatedAt,
     bool IsFavorite,
     BoardRole UserRole,
+    bool OwnerIsPro,
     List<ListDto> Lists,
     List<BoardMemberDto> Members
 );

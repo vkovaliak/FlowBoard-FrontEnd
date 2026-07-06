@@ -1,0 +1,57 @@
+@page "/subscription/success"
+
+<MudContainer MaxWidth=@MaxWidth.Small 
+              Class="mt-16">
+
+    <MudPaper Class="pa-8 text-center" 
+              Elevation="2" 
+              Style="border-radius: 16px;">
+
+        @if (_isPro)
+        {
+            <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                     Color=@Color.Success 
+                     Style="font-size: 5rem;" />
+
+            <MudText Typo=@Typo.h4 
+                     Class="mt-4" 
+                     Style="font-weight: 600;">
+                Welcome to Pro! 🎉
+            </MudText>
+
+            <MudText Typo=@Typo.body1 
+                     Class="mt-2" 
+                     Color=@Color.Secondary>
+                Your subscription is active. 
+                Enjoy unlimited boards and all Pro features.
+            </MudText>
+        }
+        else
+        {
+            <MudProgressCircular Indeterminate=@true 
+                                 Size=@Size.Large 
+                                 Color=@Color.Primary />
+
+            <MudText Typo=@Typo.h5 
+                     Class="mt-4" 
+                     Style="font-weight: 600;">
+                Activating your subscription...
+            </MudText>
+
+            <MudText Typo=@Typo.body2 
+                     Class="mt-2" 
+                     Color=@Color.Secondary>
+                Payment received. This may take a few seconds.
+            </MudText>
+        }
+
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   Class="mt-6"
+                   OnClick=@GoToBoards>
+            Go to Boards
+        </MudButton>
+
+    </MudPaper>
+    
+</MudContainer>

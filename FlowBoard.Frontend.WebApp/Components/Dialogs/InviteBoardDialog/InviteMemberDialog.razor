@@ -17,6 +17,31 @@
 
     <DialogContent>
 
+        @if (!IsOwnerPro)
+        {
+            <MudText Typo=@Typo.subtitle2 
+                     Color=@Color.Secondary 
+                     Class="mb-2">
+                <b>@CurrentMembersCount</b> / @FreeMaxMembers members used
+            </MudText>
+        }
+
+        @if (LimitReached)
+        {
+            <MudAlert Severity=@Severity.Warning
+                      Dense=@true
+                      Class="mb-4">
+                Free plan allows up to @FreeMaxMembers members per board.
+
+                <MudLink OnClick=@Upgrade
+                         Style="font-weight: 600; cursor: pointer;">
+                    Upgrade to Pro
+                </MudLink>
+
+                for unlimited members.
+            </MudAlert>
+        }
+
         <MudText Typo=@Typo.subtitle1
                     Class="mb-3"
                     Style="font-weight: 600;">
@@ -34,26 +59,35 @@
                 AdornmentIcon=@Icons.Material.Outlined.Email
                 MinCharacters="3"
                 Clearable=@true
+                Disabled=@LimitReached
                 Class="mb-4">
 
-    <ItemTemplate Context="user">
-        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="3">
+            <ItemTemplate Context="user">
 
-            <UserAvatar UserName=@user.UserName
-                        AvatarUrl=@user.AvatarUrl
-                        Size=@Size.Small />
+                <MudStack Row=@true 
+                          AlignItems=@AlignItems.Center 
+                          Spacing="3">
 
-            <div>
-                <MudText Typo=@Typo.body2>@user.UserName</MudText>
-                <MudText Typo=@Typo.caption Color=@Color.Secondary>
-                    @user.EmailAddress
-                </MudText>
-            </div>
+                    <UserAvatar UserName=@user.UserName
+                                AvatarUrl=@user.AvatarUrl
+                                Size=@Size.Small />
 
-        </MudStack>
-    </ItemTemplate>
+                    <div>
+                        <MudText Typo=@Typo.body2>
+                            @user.UserName
+                        </MudText>
 
-</MudAutocomplete>
+                        <MudText Typo=@Typo.caption 
+                                 Color=@Color.Secondary>
+                            @user.EmailAddress
+                        </MudText>
+                    </div>
+
+                </MudStack>
+
+            </ItemTemplate>
+
+        </MudAutocomplete>
 
         <MudText Typo=@Typo.subtitle1
                     Class="mb-2"
@@ -62,12 +96,13 @@
         </MudText>
 
         <MudSelect @bind-Value=@_role
-                Variant=@Variant.Outlined
-                Margin=@Margin.Normal
-                Adornment=@Adornment.Start
-                AdornmentIcon=@GetRoleIcon(_role)
-                ToStringFunc=@RoleToString
-                AnchorOrigin=@Origin.BottomCenter>
+                   Variant=@Variant.Outlined
+                   Margin=@Margin.Normal
+                   Adornment=@Adornment.Start
+                   AdornmentIcon=@GetRoleIcon(_role)
+                   ToStringFunc=@RoleToString
+                   Disabled=@LimitReached
+                   AnchorOrigin=@Origin.BottomCenter>
 
             @foreach (var role in AvailableRoles)
             {
@@ -107,7 +142,6 @@
             @GetRoleDescription(_role)
         </MudText>
 
-
     </DialogContent>
 
     <DialogActions>
@@ -123,6 +157,7 @@
                    Variant=@Variant.Filled
                    StartIcon=@Icons.Material.Filled.Send
                    OnClick=@Submit
+                   Disabled=@(LimitReached || _selectedUser is null)
                    Class="mr-4"
                    Style="text-transform: none;">
             Send Invite

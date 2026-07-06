@@ -11,12 +11,17 @@ public partial class NavMenu : IDisposable
     [Inject] public FavoritesState FavoritesState { get; set; } = default!;
     [Inject] public TasksState TasksState { get; set; } = default!;
     [Inject] public ICardService CardService { get; set; } = default!;
+    [Inject] private UserState UserState { get; set; } = default!;
+    
 
     private List<BoardDto> _favorites = [];
     private int _myTasksCount;
 
     protected override async Task OnInitializedAsync()
     {
+        await UserState.EnsureLoadedAsync();
+        UserState.OnChanged += OnStateChanged;
+
         FavoritesState.OnChanged += HandleFavoritesChanged;
         TasksState.OnChanged += HandleTaskChanged;
         await LoadFavoritesAsync();
@@ -27,6 +32,11 @@ public partial class NavMenu : IDisposable
     {
         var tasks = await CardService.GetMyTasksAsync();
         _myTasksCount = tasks.Count(c => !c.IsCompleted);
+    }
+
+    private async void OnStateChanged()
+    {
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task LoadFavoritesAsync()
@@ -53,5 +63,7 @@ public partial class NavMenu : IDisposable
     {
         FavoritesState.OnChanged -= HandleFavoritesChanged;
         TasksState.OnChanged -= HandleTaskChanged;
+        UserState.OnChanged -= OnStateChanged;
+
     }
 }

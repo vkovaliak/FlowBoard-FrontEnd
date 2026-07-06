@@ -3,6 +3,7 @@ using MudBlazor;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 
@@ -15,16 +16,20 @@ public partial class CreateBoardDialog : ComponentBase
     public BoardDto? CurrentBoard { get; set; }
 
     [Inject] private IBoardService BoardService { get; set; } = default!;
+    [Inject] private UserState UserState { get; set; } = default!;
 
     public CreateBoardModel Model { get; set; } = new();
 
     public bool IsEditMode => CurrentBoard != null;
+    private bool CanUseBackground => UserState.IsPro;
 
     private List<BoardBackgroundDto> _backgrounds = [];
     private bool _isLoadingBackgrounds = true;
 
     protected override async Task OnInitializedAsync()
     {
+        await UserState.EnsureLoadedAsync();
+
         if (IsEditMode && CurrentBoard != null)
         {
             Model.Name = CurrentBoard.Name;
@@ -34,7 +39,11 @@ public partial class CreateBoardDialog : ComponentBase
                 : CurrentBoard.Background;
         }
 
-        _backgrounds = await BoardService.GetBackgroundsAsync();
+        if (CanUseBackground)
+        {
+            _backgrounds = await BoardService.GetBackgroundsAsync();
+        }
+
         _isLoadingBackgrounds = false;
     }
 

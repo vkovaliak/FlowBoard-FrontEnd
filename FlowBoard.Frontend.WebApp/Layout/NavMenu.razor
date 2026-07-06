@@ -1,4 +1,7 @@
-﻿<MudNavMenu Class="custom-nav-menu">
+﻿@using FlowBoard.Frontend.WebApp.Components.Subscription;
+
+<MudNavMenu Class="custom-nav-menu d-flex flex-column" 
+            Style="height: 100%;">
 
     <MudNavLink Href="/" 
                 Icon=@Icons.Material.Filled.Dashboard 
@@ -69,6 +72,14 @@
                 
             </MudNavLink>
         }
+    }
+
+    @if (!UserState.IsPro)
+    {
+        <div style="margin-top: auto; 
+                    padding-bottom: 10px;">
+            <UpgradeCard />
+        </div>
     }
 
 </MudNavMenu>

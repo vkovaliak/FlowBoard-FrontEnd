@@ -7,13 +7,17 @@ namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
 public partial class BoardDetails
 {
+    private bool _isOwnerPro => _board?.OwnerIsPro ?? false;
+        
     private async Task OpenInviteDialogAsync()
     {
         var assignable = BoardPermissions.AssignableRoles(_board!.UserRole);
 
         var parameters = new DialogParameters<InviteMemberDialog>
         {
-            { x => x.AvailableRoles, [.. assignable] }
+            { x => x.AvailableRoles, [.. assignable] },
+            { x => x.CurrentMembersCount, _board.Members.Count },
+            { x => x.IsOwnerPro, _isOwnerPro }
         };
 
         var options = new DialogOptions
