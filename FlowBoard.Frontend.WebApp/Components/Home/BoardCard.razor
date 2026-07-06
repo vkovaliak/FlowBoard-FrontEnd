@@ -1,110 +1,115 @@
-<MudItem xs="12" sm="6" md="4">
-    <MudPaper Elevation="4"
-              Class="pa-4 hoverable-card"
-              Style=@CardStyle
-              @onclick=@HandleCardClick>
+<div class="board-card 
+            @(IsArchived ? "" : "board-card-clickable")"
+     @onclick=@HandleCardClick >
 
-        <MudStack Justify=@Justify.SpaceBetween 
-                  Style="min-height: 110px;">
+    <div class="board-card-cover" 
+         style=@CoverStyle >
 
-            <MudStack Row=@true 
-                      AlignItems=@AlignItems.Center
-                      Justify=@Justify.SpaceBetween >
+        <div class="board-card-icon">
 
-                <MudText Typo=@Typo.h6
-                         Class="font-weight-bold">
-                    @Board.Name
-                </MudText>
+            <MudIcon Icon=@Icons.Material.Filled.ViewKanban
+                     Style="color: #6366f1;" />
 
-                <MudStack Row=@true 
-                          Spacing="0" 
-                          AlignItems=@AlignItems.Center>
+        </div>
 
-                    @if (!IsArchived)
-                    {
-                        <div @onclick:stopPropagation=@true>
+        @if (!IsArchived)
+        {
+            <div @onclick:stopPropagation=@true 
+                 class="board-card-star">
 
-                            <MudIconButton Icon=@(Board.IsFavorite
-                                                    ? Icons.Material.Filled.Star
-                                                    : Icons.Material.Outlined.StarBorder)
-                                           Color=@(Board.IsFavorite ? Color.Warning : Color.Default)
-                                           Size=@Size.Medium
-                                           OnClick=@(() => OnToggleFavorite.InvokeAsync(Board)) />
+                <MudIconButton Icon=@(Board.IsFavorite
+                                        ? Icons.Material.Filled.Star
+                                        : Icons.Material.Outlined.StarBorder)
+                               Color=@(Board.IsFavorite 
+                                     ? Color.Warning : Color.Warning)
+                               Size=@Size.Medium
+                               OnClick=@(() => OnToggleFavorite.InvokeAsync(Board)) />
+            </div>
+        }
 
-                        </div>
-                    }
+    </div>
 
+    <div class="board-card-body">
 
-                    @if (HasMenuActions)
-                    {
-                        <div @onclick:stopPropagation=@true>
+        <div class="d-flex align-center justify-space-between">
+            <MudText Typo=@Typo.h6 
+                     Style="font-weight: 600;">
+                @Board.Name
+            </MudText>
 
-                            <MudMenu Icon=@Icons.Material.Filled.MoreVert
-                                     Size=@Size.Medium 
-                                     Dense=@true
-                                     AnchorOrigin=@Origin.BottomRight
-                                     TransformOrigin=@Origin.TopRight>
-
-                                @if (IsArchived)
-                                {
-                                    <MudMenuItem Icon=@Icons.Material.Filled.Unarchive
-                                                 Disabled=@true
-                                                 OnClick=@(() => OnRestore.InvokeAsync(Board))>
-                                        Restore
-                                    </MudMenuItem>
-
-                                    @if (CanManage)
-                                    {
-                                        <MudMenuItem Icon=@Icons.Material.Filled.Delete
-                                                     IconColor=@Color.Error
-                                                     OnClick=@(() => OnDelete.InvokeAsync(Board))>
-                                            Delete
-                                        </MudMenuItem>
-                                    }
-                                }
-                                else
-                                {
-                                    <MudMenuItem Icon=@Icons.Material.Filled.Edit
-                                                OnClick=@(() => OnEdit.InvokeAsync(Board))>
-                                        Edit
-                                    </MudMenuItem>
-
-                                    <MudMenuItem Icon=@Icons.Material.Outlined.Archive
-                                                OnClick=@(() => OnArchive.InvokeAsync(Board))>
-                                        Archive
-                                    </MudMenuItem>
-                                }
-                            </MudMenu>
-
-                        </div>
-                    }
-
-
-                </MudStack>
-
-            </MudStack>
-
-            <MudStack Row=@true 
-                      AlignItems=@AlignItems.Center>
-
-                <MudChip T=@string
-                         Color=@(Board.IsPublic 
+            <MudChip T=@string
+                     Size=@Size.Medium
+                     Variant=@Variant.Text
+                     Color=@(Board.IsPublic 
                             ? Color.Primary : Color.Tertiary)
-                         Size=@Size.Small>
-                    @(Board.IsPublic ? "Public" : "Private")
-                </MudChip>
+                     Style="height: 20px;" >
+                @(Board.IsPublic ? "Public" : "Private")
+            </MudChip>
+        </div>
 
-                <MudSpacer />
+        <MudText Typo=@Typo.body2
+                 Color=@Color.Secondary
+                 Class="mt-2"
+                 Style="min-height: 30px;">
+            Created @Board.CreatedAt.ToShortDateString()
+        </MudText>
 
-                <MudText Typo=@Typo.caption
-                         Color=@Color.Secondary>
-                    Created: @Board.CreatedAt.ToShortDateString()
-                </MudText>
+        <div class="d-flex align-center 
+                    justify-space-between">
 
-            </MudStack>
+            @if (!IsArchived && Board.Members.Any())
+            {
+                <MemberAvatars Members=@Board.Members MaxVisible="3" />
+            }
+            else
+            {
+                <span></span>
+            }
 
-        </MudStack>
+            @if (HasMenuActions)
+            {
+                <div @onclick:stopPropagation=@true>
+                    <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                            Size=@Size.Medium
+                            Dense=@true
+                            AnchorOrigin=@Origin.BottomRight
+                            TransformOrigin=@Origin.TopRight >
 
-    </MudPaper>
-    
-</MudItem>
+                        @if (IsArchived)
+                        {
+                            <MudMenuItem Icon=@Icons.Material.Filled.Unarchive
+                                        Disabled=@true
+                                        OnClick=@(() => OnRestore.InvokeAsync(Board))>
+                                Restore
+                            </MudMenuItem>
+
+                            @if (CanManage)
+                            {
+                                <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                                            IconColor=@Color.Error
+                                            OnClick=@(() => OnDelete.InvokeAsync(Board))>
+                                    Delete
+                                </MudMenuItem>
+                            }
+                        }
+                        else
+                        {
+                            <MudMenuItem Icon=@Icons.Material.Filled.Edit
+                                        OnClick=@(() => OnEdit.InvokeAsync(Board))>
+                                Edit
+                            </MudMenuItem>
+
+                            <MudMenuItem Icon=@Icons.Material.Outlined.Archive
+                                        OnClick=@(() => OnArchive.InvokeAsync(Board))>
+                                Archive
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

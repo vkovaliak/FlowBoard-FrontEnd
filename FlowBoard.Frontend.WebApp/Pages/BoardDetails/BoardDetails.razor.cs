@@ -150,4 +150,18 @@ public partial class BoardDetails : IAsyncDisposable
             Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
+
+    private string PaperBackgroundStyle
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_board?.Background))
+            {
+                return string.Empty;
+            }
+
+            return $"background-image: url('{_board.Background}');" + 
+                   "background-size: 100% 100%; background-position: center;";
+        }
+    }
 }

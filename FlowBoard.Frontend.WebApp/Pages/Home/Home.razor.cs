@@ -15,6 +15,8 @@ namespace FlowBoard.Frontend.WebApp.Pages.Home;
 public partial class Home
 {
     [Inject] public IBoardService BoardService { get; set; } = default!;
+    [Inject] public ICardService CardService { get; set; } = default!;
+    [Inject] public IUserService UserService { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
@@ -22,16 +24,44 @@ public partial class Home
     [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
 
     private Guid _currentUserId;
+    private string _userName = ""; 
 
     private IEnumerable<BoardDto>? _boards;
     private IEnumerable<BoardDto>? _archivedBoards;
 
+    private int _boardsCount;
+    private int _completedCount;
+    private int _inProgressCount;
+    private int _membersCount;
+
     protected override async Task OnInitializedAsync()
     {
         _currentUserId = await AuthStateProvider.GetCurrentUserIdAsync();
+        
         _boards = await BoardService.GetMyBoardsAsync();
         _archivedBoards = await BoardService.GetArchivedBoardsAsync();
+
+        var user = await UserService.GetMeAsync();
+        _userName = user!.UserName;
+
+        await LoadStatsAsync();
     }
+
+    private async Task LoadStatsAsync()
+    {
+        var tasks = await CardService.GetMyTasksAsync();
+
+        _boardsCount = _boards?.Count() ?? 0;
+        _completedCount = tasks.Count(t => t.IsCompleted);
+        _inProgressCount = tasks.Count(t => !t.IsCompleted);
+
+        _membersCount = _boards?
+            .SelectMany(b => b.Members)
+            .Select(m => m.UserId)
+            .Where(id => id != _currentUserId)
+            .Distinct()
+            .Count() ?? 0;
+        }
 
     private Task OpenCreateBoardDialog() 
         => ManageBoardDialogAsync(null);
@@ -71,7 +101,8 @@ public partial class Home
             {
                 var createDto = new CreateBoardDto(
                     Name: model.Name, 
-                    IsPublic: model.IsPublic);
+                    IsPublic: model.IsPublic,
+                    Background: model.Background);
 
                 isSuccess = await BoardService.CreateAsync(createDto);
                 successMessage = "Board created!";
@@ -82,9 +113,12 @@ public partial class Home
             {
                 var updateDto = new UpdateBoardDto(
                     Name: model.Name, 
-                    IsPublic: model.IsPublic);
+                    IsPublic: model.IsPublic,
+                    Background: model.Background
+                );
 
-                isSuccess = await BoardService.UpdateAsync(currentBoard.Id, updateDto);
+                isSuccess = await BoardService.UpdateAsync(
+                    currentBoard.Id, updateDto);
                 successMessage = "Board updated successfully!";
                 errorMessage = $"Failed to update board: {isSuccess.Error}";
             }
@@ -115,7 +149,8 @@ public partial class Home
 
             if (isDeleted.Success)
             {
-                Snackbar.Add($"Board '{board.Name}' deleted", Severity.Success);
+                Snackbar.Add(
+                    $"Board '{board.Name}' deleted", Severity.Success);
                 _boards = await BoardService.GetMyBoardsAsync();
             }
             else

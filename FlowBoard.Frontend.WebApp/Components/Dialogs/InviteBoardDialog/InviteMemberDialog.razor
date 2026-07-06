@@ -1,68 +1,130 @@
+@using FlowBoard.Frontend.Domain.DTOs.Search
 @using FlowBoard.Frontend.Domain.Enums
+@using FlowBoard.Frontend.WebApp.Components.Common
 
 <MudDialog>
 
+    <TitleContent>
+        <div>
+            <MudText Typo=@Typo.h5 Style="font-weight: 700;">
+                Invite on Board
+            </MudText>
+            <MudText Typo=@Typo.body2 Class="mt-2">
+                Invite people to collaborate on this board
+            </MudText>
+        </div>
+    </TitleContent>
+
     <DialogContent>
 
-        <EditForm Model=@_model>
+        <MudText Typo=@Typo.subtitle1
+                    Class="mb-3"
+                    Style="font-weight: 600;">
+            Invite by email
+        </MudText>
 
-            <DataAnnotationsValidator />
+        <MudAutocomplete T=@UserSearchDto
+                @bind-Value=@_selectedUser
+                SearchFunc=@SearchUsersAsync
+                ToStringFunc=@(u => u?.EmailAddress ?? string.Empty)
+                Placeholder="Enter email address..."
+                Variant=@Variant.Outlined
+                Margin=@Margin.Dense
+                Adornment=@Adornment.Start
+                AdornmentIcon=@Icons.Material.Outlined.Email
+                MinCharacters="3"
+                Clearable=@true
+                Class="mb-4">
 
-            <MudTextField @bind-Value=@_model.Email
-                          Label="Email address"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          Adornment=@Adornment.Start
-                          AdornmentIcon=@Icons.Material.Filled.Email
-                          For=@(() => _model.Email)
-                          Class="mb-3" />
+    <ItemTemplate Context="user">
+        <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="3">
 
-            <MudSelect @bind-Value=@_role
-                       Label="Role"
-                       Variant=@Variant.Outlined
-                       Adornment=@Adornment.Start
-                       AdornmentIcon=@Icons.Material.Filled.AdminPanelSettings>
+            <UserAvatar UserName=@user.UserName
+                        AvatarUrl=@user.AvatarUrl
+                        Size=@Size.Small />
 
-                @foreach (var role in AvailableRoles)
-                {
-                    <MudSelectItem T=@BoardRole Value=@role>
+            <div>
+                <MudText Typo=@Typo.body2>@user.UserName</MudText>
+                <MudText Typo=@Typo.caption Color=@Color.Secondary>
+                    @user.EmailAddress
+                </MudText>
+            </div>
 
-                        <MudStack Row=@true 
-                                  AlignItems=@AlignItems.Center 
-                                  Spacing="2">
+        </MudStack>
+    </ItemTemplate>
 
-                            <MudIcon Icon=@GetRoleIcon(role)
-                                     Size=@Size.Small />
+</MudAutocomplete>
 
-                            <div>
-                                <MudText Typo=@Typo.body2>
-                                    @role.ToString()
-                                </MudText>
+        <MudText Typo=@Typo.subtitle1
+                    Class="mb-2"
+                    Style="font-weight: 600;">
+            Select a role
+        </MudText>
 
-                                <MudText Typo=@Typo.caption
-                                         Color=@Color.Secondary>
-                                    @GetRoleDescription(role)
-                                </MudText>
-                            </div>
+        <MudSelect @bind-Value=@_role
+                Variant=@Variant.Outlined
+                Margin=@Margin.Normal
+                Adornment=@Adornment.Start
+                AdornmentIcon=@GetRoleIcon(_role)
+                ToStringFunc=@RoleToString
+                AnchorOrigin=@Origin.BottomCenter>
 
-                        </MudStack>
+            @foreach (var role in AvailableRoles)
+            {
+                <MudSelectItem T=@BoardRole Value=@role>
 
-                    </MudSelectItem>
-                }
+                    <MudStack Row=@true
+                            AlignItems=@AlignItems.Center
+                            Spacing="3"
+                            Class="py-1">
 
-            </MudSelect>
+                        <MudIcon Icon=@GetRoleIcon(role)
+                                Size=@Size.Small
+                                Color=@Color.Default />
 
-        </EditForm>
+                        <div>
+                            <MudText Typo=@Typo.body2
+                                    Style="font-weight: 500;">
+                                @role.ToString()
+                            </MudText>
+
+                            <MudText Typo=@Typo.caption
+                                    Color=@Color.Secondary>
+                                @GetRoleDescription(role)
+                            </MudText>
+                        </div>
+
+                    </MudStack>
+
+                </MudSelectItem>
+            }
+
+        </MudSelect>
+
+        <MudText Typo=@Typo.caption
+                Color=@Color.Secondary
+                Class="mt-2 d-block">
+            @GetRoleDescription(_role)
+        </MudText>
+
 
     </DialogContent>
 
     <DialogActions>
 
-        <MudButton OnClick=@Cancel>Cancel</MudButton>
+        <MudButton OnClick=@Cancel
+                   Variant=@Variant.Outlined
+                   Class="mr-3"
+                   Style="text-transform: none;">
+            Cancel
+        </MudButton>
 
         <MudButton Color=@Color.Primary
                    Variant=@Variant.Filled
-                   OnClick=@Submit>
+                   StartIcon=@Icons.Material.Filled.Send
+                   OnClick=@Submit
+                   Class="mr-4"
+                   Style="text-transform: none;">
             Send Invite
         </MudButton>
 

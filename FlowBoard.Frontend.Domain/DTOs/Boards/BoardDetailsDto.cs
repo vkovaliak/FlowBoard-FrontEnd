@@ -7,6 +7,7 @@ public record BoardDetailsDto(
     Guid Id,
     string Name,
     bool IsPublic,
+    string? Background,
     Guid CreatedBy,
     DateTime CreatedAt,
     bool IsFavorite,

@@ -2,20 +2,22 @@
 @namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
 @using FlowBoard.Frontend.Domain.Authorization
 
-<MudContainer MaxWidth=@MaxWidth.False
-              Class="mt-6"
-              Style="width: 85vw; overflow: hidden;">
-    
-    @if (_isNotFound)
-    {
-        <BoardNotFound />
-    }
-    else if (_board == null)
-    {
-        <BoardLoading />
-    }
-    else
-    {
+@if (_isNotFound)
+{
+    <BoardNotFound />
+}
+else if (_board == null)
+{
+    <BoardLoading />
+}
+else
+{
+    <div style="width: 100%; 
+                height: calc(100vh - 64px); 
+                display: flex; 
+                flex-direction: column; 
+                overflow: hidden;">
+        
         <BoardHeader BoardName=@_board.Name
                      IsPublic=@_board.IsPublic
                      IsFavorite=@_board.IsFavorite
@@ -28,19 +30,18 @@
                      OnToggleFavorite=@ToggleFavoriteAsync
                      OnMembersChanged=@HandleMembersChangedAsync />
 
-        <MudPaper Elevation="2" 
-                  Class="pa-4"
-                  Style="height: calc(100vh - 220px);
-                         width:100%;
-                         min-width: 400px;
-                         max-width: 100%;
-                         overflow: hidden;">
-
-            <div class="board-scroll-wrapper">
+        <MudPaper Elevation="0" 
+                  Style=@($"flex-grow: 1; width: 100%;" +
+                        " border-radius:0px; overflow: hidden;" +
+                        " position: relative; {PaperBackgroundStyle}")>
+            
+            <div class="board-scroll-wrapper" 
+                 style="padding: 35px 25px; height: 100%; 
+                        overflow-x: auto; overflow-y: hidden;">
 
                 @{
-                    var canEdit = BoardPermissions
-                        .CanModifyContent(_board.UserRole);
+                    var canEdit = BoardPermissions.CanModifyContent(
+                        _board.UserRole);
                 }
 
                 <div class="d-flex flex-row flex-nowrap board-lists-container" 
@@ -55,33 +56,29 @@
                                     display: flex;">      
 
                             <TaskList List=@list
-                                    BoardId=@_board.Id
-                                    AllLists=@_board.Lists
-                                    BoardMembers=@_board.Members
-                                    CanEdit=@canEdit
-                                    OnRenameList=@HandleRenameListAsync
-                                    OnDeleteList=@HandleDeleteListAsync
-                                    OnCreateCard=@HandleCreateCardAsync
-                                    OnUpdateCard=@HandleUpdateCardAsync
-                                    OnDeleteCard=@HandleDeleteCardAsync
-                                    OnToggleCardComplete=@HandleToggleCardCompleteAsync />
+                                      BoardId=@_board.Id
+                                      AllLists=@_board.Lists
+                                      BoardMembers=@_board.Members
+                                      CanEdit=@canEdit
+                                      OnRenameList=@HandleRenameListAsync
+                                      OnDeleteList=@HandleDeleteListAsync
+                                      OnCreateCard=@HandleCreateCardAsync
+                                      OnUpdateCard=@HandleUpdateCardAsync
+                                      OnDeleteCard=@HandleDeleteCardAsync
+                                      OnToggleCardComplete=@HandleToggleCardCompleteAsync />
                         </div>
                     }
 
                     @if (canEdit)
                     {
-                        <div class="flex-shrink-0" 
-                             style="width: 280px;">
-
+                        <div class="flex-shrink-0" style="width: 260px;">
                             <CreateListButtons BoardId=@_board.Id 
-                                            OnListCreate=@CreateListAsync />
-
+                                               OnListCreate=@CreateListAsync />
                         </div>
                     }
                 </div>
             </div>
             
         </MudPaper>
-    }
-
-</MudContainer>
+    </div>
+}

@@ -20,7 +20,8 @@ public partial class BoardDetails
         {
             CloseOnEscapeKey = true,
             MaxWidth = MaxWidth.Small,
-            FullWidth = true
+            FullWidth = true,
+            CloseButton = true
         };
 
         var dialog = await DialogService.ShowAsync<InviteMemberDialog>(

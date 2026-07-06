@@ -1,0 +1,36 @@
+<MudGrid Spacing="20" 
+         Class="mb-5">
+
+    <MudItem xs="12" sm="6" md="3">
+        <StatCard Icon=@Icons.Material.Filled.Dashboard
+                  Value=@BoardsCount.ToString()
+                  Label="Boards"
+                  IconBg="#eef2ff"
+                  IconColor="#6366f1" />
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <StatCard Icon=@Icons.Material.Filled.CheckCircle
+                  Value=@CompletedCount.ToString()
+                  Label="Tasks Completed"
+                  IconBg="#ecfdf5"
+                  IconColor="#10b981" />
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <StatCard Icon=@Icons.Material.Filled.Schedule
+                  Value=@InProgressCount.ToString()
+                  Label="Tasks In Progress"
+                  IconBg="#fffbeb"
+                  IconColor="#f59e0b" />
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <StatCard Icon=@Icons.Material.Filled.Group
+                  Value=@MembersCount.ToString()
+                  Label="Team Members"
+                  IconBg="#f5f3ff"
+                  IconColor="#8b5cf6" />
+    </MudItem>
+
+</MudGrid>

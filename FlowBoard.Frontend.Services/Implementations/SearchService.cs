@@ -35,4 +35,13 @@ public class SearchService : ISearchService
 
         return OperationResult<SearchResultDto>.Fail(response.GetErrorMessage());
     }
+
+    public async Task<List<UserSearchDto>> SearchUsersAsync(string query)
+    {
+        var response = await _searchApi.SearchUsersAsync(query);
+
+        return response.IsSuccessStatusCode && response.Content != null
+            ? response.Content
+            : [];
+    }
 }

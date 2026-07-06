@@ -6,4 +6,5 @@ namespace FlowBoard.Frontend.Services.Abstractions;
 public interface ISearchService
 {
     Task<OperationResult<SearchResultDto>> SearchAsync(string query);
+    Task<List<UserSearchDto>> SearchUsersAsync(string query);
 }

@@ -45,4 +45,8 @@ public interface IBoardApi
     [Patch("/api/boards/{boardId}/members/{userId}/role")]
     Task<ApiResponse<bool>> ChangeMemberRoleAsync(
         Guid boardId, Guid userId, ChangeMemberRoleDto dto);
+
+    [Get("/api/boards/backgrounds")]
+    Task<ApiResponse<List<BoardBackgroundDto>>> GetBackgroundsAsync();
+
 }

@@ -7,7 +7,7 @@ namespace FlowBoard.Frontend.WebApp.Components.Home;
 public partial class BoardCard
 {
     [Parameter, EditorRequired] public BoardDto Board { get; set; } = default!;
-    [Parameter] public bool IsArchived { get; set; } 
+    [Parameter] public bool IsArchived { get; set; }
     [Parameter] public Guid CurrentUserId { get; set; }
 
     [Parameter] public EventCallback<Guid> OnClick { get; set; }
@@ -18,12 +18,14 @@ public partial class BoardCard
     [Parameter] public EventCallback<BoardDto> OnDelete { get; set; }
 
     private bool CanManage => BoardPermissions.CanManageBoard(Board.UserRole);
-
     private bool HasMenuActions => IsArchived || CanManage;
 
-    private string CardStyle => IsArchived
-        ? "cursor: default; min-height: 120px;"
-        : "cursor: pointer; min-height: 120px;";
+    private bool HasBackground => !string.IsNullOrEmpty(Board.Background);
+
+    private string CoverStyle => HasBackground
+        ? $"background-image: url('{Board.Background}'); " +
+          "background-size: 100% 100%; background-position: top left;"
+        : "background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%);";
 
     private async Task HandleCardClick()
     {

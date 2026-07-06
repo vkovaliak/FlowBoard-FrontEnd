@@ -1,0 +1,32 @@
+@using FlowBoard.Frontend.WebApp.Components.Common
+
+<div class="d-flex align-center">
+
+    @foreach (var member in Visible)
+    {
+        <MudTooltip Text=@member.UserName>
+
+            <div style="margin-left: -8px; 
+                        border: 2px solid white; 
+                        border-radius: 50%;">
+
+                <UserAvatar UserName=@member.UserName
+                            AvatarUrl=@member.AvatarUrl
+                            Size=@Size.Small />
+
+            </div>
+
+        </MudTooltip>
+    }
+
+    @if (Overflow > 0)
+    {
+        <MudAvatar Size=@Size.Small
+                   Color=@Color.Default
+                   Style="margin-left: -8px; 
+                          border: 2px solid white; 
+                          font-size: 0.7rem;">
+            +@Overflow
+        </MudAvatar>
+    }
+</div>

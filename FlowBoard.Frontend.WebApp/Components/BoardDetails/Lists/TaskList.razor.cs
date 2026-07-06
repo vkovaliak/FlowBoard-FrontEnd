@@ -17,6 +17,7 @@ public partial class TaskList
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
     [Parameter] public bool CanEdit { get; set; } = true;
+    [Parameter] public bool HasBackground { get; set; }
 
 
     [Parameter] public EventCallback<(Guid ListId, string NewName)> OnRenameList { get; set; }

@@ -8,4 +8,5 @@ public class CreateBoardModel
     [StringLength(100, ErrorMessage = "Board name must not be more than 100 characters.")]
     public string Name { get; set; } = string.Empty;
     public bool IsPublic { get; set; } = true;
+    public string? Background { get; set; }
 }
