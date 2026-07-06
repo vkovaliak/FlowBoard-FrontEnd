@@ -1,0 +1,36 @@
+<MudPaper Elevation="0"
+          Class="pa-5 stat-card"
+          Style="border: 2px solid #edeff2; 
+                 border-radius: 12px; 
+                 height: 100%;">
+
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center 
+              Spacing="3">
+
+        <div style=@($"width: 65px; height: 65px; border-radius: 10px; " +
+                     $"display: flex; align-items: center; justify-content: center; " +
+                     $"background-color: {IconBg};")>
+
+            <MudIcon Icon=@Icon 
+                     Style=@($"color: {IconColor};") 
+                     Size=@Size.Large />
+        </div>
+
+        <MudStack Spacing="0">
+
+            <MudText Typo=@Typo.h5 
+                     Style="font-weight: 700; 
+                            line-height: 1.1;">
+                @Value
+            </MudText>
+
+            <MudText Typo=@Typo.body2>
+                @Label
+            </MudText>
+            
+        </MudStack>
+
+    </MudStack>
+
+</MudPaper>

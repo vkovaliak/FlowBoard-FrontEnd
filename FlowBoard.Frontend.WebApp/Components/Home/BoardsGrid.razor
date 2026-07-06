@@ -1,7 +1,8 @@
 @if (Boards is null)
 {
-    <MudProgressCircular Indeterminate=@true
-                         Class="mt-4" />
+    <div class="d-flex justify-center mt-8">
+        <MudProgressCircular Indeterminate=@true />
+    </div>
 }
 else if (!Boards.Any())
 {
@@ -13,23 +14,20 @@ else if (!Boards.Any())
 }
 else
 {
-    <MudPaper Class="pa-8 mt-4 rounded-lg" 
-              Elevation="1">
-
-        <MudGrid>
-            @foreach (var board in Boards)
-            {
+    <MudGrid Spacing="4" Class="mt-1">
+        @foreach (var board in Boards)
+        {
+            <MudItem xs="12" sm="6" md="4">
                 <BoardCard Board=@board
-                        IsArchived=@IsArchived
-                        CurrentUserId=@CurrentUserId
-                        OnClick=@OnClick
-                        OnToggleFavorite=@OnToggleFavorite
-                        OnEdit=@OnEdit
-                        OnArchive=@OnArchive
-                        OnRestore=@OnRestore
-                        OnDelete=@OnDelete />
-            }
-        </MudGrid>
-        
-    </MudPaper>
+                           IsArchived=@IsArchived
+                           CurrentUserId=@CurrentUserId
+                           OnClick=@OnClick
+                           OnToggleFavorite=@OnToggleFavorite
+                           OnEdit=@OnEdit
+                           OnArchive=@OnArchive
+                           OnRestore=@OnRestore
+                           OnDelete=@OnDelete />
+            </MudItem>
+        }
+    </MudGrid>
 }

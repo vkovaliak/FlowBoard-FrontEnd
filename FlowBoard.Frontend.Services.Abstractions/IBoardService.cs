@@ -22,4 +22,6 @@ public interface IBoardService
 
     Task<OperationResult> ChangeMemberRoleAsync(
         Guid boardId, Guid userId, ChangeMemberRoleDto dto);
+
+    Task<List<BoardBackgroundDto>> GetBackgroundsAsync();
 }

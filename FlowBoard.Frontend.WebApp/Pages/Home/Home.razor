@@ -6,50 +6,22 @@
 <MudContainer MaxWidth=@MaxWidth.ExtraLarge
               Class="mt-8">
 
-    <MudStack Row=@true 
-              AlignItems=@AlignItems.Center
-              Justify=@Justify.SpaceBetween
-              Class="mb-4">
+    <HomeHeader UserName=@_userName />
 
-        <MudText Typo=@Typo.h4
-                 Class="font-weight-bold">
-            Your Boards
-        </MudText>
+    <StatsCards BoardsCount=@_boardsCount
+                CompletedCount=@_completedCount
+                InProgressCount=@_inProgressCount
+                MembersCount=@_membersCount />
 
-        <MudButton Variant=@Variant.Filled
-                   Color=@Color.Primary
-                   StartIcon=@Icons.Material.Filled.Add
-                   OnClick=@OpenCreateBoardDialog>
-            New Board
-        </MudButton>
-
-    </MudStack>
-
-    <MudTabs Elevation="0" 
-             Color=@Color.Transparent
-             Rounded=@false
-             ApplyEffectsToContainer=@true>
-
-        <MudTabPanel Text="All Boards">
-            <BoardsGrid Boards=@_boards
-                        CurrentUserId=@_currentUserId
-                        EmptyMessage="You don't have any boards yet. 
-                                      Create your first one!"
-                        OnClick=@NavigateToBoard
-                        OnToggleFavorite=@ToggleFavoriteAsync
-                        OnEdit=@OpenEditBoardDialog
-                        OnArchive=@OpenArchiveConfirmation />
-        </MudTabPanel>
-
-        <MudTabPanel Text="Archived">
-
-            <BoardsGrid Boards=@_archivedBoards
-                        EmptyMessage="No archived boards yet."
-                        IsArchived=@true
-                        OnRestore=@OnRestoreBoard
-                        OnDelete=@OpenDeleteConfirmation />
-        </MudTabPanel>
-
-    </MudTabs>
+    <BoardsSection Boards=@_boards
+                   ArchivedBoards=@_archivedBoards
+                   CurrentUserId=@_currentUserId
+                   OnCreateBoard=@OpenCreateBoardDialog
+                   OnClick=@NavigateToBoard
+                   OnToggleFavorite=@ToggleFavoriteAsync
+                   OnEdit=@OpenEditBoardDialog
+                   OnArchive=@OpenArchiveConfirmation
+                   OnRestore=@OnRestoreBoard
+                   OnDelete=@OpenDeleteConfirmation />
 
 </MudContainer>

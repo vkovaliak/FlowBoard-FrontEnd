@@ -1,0 +1,64 @@
+<MudPaper Elevation="0"
+          Class="pa-6 mt-6"
+          Style="border: 1px solid #edeff2; 
+                 border-radius: 16px;">
+
+    <MudStack Row=@true
+              AlignItems=@AlignItems.Center
+              Justify=@Justify.SpaceBetween
+              Class="mb-2">
+
+        <MudText Typo=@Typo.h5 
+                 Style="font-weight: 700;">
+            Your Boards
+        </MudText>
+
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   StartIcon=@Icons.Material.Filled.Add
+                   OnClick=@(() => OnCreateBoard.InvokeAsync())
+                   Style="text-transform: none; 
+                          border-radius: 8px;">
+            New Board
+        </MudButton>
+
+    </MudStack>
+
+    <MudTabs Elevation="0"
+             Color=@Color.Transparent
+             Rounded=@false
+             ApplyEffectsToContainer=@true >
+
+        <MudTabPanel Text="All Boards">
+            <BoardsGrid Boards=@Boards
+                        CurrentUserId=@CurrentUserId
+                        EmptyMessage="You don't have any boards yet. 
+                                      Create your first one!"
+                        OnClick=@OnClick
+                        OnToggleFavorite=@OnToggleFavorite
+                        OnEdit=@OnEdit
+                        OnArchive=@OnArchive />
+        </MudTabPanel>
+
+        <MudTabPanel Text="Starred">
+            <BoardsGrid Boards=@StarredBoards
+                        CurrentUserId=@CurrentUserId
+                        EmptyMessage="No starred boards yet. 
+                                      Tap the star on a board to add it here."
+                        OnClick=@OnClick
+                        OnToggleFavorite=@OnToggleFavorite
+                        OnEdit=@OnEdit
+                        OnArchive=@OnArchive />
+        </MudTabPanel>
+
+        <MudTabPanel Text="Archived">
+            <BoardsGrid Boards=@ArchivedBoards
+                        EmptyMessage="No archived boards yet."
+                        IsArchived=@true
+                        OnRestore=@OnRestore
+                        OnDelete=@OnDelete />
+        </MudTabPanel>
+
+    </MudTabs>
+
+</MudPaper>

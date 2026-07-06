@@ -161,4 +161,12 @@ public class BoardService : IBoardService
 
         return OperationResult.Fail(respone.GetErrorMessage());
     }
+
+    public async Task<List<BoardBackgroundDto>> GetBackgroundsAsync()
+    {
+        var response = await _boardApi.GetBackgroundsAsync();
+        
+        return response.IsSuccessStatusCode 
+            && response.Content != null ? response.Content : [];
+    }
 }

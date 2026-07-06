@@ -5,7 +5,7 @@
         <MudText Typo=@Typo.h6>
             @(IsEditMode ? "Edit Board" : "Create New Board")
         </MudText>
-        
+
     </TitleContent>
 
     <DialogContent>
@@ -15,16 +15,15 @@
             <DataAnnotationsValidator />
 
             <MudTextField Label="Board Name"
-                        Variant=@Variant.Outlined
-                        Margin=@Margin.Dense
-                        @bind-Value=@Model.Name 
-                        For=@(() => Model.Name) />
+                          Variant=@Variant.Outlined
+                          Margin=@Margin.Dense
+                          @bind-Value=@Model.Name
+                          For=@(() => Model.Name) />
 
-            <MudRadioGroup T="bool" @bind-Value=@Model.IsPublic 
-                        Class="mt-4 d-flex flex-column">
+            <MudRadioGroup T="bool" @bind-Value=@Model.IsPublic
+                           Class="mt-4 d-flex flex-column">
 
-                <MudRadio Value=@false 
-                        Color=@Color.Primary>
+                <MudRadio Value=@false Color=@Color.Primary>
                     Private
                 </MudRadio>
 
@@ -34,6 +33,62 @@
                 </MudRadio>
 
             </MudRadioGroup>
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="mt-4 mb-2"
+                     Style="font-weight: 500;">
+                Background
+            </MudText>
+
+            @if (_isLoadingBackgrounds)
+            {
+                <MudProgressCircular Size=@Size.Small Indeterminate=@true />
+            }
+            else
+            {
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+
+                    <div @onclick=@(() => SelectBackground(null))
+                         style=@GetTileStyle(IsSelected(null))
+                         title="No background">
+
+                        <div style="width: 100%; height: 100%;
+                                    display: flex; align-items: center;
+                                    justify-content: center;
+                                    background-color: #f4f5f7;
+                                    border-radius: 6px;">
+                            <MudIcon Icon=@Icons.Material.Filled.FormatColorReset
+                                     Size=@Size.Small
+                                     Style="color: #94a3b8;" />
+                        </div>
+
+                        @if (IsSelected(null))
+                        {
+                            <div style=@CheckOverlayStyle>
+                                <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                                         Style="color: white;" />
+                            </div>
+                        }
+                    </div>
+
+                    @foreach (var bg in _backgrounds)
+                    {
+                        <div @onclick=@(() => SelectBackground(bg.Url))
+                             style=@GetTileStyle(IsSelected(bg.Url), bg.Url)
+                             title="Background">
+
+                            @if (IsSelected(bg.Url))
+                            {
+                                <div style=@CheckOverlayStyle>
+                                    <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                                             Style="color: white;" />
+                                </div>
+                            }
+                        </div>
+                    }
+
+                </div>
+            }
 
         </EditForm>
 
@@ -53,3 +108,27 @@
     </DialogActions>
 
 </MudDialog>
+
+@code {
+    private static string GetTileStyle(bool selected, string? imageUrl = null)
+    {
+        var border = selected
+            ? "border: 3px solid #2563eb;"
+            : "border: 2px solid #e2e8f0;";
+
+        var bg = imageUrl is null
+            ? string.Empty
+            : $"background-image: url('{imageUrl}'); " +
+              "background-size: cover; background-position: center;";
+
+        return "position: relative; width: 72px; height: 48px; " +
+               "border-radius: 8px; cursor: pointer; overflow: hidden; " +
+               "transition: border-color 0.15s; " +
+               border + bg;
+    }
+
+    private const string CheckOverlayStyle =
+        "position: absolute; inset: 0; display: flex; " +
+        "align-items: center; justify-content: center; " +
+        "background-color: rgba(0,0,0,0.35);";
+}

@@ -1,6 +1,8 @@
 using FlowBoard.Frontend.Domain.DTOs.Boards;
+using FlowBoard.Frontend.Domain.DTOs.Search;
 using FlowBoard.Frontend.Domain.Enums;
 using FlowBoard.Frontend.Domain.Models.Boards;
+using FlowBoard.Frontend.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -9,11 +11,12 @@ namespace FlowBoard.Frontend.WebApp.Components.Dialogs.InviteBoardDialog;
 public partial class InviteMemberDialog
 {
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
+    [Inject] private ISearchService SearchService { get; set; } = default!;
 
     [Parameter] public List<BoardRole> AvailableRoles { get; set; } = [];
 
-    private readonly InviteMemberModel _model = new();
     private BoardRole _role;
+    private UserSearchDto? _selectedUser;
 
     protected override void OnInitialized()
     {
@@ -24,13 +27,24 @@ public partial class InviteMemberDialog
 
     private void Submit()
     {
-        if (string.IsNullOrWhiteSpace(_model.Email))
+        if (_selectedUser is null)
         {
             return;
         }
 
-        var dto = new InviteMemberDto(_model.Email, _role);
+        var dto = new InviteMemberDto(_selectedUser.EmailAddress, _role);
         MudDialog.Close(DialogResult.Ok(dto));
+    }
+
+    private async Task<IEnumerable<UserSearchDto>> SearchUsersAsync(
+        string value, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return [];
+        }
+
+        return await SearchService.SearchUsersAsync(value);
     }
 
     private void Cancel() => MudDialog.Cancel();
@@ -50,4 +64,6 @@ public partial class InviteMemberDialog
         BoardRole.Viewer => "Can only view the board",
         _ => string.Empty
     };
+
+    private string RoleToString(BoardRole role) => role.ToString();
 }

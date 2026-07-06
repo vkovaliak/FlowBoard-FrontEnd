@@ -412,3 +412,56 @@ body.is-dragging .board-lists-container {
 .tox-collection {
     z-index: 99999 !important;
 }
+
+.board-card {
+    background: #ffffff;
+    border: 1px solid #edeff2;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.board-card-clickable {
+    cursor: pointer;
+}
+
+.board-card-clickable:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.board-card-cover {
+    position: relative;
+    height: 110px;
+    width: 100%;
+}
+
+.board-card-icon {
+    position: absolute;
+    left: 16px;
+    bottom: -16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-card-star {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
+.board-card-body {
+    padding: 24px 16px 16px 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
