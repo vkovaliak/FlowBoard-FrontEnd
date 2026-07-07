@@ -162,8 +162,31 @@ public partial class Home
 
     private async Task OnRestoreBoard(BoardDto board)
     {
-        Snackbar.Add("Restore will be available later", Severity.Info);
-        await Task.CompletedTask;
+        bool? confirm = await DialogService.ShowMessageBoxAsync(
+            "Restore Board",
+            $"Restore '{board.Name}'? It may take a few moments.",
+            yesText: "Restore",
+            cancelText: "Cancel");
+
+        if (confirm != true)
+        {
+            return;
+        }
+
+        var result = await BoardService.RestoreBoardAsync(board.Id);
+
+        if (result.Success)
+        {
+            Snackbar.Add(
+                $"'{board.Name}' is being restored. It will appear shortly.",
+                Severity.Info);
+
+            _archivedBoards = await BoardService.GetArchivedBoardsAsync();
+        }
+        else
+        {
+            Snackbar.Add(result.Error ?? "Failed to restore", Severity.Error);
+        }
     }
 
     private async Task OpenArchiveConfirmation(BoardDto board)

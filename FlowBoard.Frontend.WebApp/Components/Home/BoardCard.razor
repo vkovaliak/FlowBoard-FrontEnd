@@ -77,8 +77,7 @@
 
                         @if (IsArchived)
                         {
-                            <MudMenuItem Icon=@Icons.Material.Filled.Unarchive
-                                        Disabled=@true
+                            <MudMenuItem Icon=@Icons.Material.Outlined.Unarchive
                                         OnClick=@(() => OnRestore.InvokeAsync(Board))>
                                 Restore
                             </MudMenuItem>

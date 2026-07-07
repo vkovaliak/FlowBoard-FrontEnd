@@ -22,13 +22,10 @@
     }
     else
     {
-        @if (_dueToday.Count > 0)
-        {
-            <MyTasksStats DueTodayCount=@_dueToday.Count
-                        OverdueCount=@_overdue.Count
-                        ThisWeekCount=@_thisWeekCount
-                        CompletedCount=@_completedCount />
-        }
+        <MyTasksStats DueTodayCount=@_dueToday.Count
+                    OverdueCount=@_overdue.Count
+                    ThisWeekCount=@_thisWeekCount
+                    CompletedCount=@_completedCount />
 
         <MudPaper Class="pa-6 mt-4 rounded-lg" 
                   Elevation="1">

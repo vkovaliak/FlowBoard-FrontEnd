@@ -124,14 +124,26 @@ public class BoardService : IBoardService
 
     public async Task<OperationResult> ArchiveBoardAsync(Guid boardId)
     {
-        var respone = await _boardApi.ArchiveBoardAsync(boardId);
+        var response = await _boardApi.ArchiveBoardAsync(boardId);
 
-        if (respone.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
             return OperationResult.Ok();
         }
 
-        return OperationResult.Fail(respone.GetErrorMessage());
+        return OperationResult.Fail(response.GetErrorMessage());
+    }
+
+    public async Task<OperationResult> RestoreBoardAsync(Guid boardId)
+    {
+        var response = await _boardApi.RestoreBoardAsync(boardId);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
     }
 
     public async Task<OperationResult> TransferOwnershipAsync(
