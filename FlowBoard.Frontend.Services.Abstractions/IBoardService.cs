@@ -16,6 +16,7 @@ public interface IBoardService
     Task<OperationResult> LeaveBoardAsync(Guid boardId);
     Task<OperationResult> ToggleFavoriteAsync(Guid boardId);
     Task<OperationResult> ArchiveBoardAsync(Guid boardId);
+    Task<OperationResult> RestoreBoardAsync(Guid boardId);
     
     Task<OperationResult> TransferOwnershipAsync(
         Guid boardId, TransferOwnershipDto dto);
