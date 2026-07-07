@@ -14,6 +14,8 @@ public partial class BoardHeader
     [Parameter] public Guid CreatedBy { get; set; }
     [Parameter] public Guid CurrentUserId { get; set; }
     [Parameter] public BoardRole CurrentUserRole { get; set; }
+    [Parameter] public BoardViewTab ActiveTab { get; set; }
+    [Parameter] public EventCallback<BoardViewTab> OnTabChanged { get; set; }
     [Parameter] public EventCallback OnMembersChanged { get; set; }
     [Parameter] public bool IsFavorite { get; set; }
     [Parameter] public EventCallback OnToggleFavorite { get; set; }
