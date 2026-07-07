@@ -6,6 +6,7 @@ using MudBlazor;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
+using FlowBoard.Frontend.Services.Handlers;
 
 namespace FlowBoard.Frontend.WebApp.Layout;
 
@@ -15,6 +16,7 @@ public partial class MainLayout : IDisposable
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public IUserService UserService { get; set; } = default!;
     [Inject] public UserState UserState { get; set; } = default!;
+    [Inject] private UpgradeHandler UpgradeHandler { get; set; } = default!;
 
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public IBoardService BoardService { get; set; } = default!;
@@ -29,6 +31,7 @@ public partial class MainLayout : IDisposable
     {
         UserState.OnChanged += HandleUserChanged;
         _currentUser = await UserService.GetMeAsync();
+        await UserState.EnsureLoadedAsync();
     }
 
     private bool _drawerOpen = true;
@@ -40,6 +43,7 @@ public partial class MainLayout : IDisposable
 
     private async Task HandleLogoutAsync()
     {
+        UserState.Clear();
         await AuthService.LogoutAsync();
         NavigationManager.NavigateTo("/login");
     }
@@ -109,4 +113,7 @@ public partial class MainLayout : IDisposable
     {
         _isChatOpen = !_isChatOpen;
     }
+
+    private async Task Upgrade() 
+        => await UpgradeHandler.StartUpgradeAsync();
 }

@@ -34,50 +34,39 @@
 
             </MudRadioGroup>
 
-            <MudText Typo=@Typo.subtitle2 
-                     Class="mt-4 mb-2"
-                     Style="font-weight: 500;">
-                Background
-            </MudText>
-
-            @if (_isLoadingBackgrounds)
+            @if (CanUseBackground)
             {
-                <MudProgressCircular Size=@Size.Small Indeterminate=@true />
-            }
-            else
-            {
-                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <MudText Typo=@Typo.subtitle2 
+                        Class="mt-4 mb-2"
+                        Style="font-weight: 500;">
+                    Background
+                </MudText>
 
-                    <div @onclick=@(() => SelectBackground(null))
-                         style=@GetTileStyle(IsSelected(null))
-                         title="No background">
+                @if (_isLoadingBackgrounds)
+                {
+                    <MudProgressCircular Size=@Size.Small 
+                                         Indeterminate=@true />
+                }
+                else
+                {
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
 
-                        <div style="width: 100%; height: 100%;
-                                    display: flex; align-items: center;
-                                    justify-content: center;
-                                    background-color: #f4f5f7;
-                                    border-radius: 6px;">
-                            <MudIcon Icon=@Icons.Material.Filled.FormatColorReset
-                                     Size=@Size.Small
-                                     Style="color: #94a3b8;" />
-                        </div>
+                        <div @onclick=@(() => SelectBackground(null))
+                            style=@GetTileStyle(IsSelected(null))
+                            title="No background">
 
-                        @if (IsSelected(null))
-                        {
-                            <div style=@CheckOverlayStyle>
-                                <MudIcon Icon=@Icons.Material.Filled.CheckCircle
-                                         Style="color: white;" />
+                            <div style="width: 100%; height: 100%;
+                                        display: flex; align-items: center;
+                                        justify-content: center;
+                                        background-color: #f4f5f7;
+                                        border-radius: 6px;">
+
+                                <MudIcon Icon=@Icons.Material.Filled.FormatColorReset
+                                        Size=@Size.Small
+                                        Style="color: #94a3b8;" />
                             </div>
-                        }
-                    </div>
 
-                    @foreach (var bg in _backgrounds)
-                    {
-                        <div @onclick=@(() => SelectBackground(bg.Url))
-                             style=@GetTileStyle(IsSelected(bg.Url), bg.Url)
-                             title="Background">
-
-                            @if (IsSelected(bg.Url))
+                            @if (IsSelected(null))
                             {
                                 <div style=@CheckOverlayStyle>
                                     <MudIcon Icon=@Icons.Material.Filled.CheckCircle
@@ -85,9 +74,25 @@
                                 </div>
                             }
                         </div>
-                    }
 
-                </div>
+                        @foreach (var bg in _backgrounds)
+                        {
+                            <div @onclick=@(() => SelectBackground(bg.Url))
+                                style=@GetTileStyle(IsSelected(bg.Url), bg.Url)
+                                title="Background">
+
+                                @if (IsSelected(bg.Url))
+                                {
+                                    <div style=@CheckOverlayStyle>
+                                        <MudIcon Icon=@Icons.Material.Filled.CheckCircle
+                                                Style="color: white;" />
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                    </div>
+                }
             }
 
         </EditForm>

@@ -344,6 +344,10 @@ body.is-dragging .board-lists-container {
     color: #F87171;
 }
 
+.item.warning {
+    color: #f2c41f;
+}
+
 .backdrop {
     position: fixed;
     inset: 0;
@@ -464,4 +468,17 @@ body.is-dragging .board-lists-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+}
+
+html body .mud-main-content:has(.flowboard-details-page) {
+    padding-top: 64px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+html body .mud-main-content:has(.flowboard-details-page) .mud-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
 }

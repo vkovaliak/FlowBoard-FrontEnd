@@ -1,0 +1,52 @@
+<MudPaper Class="pa-4 ma-2" 
+          Elevation="0"
+          Style="background: linear-gradient(135deg, #2d3561, #1e2142);
+                 border-radius: 12px; 
+                 border: 1px solid #ffffff14;">
+
+    <MudStack Spacing="2">
+
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center
+                  Spacing="2">
+
+            <MudIcon Icon=@Icons.Material.Filled.WorkspacePremium
+                     Style="color: #FFB800;" 
+                     Size=@Size.Large />
+
+            <MudText Typo=@Typo.subtitle1 
+                     Style="color: white; font-weight: 600;">
+                Upgrade to Pro
+            </MudText>
+
+        </MudStack>
+
+        <MudText Typo=@Typo.subtitle2
+                 Style="color: #9096c7; line-height: 1.6;">
+            Get unlimited boards, ai chat and more integrations.
+        </MudText>
+
+        <MudButton Variant=@Variant.Filled
+                   Color=@Color.Primary
+                   FullWidth=@true
+                   Size=@Size.Medium
+                   OnClick=@Upgrade
+                   Disabled=@_loading
+                   Class="mt-3">
+                   
+            @if (_loading)
+            {
+                <MudProgressCircular Size=@Size.Small 
+                                     Indeterminate=@true 
+                                     Class="me-2" />
+                <text>Redirecting...</text>
+            }
+            else
+            {
+                <text>Upgrade Now</text>
+            }
+        </MudButton>
+
+    </MudStack>
+    
+</MudPaper>

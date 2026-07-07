@@ -12,7 +12,8 @@ else if (_board == null)
 }
 else
 {
-    <div style="width: 100%; 
+    <div class="flowboard-details-page" 
+         style="width: 100%; 
                 height: calc(100vh - 64px); 
                 display: flex; 
                 flex-direction: column; 
@@ -31,9 +32,9 @@ else
                      OnMembersChanged=@HandleMembersChangedAsync />
 
         <MudPaper Elevation="0" 
-                  Style=@($"flex-grow: 1; width: 100%;" +
+                  Style=@("flex-grow: 1; width: 100%;" +
                         " border-radius:0px; overflow: hidden;" +
-                        " position: relative; {PaperBackgroundStyle}")>
+                        $"position: relative; {PaperBackgroundStyle}")>
             
             <div class="board-scroll-wrapper" 
                  style="padding: 35px 25px; height: 100%; 

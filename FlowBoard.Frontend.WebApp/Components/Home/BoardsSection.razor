@@ -3,26 +3,50 @@
           Style="border: 1px solid #edeff2; 
                  border-radius: 16px;">
 
-    <MudStack Row=@true
-              AlignItems=@AlignItems.Center
-              Justify=@Justify.SpaceBetween
-              Class="mb-2">
+    <div class="d-flex align-center 
+                justify-space-between mb-2">
 
         <MudText Typo=@Typo.h5 
                  Style="font-weight: 700;">
             Your Boards
         </MudText>
 
-        <MudButton Variant=@Variant.Filled
-                   Color=@Color.Primary
-                   StartIcon=@Icons.Material.Filled.Add
-                   OnClick=@(() => OnCreateBoard.InvokeAsync())
-                   Style="text-transform: none; 
-                          border-radius: 8px;">
-            New Board
-        </MudButton>
+        <div class="d-flex align-center gap-8">
 
-    </MudStack>
+            @if (!UserState.IsPro)
+            {
+                <MudText Typo=@Typo.subtitle1 
+                         Color=@Color.Secondary 
+                         Class="mb-2">
+                    <b>@OwnedBoardsCount</b> / @FreeMaxBoards boards used
+                </MudText>
+            }
+
+            @if (CanCreateBoard)
+            {
+                <MudButton Variant=@Variant.Filled
+                        Color=@Color.Primary
+                        StartIcon=@Icons.Material.Filled.Add
+                        OnClick=@(() => OnCreateBoard.InvokeAsync())
+                        Style="text-transform: none; 
+                               border-radius: 8px;">
+                    Create Board
+                </MudButton>
+            }
+            else
+            {
+                <MudButton Variant=@Variant.Filled
+                        Color=@Color.Warning
+                        StartIcon=@Icons.Material.Filled.WorkspacePremium
+                        OnClick=@Upgrade
+                        Style="text-transform: none; 
+                            border-radius: 8px;">
+                    Upgrade to Pro
+                </MudButton>
+            }
+        </div>
+    </div>
+
 
     <MudTabs Elevation="0"
              Color=@Color.Transparent

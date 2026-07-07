@@ -3,6 +3,7 @@ using FlowBoard.Frontend.Domain.DTOs.Search;
 using FlowBoard.Frontend.Domain.Enums;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Handlers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -12,11 +13,19 @@ public partial class InviteMemberDialog
 {
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
     [Inject] private ISearchService SearchService { get; set; } = default!;
+    [Inject] private UpgradeHandler UpgradeHandler { get; set; } = default!;
 
     [Parameter] public List<BoardRole> AvailableRoles { get; set; } = [];
+    [Parameter] public int CurrentMembersCount { get; set; }
+    [Parameter] public bool IsOwnerPro { get; set; }
+
+    private const int FreeMaxMembers = 5;
 
     private BoardRole _role;
     private UserSearchDto? _selectedUser;
+
+    private bool LimitReached =>
+        !IsOwnerPro && CurrentMembersCount >= FreeMaxMembers;
 
     protected override void OnInitialized()
     {
@@ -27,7 +36,7 @@ public partial class InviteMemberDialog
 
     private void Submit()
     {
-        if (_selectedUser is null)
+        if (LimitReached || _selectedUser is null)
         {
             return;
         }
@@ -35,6 +44,9 @@ public partial class InviteMemberDialog
         var dto = new InviteMemberDto(_selectedUser.EmailAddress, _role);
         MudDialog.Close(DialogResult.Ok(dto));
     }
+
+    private async Task Upgrade()
+        => await UpgradeHandler.StartUpgradeAsync();
 
     private async Task<IEnumerable<UserSearchDto>> SearchUsersAsync(
         string value, CancellationToken cancellationToken)
