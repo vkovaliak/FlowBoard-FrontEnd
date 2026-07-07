@@ -1,6 +1,8 @@
 @page "/boards/{Id:guid}"
 @namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
 @using FlowBoard.Frontend.Domain.Authorization
+@using FlowBoard.Frontend.Domain.Enums;
+@using FlowBoard.Frontend.WebApp.Components.BoardDetails.Table;
 
 @if (_isNotFound)
 {
@@ -27,59 +29,69 @@ else
                      CreatedBy=@_board.CreatedBy
                      CurrentUserId=@_currentUserId
                      CurrentUserRole=@_board.UserRole
+                     ActiveTab=@_activeTab
+                     OnTabChanged=@HandleTabChanged
                      OnInviteClick=@OpenInviteDialogAsync
                      OnToggleFavorite=@ToggleFavoriteAsync
                      OnMembersChanged=@HandleMembersChangedAsync />
 
-        <MudPaper Elevation="0" 
-                  Style=@("flex-grow: 1; width: 100%;" +
-                        " border-radius:0px; overflow: hidden;" +
-                        $"position: relative; {PaperBackgroundStyle}")>
-            
-            <div class="board-scroll-wrapper" 
-                 style="padding: 35px 25px; height: 100%; 
-                        overflow-x: auto; overflow-y: hidden;">
+        @if (_activeTab == BoardViewTab.Board)
+        {
+            <MudPaper Elevation="0" 
+                      Style=@("flex-grow: 1; width: 100%;" +
+                            " border-radius:0px; overflow: hidden;" +
+                            $"position: relative; {PaperBackgroundStyle}")>
 
-                @{
-                    var canEdit = BoardPermissions.CanModifyContent(
-                        _board.UserRole);
-                }
+                <div class="board-scroll-wrapper" 
+                     style="padding: 35px 25px; height: 100%; 
+                            overflow-x: auto; overflow-y: hidden;">
 
-                <div class="d-flex flex-row flex-nowrap board-lists-container" 
-                     style="gap: 24px; height: 100%; align-items: flex-start;">
-                    
-                    @foreach (var list in _board.Lists.OrderBy(l => l.Position))
-                    {
-                        <div class="list-draggable-item" 
-                            data-list-id="@list.Id" 
-                            style="width: 320px; min-width: 280px; 
-                                    height: max-content; 
-                                    display: flex;">      
-
-                            <TaskList List=@list
-                                      BoardId=@_board.Id
-                                      AllLists=@_board.Lists
-                                      BoardMembers=@_board.Members
-                                      CanEdit=@canEdit
-                                      OnRenameList=@HandleRenameListAsync
-                                      OnDeleteList=@HandleDeleteListAsync
-                                      OnCreateCard=@HandleCreateCardAsync
-                                      OnUpdateCard=@HandleUpdateCardAsync
-                                      OnDeleteCard=@HandleDeleteCardAsync
-                                      OnToggleCardComplete=@HandleToggleCardCompleteAsync />
-                        </div>
+                    @{
+                        var canEdit = BoardPermissions.CanModifyContent(
+                            _board.UserRole);
                     }
 
-                    @if (canEdit)
-                    {
-                        <div class="flex-shrink-0" style="width: 260px;">
-                            <CreateListButtons BoardId=@_board.Id 
-                                               OnListCreate=@CreateListAsync />
-                        </div>
-                    }
+                    <div class="d-flex flex-row flex-nowrap board-lists-container" 
+                         style="gap: 24px; height: 100%; align-items: flex-start;">
+
+                        @foreach (var list in _board.Lists.OrderBy(l => l.Position))
+                        {
+                            <div class="list-draggable-item" 
+                                data-list-id="@list.Id" 
+                                style="width: 320px; min-width: 280px; 
+                                        height: max-content; 
+                                        display: flex;">      
+
+                                <TaskList List=@list
+                                          BoardId=@_board.Id
+                                          AllLists=@_board.Lists
+                                          BoardMembers=@_board.Members
+                                          CanEdit=@canEdit
+                                          OnRenameList=@HandleRenameListAsync
+                                          OnDeleteList=@HandleDeleteListAsync
+                                          OnCreateCard=@HandleCreateCardAsync
+                                          OnUpdateCard=@HandleUpdateCardAsync
+                                          OnDeleteCard=@HandleDeleteCardAsync
+                                          OnToggleCardComplete=@HandleToggleCardCompleteAsync />
+                            </div>
+                        }
+
+                        @if (canEdit)
+                        {
+                            <div class="flex-shrink-0" style="width: 260px;">
+                                <CreateListButtons BoardId=@_board.Id 
+                                                   OnListCreate=@CreateListAsync />
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-            
-        </MudPaper>
+
+            </MudPaper>
+        }
+        else
+        {
+            <BoardTable Board=@_board
+                        OnCardUpdated=@HandleTableCardUpdatedAsync />
+        }
     </div>
 }

@@ -7,6 +7,7 @@ using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Providers;
 using FlowBoard.Frontend.Services.State;
 using FlowBoard.Frontend.Domain.Authorization;
+using FlowBoard.Frontend.Domain.Enums;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -32,6 +33,7 @@ public partial class BoardDetails : IAsyncDisposable
     private bool _isNotFound = false;
     private Guid _currentUserId;
     private Guid _loadedBoardId;
+    private BoardViewTab _activeTab = BoardViewTab.Board;
 
 
     private DotNetObjectReference<BoardDetails>? _objRef;
@@ -74,10 +76,11 @@ public partial class BoardDetails : IAsyncDisposable
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_board != null && _objRef is null
+        if (_board != null 
+            && _activeTab == BoardViewTab.Board
             && BoardPermissions.CanModifyContent(_board.UserRole))
         {
-            _objRef = DotNetObjectReference.Create(this);
+            _objRef ??= DotNetObjectReference.Create(this);
             await JsRuntime.InvokeVoidAsync("initKanbanSortable", _objRef);
         }
     }
@@ -163,5 +166,11 @@ public partial class BoardDetails : IAsyncDisposable
             return $"background-image: url('{_board.Background}');" + 
                    "background-size: 100% 100%; background-position: center;";
         }
+    }
+
+    private void HandleTabChanged(BoardViewTab tab)
+    {
+        _activeTab = tab;
+        StateHasChanged();
     }
 }

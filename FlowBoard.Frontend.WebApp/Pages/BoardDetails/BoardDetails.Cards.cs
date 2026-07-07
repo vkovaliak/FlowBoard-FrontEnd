@@ -31,6 +31,17 @@ public partial class BoardDetails
             result.Error ?? "Failed");
     }
 
+    private async Task HandleTableCardUpdatedAsync(
+        (Guid ListId, Guid CardId, UpdateCardDto Dto) args)
+    {
+        var result = await CardService.UpdateAsync(
+            Id, args.ListId, args.CardId, args.Dto);
+
+        ShowResult(result.Success,
+            "Card updated successfully!",
+            result.Error ?? "Failed");
+    }
+
     private async Task HandleDeleteCardAsync(
         (Guid ListId, Guid CardId, string CardName) args)
     {

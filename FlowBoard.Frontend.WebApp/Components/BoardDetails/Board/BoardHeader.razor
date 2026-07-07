@@ -1,8 +1,12 @@
-<MudStack Row=@true 
-            AlignItems=@AlignItems.Center
-            Style="padding: 28px;">
+@using FlowBoard.Frontend.Domain.Enums
 
-    <MudStack Row=@true AlignItems=@AlignItems.Center Spacing="1">
+<MudStack Spacing="0" 
+          Style="padding: 20px;">
+
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center 
+              Spacing="2" 
+              Class="mb-3">
 
         <MudLink Href="/"
                  Typo=@Typo.h6
@@ -12,11 +16,13 @@
             Boards
         </MudLink>
 
-        <MudText Typo=@Typo.h6 Style="color: #CBD5E1; font-weight: 400;">
+        <MudText Typo=@Typo.h6 
+                 Style="color: #CBD5E1; font-weight: 400;">
             /
         </MudText>
 
-        <MudText Typo=@Typo.h6 Style="font-weight: 700; color: #1E293B;">
+        <MudText Typo=@Typo.h6 
+                 Style="font-weight: 700; color: #1E293B;">
             @BoardName
         </MudText>
 
@@ -26,38 +32,64 @@
                        Color=@(IsFavorite ? Color.Warning : Color.Default)
                        Size=@Size.Small
                        OnClick=@(() => OnToggleFavorite.InvokeAsync()) />
-        
+
+        <MudChip T=@string
+                 Color=@(IsPublic ? Color.Primary : Color.Tertiary)
+                 Size=@Size.Small 
+                 Class="ml-2">
+            @(IsPublic ? "Public" : "Private")
+        </MudChip>
+
     </MudStack>
-    
-    <MudChip T=@string
-                Color=@(IsPublic ? Color.Primary : Color.Tertiary)
-                Size=@Size.Small 
-                Class="ml-2">
-        @(IsPublic ? "Public" : "Private")
-    </MudChip>
 
-    <MudSpacer />
+    <MudStack Row=@true 
+              AlignItems=@AlignItems.Center>
 
-    <BoardMembers Members=@Members
-                  BoardId=@BoardId
-                  CreatedBy=@CreatedBy
-                  CurrentUserId=@CurrentUserId
-                  CurrentUserRole=@CurrentUserRole
-                  OnMembersChanged=@OnMembersChanged />
+        <div class="board-view-tabs">
 
-    @if (CanInvite)
-    {
-        <MudButton Variant=@Variant.Outlined
-                Color=@Color.Default
-                Size=@Size.Large
-                StartIcon=@Icons.Material.Outlined.PersonAddAlt
-                Style="text-transform: none;
-                       border: 2px solid #e7dbdbde; 
-                       border-radius: 5px; 
-                       background: #e5e0e03b"
-                OnClick=@(() => OnInviteClick.InvokeAsync())>
-            Invite
-        </MudButton>
-    }
+            <button class="board-tab 
+                    @(ActiveTab == BoardViewTab.Board ? "board-tab-active" : "")"
+                    @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Board))>
+
+                <MudIcon Icon=@Icons.Material.Outlined.ViewKanban
+                         Size=@Size.Small Class="mr-1" />
+                Board
+            </button>
+
+            <button class="board-tab 
+                    @(ActiveTab == BoardViewTab.Table ? "board-tab-active" : "")"
+                    @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Table))>
+                <MudIcon Icon=@Icons.Material.Outlined.TableChart
+                         Size=@Size.Small Class="mr-1" />
+                Table
+            </button>
+            
+        </div>
+
+        <MudSpacer />
+
+        <BoardMembers Members=@Members
+                      BoardId=@BoardId
+                      CreatedBy=@CreatedBy
+                      CurrentUserId=@CurrentUserId
+                      CurrentUserRole=@CurrentUserRole
+                      OnMembersChanged=@OnMembersChanged />
+
+        @if (CanInvite)
+        {
+            <MudButton Variant=@Variant.Outlined
+                       Color=@Color.Default
+                       Size=@Size.Large
+                       StartIcon=@Icons.Material.Outlined.PersonAddAlt
+                       Class="ml-3"
+                       Style="text-transform: none;
+                              border: 2px solid #e7dbdbde;
+                              border-radius: 5px;
+                              background: #e5e0e03b"
+                       OnClick=@(() => OnInviteClick.InvokeAsync())>
+                Invite
+            </MudButton>
+        }
+    </MudStack>
 
 </MudStack>
