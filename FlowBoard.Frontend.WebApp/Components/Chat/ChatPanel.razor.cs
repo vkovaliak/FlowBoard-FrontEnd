@@ -21,6 +21,11 @@ public partial class ChatPanel
     private bool _isLoading;
     private bool _shouldScroll;
 
+    private async Task OnDrawerOpenChanged(bool value)
+    {
+        IsOpen = value;
+        await IsOpenChanged.InvokeAsync(value);
+    }
 
     private async Task Close()
     {

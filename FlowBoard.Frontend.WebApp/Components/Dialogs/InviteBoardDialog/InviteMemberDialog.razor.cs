@@ -72,7 +72,7 @@ public partial class InviteMemberDialog
     private static string GetRoleDescription(BoardRole role) => role switch
     {
         BoardRole.Admin => "Can manage members and edit the board",
-        BoardRole.Member => "Can view and edit the board",
+        BoardRole.Member => "Can view and edit the board content",
         BoardRole.Viewer => "Can only view the board",
         _ => string.Empty
     };

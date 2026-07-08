@@ -46,9 +46,18 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 
     private async Task<Guid?> CreateCommentAsync(string message)
     {
-        var createdCommentId = await CommentService.CreateAsync(
+        var result = await CommentService.CreateAsync(
             BoardId, CardId, new CreateCommentDto(message));
-        return createdCommentId.Value;
+
+        if (!result.Success)
+        {
+            Snackbar.Add(
+                result.Error ?? "Failed to create comment", Severity.Error);
+                
+            return null;
+        }
+
+        return result.Value;
     }
 
     private async Task UpdateCommentAsync((Guid Id, string Message) args)
@@ -86,8 +95,14 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
 
     private async Task DeleteCommentAttachmentAsync(Guid attachmentId)
     {
-        await AttachmentService.DeleteCommentAttachmentAsync(
+        var result = await AttachmentService.DeleteCommentAttachmentAsync(
             BoardId, CardId, attachmentId);
 
+        if (!result.Success)
+        {
+            Snackbar.Add($"Deleted failed: {result.Error}", Severity.Error);
+        }
+
+        Snackbar.Add("Attachmnet is deleted", Severity.Success);
     }
 }
