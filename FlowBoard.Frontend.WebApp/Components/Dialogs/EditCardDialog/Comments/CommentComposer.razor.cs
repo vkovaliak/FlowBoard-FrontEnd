@@ -32,17 +32,30 @@ public partial class CommentComposer
         }
 
         _isSubmitting = true;
+        StateHasChanged();
 
-        var commentId = await OnCreateComment(_message);
-
-        if (commentId is not null && _uploader.HasPendingFiles)
+        try
         {
-            await _uploader.UploadAllAsync(
-                file => UploadToCommentAsync(commentId.Value, file));
-        }
+            var commentId = await OnCreateComment(_message);
 
-        _isSubmitting = false;
-        Cancel();
+            if (commentId is null)
+            {
+                return;
+            }
+
+            if (_uploader.HasPendingFiles)
+            {
+                await _uploader.UploadAllAsync(
+                    file => UploadToCommentAsync(commentId.Value, file));
+            }
+
+            Cancel();
+        }
+        finally
+        {
+            _isSubmitting = false;
+            StateHasChanged();
+        }        
     }
 
     private async Task UploadToCommentAsync(Guid commentId, IBrowserFile file)

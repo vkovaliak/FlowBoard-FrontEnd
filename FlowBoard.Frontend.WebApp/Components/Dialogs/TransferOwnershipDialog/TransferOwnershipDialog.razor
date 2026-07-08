@@ -18,41 +18,45 @@
 
         <div style="max-height: 300px; overflow-y: auto;">
 
-            @foreach (var member in Candidates)
-            {
-                <div class="d-flex align-center px-2 py-2"
-                     style="gap: 12px; cursor: pointer; border-radius: 6px;
-                            background-color: @(IsSelected(member.UserId)
-                                ? "#EFF6FF" : "transparent");"
-                     @onclick=@(() => Select(member.UserId))>
+            <MudRadioGroup T=@Guid
+                           Value=@_selectedId
+                           ValueChanged=@Select>
 
-                    <MudRadio T=@Guid
-                              Value=@member.UserId
-                              @bind-Checked:get=@_selectedId
-                              @bind-Checked:set=@(_ => Select(member.UserId))
-                              Color=@Color.Primary
-                              Dense=@true />
+                @foreach (var member in Candidates)
+                {
+                    <div class="d-flex align-center px-2 py-2"
+                        style="gap: 12px; cursor: pointer; border-radius: 6px;
+                                background-color: @(IsSelected(member.UserId)
+                                    ? "#EFF6FF" : "transparent");"
+                        @onclick=@(() => Select(member.UserId))>
 
-                    <UserAvatar UserName=@member.UserName
-                                AvatarUrl=@member.AvatarUrl
-                                Size=@Size.Medium />
+                        <MudRadio T=@Guid
+                                Value=@member.UserId
+                                Color=@Color.Primary
+                                Dense=@true />
 
-                    <div style="min-width: 0;">
+                        <UserAvatar UserName=@member.UserName
+                                    AvatarUrl=@member.AvatarUrl
+                                    Size=@Size.Medium />
 
-                        <MudText Typo=@Typo.body2 
-                                 Class="font-weight-bold">
-                            @member.UserName
-                        </MudText>
+                        <div style="min-width: 280px;">
 
-                        <MudText Typo=@Typo.caption 
-                                 Color=@Color.Secondary>
-                            @member.EmailAddress
-                        </MudText>
-                        
+                            <MudText Typo=@Typo.body2 
+                                    Class="font-weight-bold">
+                                @member.UserName
+                            </MudText>
+
+                            <MudText Typo=@Typo.caption 
+                                    Color=@Color.Secondary>
+                                @member.EmailAddress
+                            </MudText>
+                            
+                        </div>
+
                     </div>
+                }
 
-                </div>
-            }
+            </MudRadioGroup>
 
         </div>
 

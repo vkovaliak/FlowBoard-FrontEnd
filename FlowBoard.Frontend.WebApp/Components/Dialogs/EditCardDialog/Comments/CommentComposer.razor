@@ -16,14 +16,14 @@
                       Immediate=@true />
     }
 
-    <MudStack Row=@true
-              Justify=@Justify.SpaceBetween
-              AlignItems=@AlignItems.Center>
-        
-        <AttachmentUploader @ref=@_uploader />
-        
+    <AttachmentUploader @ref=@_uploader />
 
-        <MudStack Row=@true Spacing="1">
+    <MudStack Row=@true
+              Justify=@Justify.FlexEnd
+              AlignItems=@AlignItems.Center >
+                
+
+        <MudStack Row=@true Spacing="3">
 
             @if (!_useRichEditor)
             {
