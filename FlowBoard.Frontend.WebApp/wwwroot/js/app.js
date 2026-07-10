@@ -77,3 +77,7 @@ function undoDrop(evt) {
     delete item._nextSibling;
     delete item._parent;
 }
+
+window.openInNewTab = (url) => {
+    window.open(url, "_blank");
+};

@@ -65,6 +65,9 @@ public static class ServiceCollectionExtensions
                 client.BaseAddress = new Uri(apiOptions.BaseUrl);
             });
 
+        services.Configure<MeetingOptions>(
+            configuration.GetSection(MeetingOptions.SectionName));
+
         void AddAuthenticatedRefitClient<T>() where T : class
         {
             services.AddRefitClient<T>()
