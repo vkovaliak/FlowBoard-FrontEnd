@@ -8,6 +8,8 @@ using FlowBoard.Frontend.Services.Providers;
 using FlowBoard.Frontend.Services.State;
 using FlowBoard.Frontend.Domain.Authorization;
 using FlowBoard.Frontend.Domain.Enums;
+using Microsoft.Extensions.Options;
+using FlowBoard.Frontend.Services.Configurations;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -19,6 +21,7 @@ public partial class BoardDetails : IAsyncDisposable
 
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
+    [Inject] public IOptions<MeetingOptions> MeetingOptions { get; set; } = default!;
 
     [Inject] public IBoardService BoardService { get; set; } = default!;
     [Inject] public ICardService CardService { get; set; } = default!;
@@ -176,6 +179,6 @@ public partial class BoardDetails : IAsyncDisposable
 
     private void OpenMeeting()
     {
-        JsRuntime.InvokeVoidAsync("openInNewTab", "http://localhost:5155/");
+        JsRuntime.InvokeVoidAsync("openInNewTab", MeetingOptions.Value.Url);
     }
 }
