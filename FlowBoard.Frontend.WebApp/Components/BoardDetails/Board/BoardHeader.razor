@@ -90,6 +90,21 @@
                 Invite
             </MudButton>
         }
+
+        <div @onclick:stopPropagation="true">
+        <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                Size=@Size.Medium
+                Dense=@true
+                AnchorOrigin=@Origin.BottomRight
+                TransformOrigin=@Origin.TopRight>
+
+            <MudMenuItem Icon=@Icons.Material.Outlined.Group
+                        OnClick=@OnMeetClick>
+                Meeting
+            </MudMenuItem>
+
+        </MudMenu>
+    </div>
     </MudStack>
 
 </MudStack>

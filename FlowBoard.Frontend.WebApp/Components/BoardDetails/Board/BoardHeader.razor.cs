@@ -20,6 +20,7 @@ public partial class BoardHeader
     [Parameter] public bool IsFavorite { get; set; }
     [Parameter] public EventCallback OnToggleFavorite { get; set; }
     [Parameter] public EventCallback OnInviteClick { get; set; }
+    [Parameter] public EventCallback OnMeetClick { get; set; }
 
     private bool CanInvite 
         => BoardPermissions.CanInviteMembers(CurrentUserRole);

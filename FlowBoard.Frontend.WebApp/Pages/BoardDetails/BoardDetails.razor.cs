@@ -173,4 +173,9 @@ public partial class BoardDetails : IAsyncDisposable
         _activeTab = tab;
         StateHasChanged();
     }
+
+    private void OpenMeeting()
+    {
+        JsRuntime.InvokeVoidAsync("openInNewTab", "http://localhost:5155/");
+    }
 }
