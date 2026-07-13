@@ -1,5 +1,6 @@
 using FlowBoard.Frontend.Domain.DTOs.Users;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.Handlers;
 using FlowBoard.Frontend.Services.State;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -7,11 +8,14 @@ using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Pages.Account;
 
-public partial class Account
+public partial class Account : IDisposable
 {
     [Inject] private IUserService UserService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private UserState UserState { get; set; } = default!;
+    [Inject] private UpgradeHandler UpgradeHandler { get; set; } = default!;
+    [Inject] private ISubscriptionService SubscriptionService { get; set; } = default!;
+    [Inject] private IDialogService DialogService { get; set; } = default!;
 
     private UserDto? _user;
     private string _userNameInput = string.Empty;
@@ -25,6 +29,9 @@ public partial class Account
     private bool _showNew;
     private bool _changingPassword;
     private bool _showPasswordForm;
+    private bool _cancelling; 
+
+    private bool IsPro => UserState.IsPro; 
 
     private bool IsUserNameUnchanged
         => string.IsNullOrWhiteSpace(_userNameInput)
@@ -41,6 +48,9 @@ public partial class Account
     {
         _loading = true;
 
+        await UserState.EnsureLoadedAsync();
+        UserState.OnChanged += OnStateChanged; 
+
         _user = await UserService.GetMeAsync();
         if (_user is not null)
         {
@@ -48,6 +58,40 @@ public partial class Account
         }
 
         _loading = false;
+    }
+
+    private async void OnStateChanged()
+        => await InvokeAsync(StateHasChanged);
+
+    private async Task StartUpgradeAsync()
+        => await UpgradeHandler.StartUpgradeAsync();
+    
+    private async Task CancelSubscriptionAsync()
+    {
+        bool? confirm = await DialogService.ShowMessageBoxAsync(
+            "Cancel Subscription",
+            "Are you sure? You'll lose access to Pro features immediately.",
+            yesText: "Cancel Subscription",
+            cancelText: "Keep Pro");
+
+        if (confirm != true)
+        {
+            return;
+        }
+
+        _cancelling = true;
+        var result = await SubscriptionService.CancelSubscriptionAsync();
+        _cancelling = false;
+
+        if (!result.Success)
+        {
+            Snackbar.Add(
+                result.Error ?? "Failed to cancel subscription", Severity.Error);
+            return;
+        }
+
+        await UserState.LoadAsync();
+        Snackbar.Add("Subscription cancelled", Severity.Success);
     }
 
     private async Task SaveUserNameAsync()
@@ -161,4 +205,7 @@ public partial class Account
         _showCurrent = false;
         _showNew = false;
     }
+
+    public void Dispose()
+        => UserState.OnChanged -= OnStateChanged;
 }
