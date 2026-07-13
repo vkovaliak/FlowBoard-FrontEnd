@@ -1,5 +1,6 @@
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+@using System.Globalization
 @using FlowBoard.Frontend.WebApp.Components.Common
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 
 <MudPaper Class="pa-3 my-1 bg-light" Outlined=@true>
 
@@ -21,26 +22,31 @@
             </MudText>
 
             <MudText Typo=@Typo.caption Color=@Color.Secondary>
-                @Comment.CreatedAt.ToString("g")
+                @Comment.CreatedAt.ToString("d MMM, HH:mm", CultureInfo.InvariantCulture)
             </MudText>
 
         </MudStack>
 
-        @if (!_isEditing)
+        @if (!_isEditing && CanManage)
         {
-            @if (CanManage)
-            {
-                <MudStack Row=@true Spacing="1">
+            <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                    Size=@Size.Small
+                    Dense=@true
+                    AnchorOrigin=@Origin.BottomRight
+                    TransformOrigin=@Origin.TopRight>
 
-                    <MudIconButton Icon=@Icons.Material.Filled.Edit
-                                Size=@Size.Small Color=@Color.Default
-                                OnClick=@StartEdit />
+                <MudMenuItem Icon=@Icons.Material.Filled.Edit
+                            OnClick=@StartEdit>
+                    Edit
+                </MudMenuItem>
 
-                    <MudIconButton Icon=@Icons.Material.Filled.Delete
-                                Size=@Size.Small Color=@Color.Error
-                                OnClick=@(() => OnDelete.InvokeAsync(Comment.Id)) />
-                </MudStack>
-            }
+                <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                            IconColor=@Color.Error
+                            OnClick=@(() => OnDelete.InvokeAsync(Comment.Id))>
+                    Delete
+                </MudMenuItem>
+
+            </MudMenu>
         }
     </MudStack>
 

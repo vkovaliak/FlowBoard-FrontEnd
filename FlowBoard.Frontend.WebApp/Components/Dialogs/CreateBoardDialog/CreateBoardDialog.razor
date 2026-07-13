@@ -23,13 +23,34 @@
             <MudRadioGroup T="bool" @bind-Value=@Model.IsPublic
                            Class="mt-4 d-flex flex-column">
 
-                <MudRadio Value=@false Color=@Color.Primary>
-                    Private
+                <MudRadio Value=@false 
+                          Color=@Color.Primary>
+
+                    <MudStack Row=@true Spacing="1" 
+                              AlignItems=@AlignItems.Center
+                              Class="mr-6">
+
+                        <MudIcon Icon=@Icons.Material.Outlined.Lock 
+                                 Size=@Size.Small />
+
+                        <span>Private</span>
+
+                    </MudStack>
+                    
                 </MudRadio>
 
                 <MudRadio Value=@true 
                         Color=@Color.Primary>
-                    Public
+
+                    <MudStack Row=@true Spacing="1" 
+                              AlignItems=@AlignItems.Center>
+
+                        <MudIcon Icon=@Icons.Material.Filled.Public 
+                                 Size=@Size.Small />
+
+                        <span>Public</span>
+
+                    </MudStack>
                 </MudRadio>
 
             </MudRadioGroup>
@@ -49,7 +70,7 @@
                 }
                 else
                 {
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
 
                         <div @onclick=@(() => SelectBackground(null))
                             style=@GetTileStyle(IsSelected(null))
@@ -126,7 +147,7 @@
             : $"background-image: url('{imageUrl}'); " +
               "background-size: cover; background-position: center;";
 
-        return "position: relative; width: 72px; height: 48px; " +
+        return "position: relative; width: 104px; height: 68px; " +
                "border-radius: 8px; cursor: pointer; overflow: hidden; " +
                "transition: border-color 0.15s; " +
                border + bg;
