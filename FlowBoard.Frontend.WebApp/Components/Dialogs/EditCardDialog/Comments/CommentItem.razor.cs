@@ -14,6 +14,8 @@ public partial class CommentItem
 
     [Parameter] public EventCallback<Guid> OnDeleteAttachment { get; set; }
 
+    private bool _useRichEditor;
+
     private bool CanManage 
         => _currentUserId == Comment.CreatedBy;
         
@@ -50,5 +52,15 @@ public partial class CommentItem
 
         await OnUpdate.InvokeAsync((Comment.Id, _editMessage));
         CancelEdit();
+    }
+
+    private void EnableRichEditor()
+    {
+        _useRichEditor = true;
+    }
+
+    private void DisableRichEditor()
+    {
+        _useRichEditor = false;
     }
 }

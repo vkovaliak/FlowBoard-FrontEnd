@@ -3,11 +3,13 @@
 @attribute [Authorize]
 
 <MudContainer MaxWidth=@MaxWidth.Small 
-              Class="mt-6">
+              Class="mt-6 mb-6">
 
     @if (_loading)
     {
-        <MudProgressCircular Indeterminate=@true />
+        <div class="d-flex justify-center pa-8">
+            <MudProgressCircular Indeterminate=@true />
+        </div>
     }
     else if (_user is null)
     {
@@ -17,28 +19,28 @@
     }
     else
     {
-        <MudPaper Elevation="1" 
-                  Class="pa-6">
+        <MudText Typo=@Typo.h5 
+                 Class="mb-4" 
+                 Style="font-weight:600;">
+            My Account
+        </MudText>
 
-            <MudText Typo=@Typo.h5 
-                     Class="mb-4">
-                My Account
-            </MudText>
+        <MudPaper Elevation="0" 
+                  Outlined=@true Class="pa-6 mb-4" 
+                  Style="border-radius:12px;">
 
             <MudStack Row=@true 
                       AlignItems=@AlignItems.Center 
-                      Spacing="4" 
-                      Class="mb-6">
+                      Spacing="4">
 
-                <div style="position: relative; 
-                            display: inline-flex;"
+                <div style="position: relative; display: inline-flex;"
                      @onmouseenter=@(() => _hoverAvatar = true)
                      @onmouseleave=@(() => _hoverAvatar = false)>
 
                     <UserAvatar UserName=@_user.UserName
                                 AvatarUrl=@_user.AvatarUrl
-                                SizeStyle="width: 80px; height: 80px; 
-                                           font-size: 32px;" />
+                                SizeStyle="width: 88px; height: 88px; 
+                                           font-size: 34px;" />
 
                     @if (!string.IsNullOrWhiteSpace(_user.AvatarUrl) && _hoverAvatar)
                     {
@@ -51,17 +53,18 @@
                               @onclick=@DeleteAvatarAsync>
 
                             <MudIcon Icon=@Icons.Material.Filled.Close
-                                    Size=@Size.Small
-                                    Style="color: white; font-size: 16px;" />
+                                     Style="color: white; font-size: 16px;" />
+
                         </div>
                     }
 
                     <label for="avatar-input"
-                           style="position: absolute; bottom: -4px; right: -4px;
+                           style="position: absolute; bottom: -2px; right: -2px;
                                   width: 32px; height: 32px; border-radius: 50%;
                                   background-color: var(--mud-palette-primary);
                                   display: flex; align-items: center;
-                                  justify-content: center; cursor: pointer;"
+                                  justify-content: center; cursor: pointer;
+                                  border: 2px solid white;"
                            title="Change avatar">
 
                         <MudIcon Icon=@Icons.Material.Filled.PhotoCamera
@@ -73,7 +76,6 @@
                                OnChange=@OnAvatarSelectedAsync
                                accept="image/*"
                                style="display: none;" />
-
                 </div>
 
                 <MudStack Spacing="0">
@@ -91,13 +93,24 @@
 
             </MudStack>
 
-            <MudDivider Class="mb-4" />
+        </MudPaper>
+
+        <MudPaper Elevation="0" 
+                  Outlined=@true 
+                  Class="pa-6 mb-4" 
+                  Style="border-radius:12px;">
+
+            <MudText Typo=@Typo.subtitle1 
+                     Class="mb-4" 
+                     Style="font-weight:600;">
+                Profile Details
+            </MudText>
 
             <MudText Typo=@Typo.subtitle2 
                      Class="mb-1">
                 Username
             </MudText>
-
+            
             <MudStack Row=@true 
                       Spacing="2" 
                       AlignItems=@AlignItems.Center 
@@ -122,56 +135,99 @@
                      Class="mb-1">
                 Email
             </MudText>
-            
+
             <MudTextField Value=@_user.EmailAddress
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
-                          ReadOnly=@true
+                          ReadOnly=@true 
                           Disabled=@true />
-            
-            <MudDivider Class="my-4" />
 
-            <MudText Typo=@Typo.subtitle1 
-                     Class="mb-3" 
-                     Style="font-weight:600;">
-                Change Password
-            </MudText>
+        </MudPaper>
 
-            <MudTextField @bind-Value=@_currentPassword
-                          Label="Current Password"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          InputType=@(_showCurrent ? InputType.Text : InputType.Password)
-                          Adornment=@Adornment.End
-                          AdornmentIcon=@(_showCurrent ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
-                          OnAdornmentClick=@(() => _showCurrent = !_showCurrent)
-                          Class="mb-3" />
+        <MudPaper Elevation="0" 
+                  Outlined=@true 
+                  Class="pa-6" 
+                  Style="border-radius:12px;">
 
-            <MudTextField @bind-Value=@_newPassword
-                          Label="New Password"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          InputType=@(_showNew ? InputType.Text : InputType.Password)
-                          Adornment=@Adornment.End
-                          AdornmentIcon=@(_showNew ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
-                          OnAdornmentClick=@(() => _showNew = !_showNew)
-                          Class="mb-3" />
+            <MudStack Row=@true 
+                      Justify=@Justify.SpaceBetween 
+                      AlignItems=@AlignItems.Center>
 
-            <MudTextField @bind-Value=@_confirmPassword
-                          Label="Confirm New Password"
-                          Variant=@Variant.Outlined
-                          Margin=@Margin.Dense
-                          InputType=@InputType.Password
-                          Error=@(!string.IsNullOrEmpty(_confirmPassword) && _newPassword != _confirmPassword)
-                          ErrorText="Passwords do not match"
-                          Class="mb-3" />
+                <div>
+                    <MudText Typo=@Typo.subtitle1 
+                             Style="font-weight:600;">
+                        Security
+                    </MudText>
 
-            <MudButton Variant=@Variant.Filled
-                       Color=@Color.Primary
-                       Disabled=@(!CanChangePassword || _changingPassword)
-                       OnClick=@ChangePasswordAsync>
-                @(_changingPassword ? "Changing..." : "Change Password")
-            </MudButton>
+                    <MudText Typo=@Typo.body2 
+                             Color=@Color.Secondary>
+                        Manage your account password
+                    </MudText>
+                </div>
+
+                @if (!_showPasswordForm)
+                {
+                    <MudButton Variant=@Variant.Outlined
+                               Color=@Color.Primary
+                               StartIcon=@Icons.Material.Filled.Lock
+                               OnClick=@(() => _showPasswordForm = true)>
+                        Change Password
+                    </MudButton>
+                }
+            </MudStack>
+
+            @if (_showPasswordForm)
+            {
+                <MudDivider Class="my-4" />
+
+                <MudTextField @bind-Value=@_currentPassword
+                              Label="Current Password"
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              InputType=@(_showCurrent ? InputType.Text : InputType.Password)
+                              Adornment=@Adornment.End
+                              AdornmentIcon=@(_showCurrent ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                              OnAdornmentClick=@(() => _showCurrent = !_showCurrent)
+                              Class="mb-3" />
+
+                <MudTextField @bind-Value=@_newPassword
+                              Label="New Password"
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              InputType=@(_showNew ? InputType.Text : InputType.Password)
+                              Adornment=@Adornment.End
+                              AdornmentIcon=@(_showNew ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                              OnAdornmentClick=@(() => _showNew = !_showNew)
+                              Class="mb-3" />
+
+                <MudTextField @bind-Value=@_confirmPassword
+                              Label="Confirm New Password"
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              InputType=@InputType.Password
+                              Error=@(!string.IsNullOrEmpty(_confirmPassword) && _newPassword != _confirmPassword)
+                              ErrorText="Passwords do not match"
+                              Class="mb-4" />
+
+                <MudStack Row=@true 
+                          Justify=@Justify.FlexEnd 
+                          Spacing="2">
+
+                    <MudButton Variant=@Variant.Text 
+                               Color=@Color.Secondary
+                               OnClick=@CancelPasswordChange>
+                        Cancel
+                    </MudButton>
+
+                    <MudButton Variant=@Variant.Filled
+                               Color=@Color.Primary
+                               Disabled=@(!CanChangePassword || _changingPassword)
+                               OnClick=@ChangePasswordAsync>
+                        @(_changingPassword ? "Changing..." : "Change Password")
+                    </MudButton>
+
+                </MudStack>
+            }
 
         </MudPaper>
     }

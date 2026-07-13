@@ -54,19 +54,44 @@
     {
         <MudStack Class="mt-2" Spacing="2">
 
-            <RichTextEditor @bind-Value=@_editMessage />
-
-            <MudStack Row=@true Justify=@Justify.FlexEnd Spacing="2">
-                
+            @if (_useRichEditor)
+            {
+                <RichTextEditor @bind-Value=@_editMessage />
+            }
+            else
+            {
+                <MudTextField T=@string
+                      @bind-Value=@_editMessage
+                      Placeholder="Edit a comment..."
+                      Variant=@Variant.Outlined 
+                      AutoFocus="true"
+                      Lines="5" />
+            }
+            <MudStack Row=@true 
+                      Justify=@Justify.FlexEnd 
+                      Spacing="3">
+                      
+                @if (!_useRichEditor)
+                {
+                    <MudIconButton Icon=@Icons.Material.Outlined.EditAttributes
+                                OnClick=@EnableRichEditor
+                                Size=@Size.Medium/>
+                }
+                else
+                {
+                    <MudIconButton Icon=@Icons.Material.Outlined.TextFields
+                                OnClick=@DisableRichEditor>
+                    </MudIconButton>
+                }
                 <MudButton Size=@Size.Small Variant=@Variant.Text
-                           Color=@Color.Secondary OnClick=@CancelEdit>
+                        Color=@Color.Secondary OnClick=@CancelEdit>
                     Cancel
                 </MudButton>
 
                 <MudButton Size=@Size.Small Variant=@Variant.Filled
-                           Color=@Color.Primary
-                           Disabled=@string.IsNullOrWhiteSpace(_editMessage)
-                           OnClick=@SaveAsync>
+                        Color=@Color.Primary
+                        Disabled=@string.IsNullOrWhiteSpace(_editMessage)
+                        OnClick=@SaveAsync>
                     Save
                 </MudButton>
 

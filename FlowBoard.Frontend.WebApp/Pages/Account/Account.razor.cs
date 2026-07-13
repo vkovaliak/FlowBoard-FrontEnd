@@ -24,6 +24,7 @@ public partial class Account
     private bool _showCurrent;
     private bool _showNew;
     private bool _changingPassword;
+    private bool _showPasswordForm;
 
     private bool IsUserNameUnchanged
         => string.IsNullOrWhiteSpace(_userNameInput)
@@ -145,7 +146,19 @@ public partial class Account
         _currentPassword = string.Empty;
         _newPassword = string.Empty;
         _confirmPassword = string.Empty;
+        _showPasswordForm = false;
+        
 
         Snackbar.Add("Password changed successfully", Severity.Success);
+    }
+
+    private void CancelPasswordChange()
+    {
+        _showPasswordForm = false;
+        _currentPassword = string.Empty;
+        _newPassword = string.Empty;
+        _confirmPassword = string.Empty;
+        _showCurrent = false;
+        _showNew = false;
     }
 }

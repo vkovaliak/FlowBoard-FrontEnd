@@ -97,6 +97,7 @@ public partial class ManageLabelsDialog
             return;
         }
 
+        Snackbar.Add("Label deleted", Severity.Success);
         await ReloadAsync();
     }
 
