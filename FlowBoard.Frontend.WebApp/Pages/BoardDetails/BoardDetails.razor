@@ -34,7 +34,8 @@ else
                      OnTabChanged=@HandleTabChanged
                      OnInviteClick=@OpenInviteDialogAsync
                      OnToggleFavorite=@ToggleFavoriteAsync
-                     OnMembersChanged=@HandleMembersChangedAsync />
+                     OnMembersChanged=@HandleMembersChangedAsync 
+                     OnArchiveClick=@ArchiveBoardAsync/>
 
         @if (_activeTab == BoardViewTab.Board)
         {

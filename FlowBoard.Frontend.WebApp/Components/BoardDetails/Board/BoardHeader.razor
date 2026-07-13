@@ -56,13 +56,32 @@
                 Board
             </button>
 
-            <button class="board-tab 
-                    @(ActiveTab == BoardViewTab.Table ? "board-tab-active" : "")"
-                    @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Table))>
-                <MudIcon Icon=@Icons.Material.Outlined.TableChart
-                         Size=@Size.Small Class="mr-1" />
-                Table
-            </button>
+            @if (IsPro)
+            {
+                <button class="board-tab 
+                        @(ActiveTab == BoardViewTab.Table ? "board-tab-active" : "")"
+                        @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Table))>
+
+                    <MudIcon Icon=@Icons.Material.Outlined.TableChart
+                            Size=@Size.Small Class="mr-1" />
+                    Table
+                </button>
+            }
+            else
+            {
+                <button class="board-tab board-tab-locked"
+                        @onclick=@UpgradeAsync
+                        title="Upgrade to Pro to unlock more views">
+
+                    <MudIcon Icon=@Icons.Material.Outlined.TableChart
+                            Size=@Size.Small Class="mr-1" />
+                    Table
+                    
+                    <MudIcon Icon=@Icons.Material.Filled.Lock
+                            Size=@Size.Small Class="ml-1"
+                            Style="font-size: 14px; opacity: 0.6;" />
+                </button>
+            }
             
         </div>
 
@@ -92,19 +111,31 @@
         }
 
         <div @onclick:stopPropagation="true">
-        <MudMenu Icon=@Icons.Material.Filled.MoreVert
-                Size=@Size.Medium
-                Dense=@true
-                AnchorOrigin=@Origin.BottomRight
-                TransformOrigin=@Origin.TopRight>
+            <MudMenu Icon=@Icons.Material.Filled.MoreVert
+                    Size=@Size.Medium
+                    Dense=@true
+                    AnchorOrigin=@Origin.BottomRight
+                    TransformOrigin=@Origin.TopRight>
 
-            <MudMenuItem Icon=@Icons.Material.Outlined.Group
-                        OnClick=@OnMeetClick>
-                Meeting
-            </MudMenuItem>
+                <MudMenuItem Icon=@Icons.Material.Outlined.Group
+                            OnClick=@OnMeetClick>
+                    Meeting
+                </MudMenuItem>
 
-        </MudMenu>
-    </div>
+                @if (IsOwner)
+                {
+                    <MudDivider Class="my-1" />
+
+                    <MudMenuItem Icon=@Icons.Material.Outlined.Archive
+                                OnClick=@(() => OnArchiveClick.InvokeAsync())>
+                        Archive board
+                    </MudMenuItem>
+                }
+
+            </MudMenu>
+
+        </div>
+
     </MudStack>
 
 </MudStack>

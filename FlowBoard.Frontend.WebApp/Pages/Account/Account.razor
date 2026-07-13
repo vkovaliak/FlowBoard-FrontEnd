@@ -145,6 +145,71 @@
         </MudPaper>
 
         <MudPaper Elevation="0" 
+                Outlined=@true 
+                Class="pa-6 mb-4"
+                Style="border-radius:12px;">
+
+            <MudStack Row=@true
+                    Justify=@Justify.SpaceBetween
+                    AlignItems=@AlignItems.Center>
+
+                <div>
+                    <MudStack Row=@true 
+                              AlignItems=@AlignItems.Center 
+                              Spacing="2">
+
+                        <MudText Typo=@Typo.subtitle1 
+                                 Style="font-weight:600;">
+                            Subscription
+                        </MudText>
+
+                        <MudChip T=@string
+                                Size=@Size.Small
+                                Color=@(IsPro 
+                                          ? Color.Warning : Color.Default)
+                                Icon=@(IsPro 
+                                         ? Icons.Material.Filled.WorkspacePremium 
+                                         : null)>
+                            @(IsPro ? "Pro" : "Free")
+                        </MudChip>
+
+                    </MudStack>
+
+                    <MudText Typo=@Typo.body2 
+                             Color=@Color.Secondary 
+                             Class="mt-1">
+                        @(IsPro
+                            ? "You have access to all Pro features"
+                            : "Upgrade to unlock unlimited boards and advanced views")
+                    </MudText>
+
+                </div>
+
+                @if (IsPro)
+                {
+                    <MudButton Variant=@Variant.Outlined
+                               Color=@Color.Error
+                               Disabled=@_cancelling
+                               OnClick=@CancelSubscriptionAsync>
+                        @(_cancelling ? "Cancelling..." : "Cancel Subscription")
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton Variant=@Variant.Filled
+                               Color=@Color.Warning
+                               StartIcon=@Icons.Material.Filled.WorkspacePremium
+                               OnClick=@StartUpgradeAsync
+                               Style="text-transform: none;">
+                        Upgrade to Pro
+                    </MudButton>
+                }
+
+            </MudStack>
+
+        </MudPaper>
+
+        <MudPaper Elevation="0" 
                   Outlined=@true 
                   Class="pa-6" 
                   Style="border-radius:12px;">

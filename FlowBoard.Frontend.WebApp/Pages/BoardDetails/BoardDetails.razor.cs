@@ -181,4 +181,35 @@ public partial class BoardDetails : IAsyncDisposable
     {
         JsRuntime.InvokeVoidAsync("openInNewTab", MeetingOptions.Value.Url);
     }
+
+    private async Task ArchiveBoardAsync()
+    {
+        if (_board is null)
+        {
+            return;
+        }
+
+        bool? confirm = await DialogService.ShowMessageBoxAsync(
+            "Archive Board",
+            $"Are you sure you want to archive board '{_board.Name}'?",
+            yesText: "Archive",
+            cancelText: "Cancel");
+
+        if (confirm != true)
+        {
+            return;
+        }
+
+        var result = await BoardService.ArchiveBoardAsync(_board.Id);
+
+        if (result.Success)
+        {
+            Snackbar.Add($"Board '{_board.Name}' archived", Severity.Success);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Snackbar.Add(result.Error ?? "Failed", Severity.Error);
+        }
+    }
 }
