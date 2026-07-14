@@ -3,5 +3,6 @@ namespace FlowBoard.Frontend.Domain.Enums;
 public enum BoardViewTab
 {
     Board,
-    Table
+    Table, 
+    Calendar
 }
