@@ -11,14 +11,11 @@
 @if (_card != null)
 {
     <MudDialog Class="card-side-panel"
-               TitleClass="dialog-title-tight"
-               ContentClass="dialog-content-tight">
+               ContentClass="edit-card-content">
 
-        <TitleContent>
-            <MudStack Row=@true
-                      Justify=@Justify.SpaceBetween
-                      AlignItems=@AlignItems.Center
-                      Style="width: 100%;">
+        <DialogContent>
+
+            <div class="edit-card-header">
 
                 @if (!CanEdit)
                 {
@@ -36,85 +33,93 @@
                 }
 
                 <MudIconButton Icon=@Icons.Material.Filled.Close
-                               Size=@Size.Small 
+                               Size=@Size.Small
                                OnClick=@Close />
-            </MudStack>
-        </TitleContent>
-
-        <DialogContent>
-
-            <div style="flex-grow: 1; min-width: 0;" 
-                 class="mb-4">
-
-                <CardNameEditor BoardId=@BoardId
-                                CardId=@CardId
-                                Name=@_card.Name
-                                CanEdit=@CanEdit />
             </div>
 
-            <div class="edit-card-toprow mb-4">
+            <div class="edit-card-body">
 
-                <CardAssigneeSelector BoardId=@BoardId
-                                      CardId=@CardId
-                                      Assignees=@_card.Assignees
-                                      BoardMembers=@_board!.Members
-                                      CanEdit=@CanEdit />
+                <div style="flex-grow: 1; 
+                            min-width: 0;" 
+                     class="mb-4">
 
-                <CardDueDatePicker BoardId=@BoardId
-                                   CardId=@CardId
-                                   DueDate=@_card.DueDate
-                                   IsCompleted=@_card.IsCompleted
-                                   CanEdit=@CanEdit />
-
-                <CardListSelector BoardId=@BoardId
-                                  CardId=@CardId
-                                  CurrentListId=@_card.ListId
-                                  Lists=@_board.Lists
-                                  CanEdit=@CanEdit />
-
-            </div>
-
-            <div class="mb-4">
-                <CardDescriptionEditor BoardId=@BoardId
-                                       CardId=@CardId
-                                       Description=@_card.Description
-                                       CanEdit=@CanEdit />
-            </div>
-
-            <div class="edit-card-grid">
-
-                <div class="edit-card-col">
-                    <MudStack Spacing="4">
-
-                        <AttachmentsSection BoardId=@BoardId
-                                            CardId=@CardId
-                                            Attachments=@_card.Attachments
-                                            CanEdit=@CanEdit
-                                            OnDelete=@DeleteCardAttachmentAsync />
-
-                        <ChecklistSection BoardId=@BoardId
-                                          CardId=@CardId
-                                          Items=@_card.ChecklistItems
-                                          CanEdit=@CanEdit />
-
-                    </MudStack>
+                    <CardNameEditor BoardId=@BoardId
+                                    CardId=@CardId
+                                    Name=@_card.Name
+                                    CanEdit=@CanEdit />
                 </div>
 
-                <div class="edit-card-col">
-                    <MudStack Spacing="4">
+                <div class="edit-card-toprow mb-4">
 
-                        <LabelManager BoardId=@BoardId
+                    <CardAssigneeSelector BoardId=@BoardId
+                                          CardId=@CardId
+                                          Assignees=@_card.Assignees
+                                          BoardMembers=@_board!.Members
+                                          CanEdit=@CanEdit />
+
+                    <CardDueDatePicker BoardId=@BoardId
+                                       CardId=@CardId
+                                       DueDate=@_card.DueDate
+                                       IsCompleted=@_card.IsCompleted
+                                       CanEdit=@CanEdit />
+
+                    <CardListSelector BoardId=@BoardId
                                       CardId=@CardId
-                                      AttachedLabels=@_card.Labels
+                                      CurrentListId=@_card.ListId
+                                      Lists=@_board.Lists
                                       CanEdit=@CanEdit />
 
-                        <MudDivider />
+                </div>
 
-                        <CardCommentsSection BoardId=@BoardId
-                                             CardId=@CardId
-                                             CanEdit=@CanEdit />
+                <div class="mb-4">
 
-                    </MudStack>
+                    <CardDescriptionEditor BoardId=@BoardId
+                                           CardId=@CardId
+                                           Description=@_card.Description
+                                           CanEdit=@CanEdit />
+
+                </div>
+
+                <div class="edit-card-grid">
+
+                    <div class="edit-card-col">
+
+                        <MudStack Spacing="4">
+
+                            <AttachmentsSection BoardId=@BoardId
+                                                CardId=@CardId
+                                                Attachments=@_card.Attachments
+                                                CanEdit=@CanEdit
+                                                OnDelete=@DeleteCardAttachmentAsync />
+
+                            <ChecklistSection BoardId=@BoardId
+                                              CardId=@CardId
+                                              Items=@_card.ChecklistItems
+                                              CanEdit=@CanEdit />
+
+                        </MudStack>
+                    
+                    </div>
+
+                    <div class="edit-card-col">
+
+                        <MudStack Spacing="4">
+
+                            <LabelManager BoardId=@BoardId
+                                          CardId=@CardId
+                                          AttachedLabels=@_card.Labels
+                                          CanEdit=@CanEdit />
+
+                            <MudDivider />
+
+                            <CardCommentsSection BoardId=@BoardId
+                                                 CardId=@CardId
+                                                 CanEdit=@CanEdit />
+
+                        </MudStack>
+                        
+                    </div>
+
                 </div>
 
             </div>

@@ -62,7 +62,7 @@
                         @(ActiveTab == BoardViewTab.Table ? "board-tab-active" : "")"
                         @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Table))>
 
-                    <MudIcon Icon=@Icons.Material.Outlined.TableChart
+                    <MudIcon Icon=@Icons.Material.Outlined.ViewHeadline
                             Size=@Size.Small Class="mr-1" />
                     Table
                 </button>
@@ -80,7 +80,7 @@
                         @(ActiveTab == BoardViewTab.Dashboard ? "board-tab-active" : "")"
                         @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Dashboard))>
 
-                    <MudIcon Icon=@Icons.Material.Outlined.Dashboard 
+                    <MudIcon Icon=@Icons.Material.Outlined.BarChart 
                              Size=@Size.Small Class="mr-1" />
                     Dashboard
                 </button>
@@ -107,6 +107,19 @@
                     <MudIcon Icon=@Icons.Material.Outlined.CalendarMonth
                             Size=@Size.Small Class="mr-1" />
                     Calendar
+                    
+                    <MudIcon Icon=@Icons.Material.Filled.Lock
+                            Size=@Size.Small Class="ml-1"
+                            Style="font-size: 14px; opacity: 0.6;" />
+                </button>
+
+                <button class="board-tab board-tab-locked"
+                        @onclick=@UpgradeAsync
+                        title="Upgrade to Pro to unlock more views">
+
+                    <MudIcon Icon=@Icons.Material.Outlined.BarChart
+                            Size=@Size.Small Class="mr-1" />
+                    Dashboard
                     
                     <MudIcon Icon=@Icons.Material.Filled.Lock
                             Size=@Size.Small Class="ml-1"
