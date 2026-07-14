@@ -1,0 +1,34 @@
+@using System.Globalization
+
+<div class="d-flex align-center mb-4" 
+     style="gap: 16px; flex-wrap: wrap;">
+
+    <MudButton Variant=@Variant.Outlined
+               Style="color: var(--mud-palette-text-secondary);
+                      font-size: 16px; border: 2px solid #b4b4b43c;
+                      padding: 6px 14px"
+               OnClick=@(() => OnToday.InvokeAsync())>
+        Today
+    </MudButton>
+
+    <MudIconButton Icon=@Icons.Material.Filled.ChevronLeft
+                   Style="border-radius: 12px; 
+                          border: 2px solid #b4b4b43c;
+                          padding: 6px 10px"
+                   OnClick=@(() => OnPrevious.InvokeAsync()) />
+
+    <MudIconButton Icon=@Icons.Material.Filled.ChevronRight
+                   Style="border-radius: 12px; 
+                          border: 2px solid #b4b4b43c;
+                          padding: 6px 10px"
+                   OnClick=@(() => OnNext.InvokeAsync()) />
+
+    <MudText Typo=@Typo.h5 
+             Style="font-weight: 700;" 
+             Class="ml-10">
+        @CurrentMonth.ToString(
+              "MMMM yyyy", CultureInfo.InvariantCulture)
+    </MudText>
+
+    <MudSpacer />
+</div>

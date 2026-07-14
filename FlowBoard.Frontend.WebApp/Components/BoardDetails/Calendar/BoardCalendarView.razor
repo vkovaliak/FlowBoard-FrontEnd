@@ -1,0 +1,15 @@
+<div style="padding: 24px; height: 100%; overflow-y: auto;
+            background-color: #F8F9FB;">
+
+    <MudPaper Class="pa-6 rounded-lg" Elevation="1">
+
+        <BoardCalendarToolbar CurrentMonth=@_currentMonth
+                              OnToday=@GoToday
+                              OnPrevious=@PreviousMonth
+                              OnNext=@NextMonth />
+
+        <BoardCalendarMonth CurrentMonth=@_currentMonth
+                            Cards=@AllCards
+                            OnCardClick=@OpenCardAsync />
+    </MudPaper>
+</div>

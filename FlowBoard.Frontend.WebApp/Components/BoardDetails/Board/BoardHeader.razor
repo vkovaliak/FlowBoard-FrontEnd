@@ -66,6 +66,15 @@
                             Size=@Size.Small Class="mr-1" />
                     Table
                 </button>
+
+                <button class="board-tab 
+                        @(ActiveTab == BoardViewTab.Calendar ? "board-tab-active" : "")"
+                        @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Calendar))>
+
+                    <MudIcon Icon=@Icons.Material.Outlined.CalendarMonth
+                            Size=@Size.Small Class="mr-1" />
+                    Calendar
+                </button>
             }
             else
             {
@@ -76,6 +85,19 @@
                     <MudIcon Icon=@Icons.Material.Outlined.TableChart
                             Size=@Size.Small Class="mr-1" />
                     Table
+                    
+                    <MudIcon Icon=@Icons.Material.Filled.Lock
+                            Size=@Size.Small Class="ml-1"
+                            Style="font-size: 14px; opacity: 0.6;" />
+                </button>
+
+                <button class="board-tab board-tab-locked"
+                        @onclick=@UpgradeAsync
+                        title="Upgrade to Pro to unlock more views">
+
+                    <MudIcon Icon=@Icons.Material.Outlined.CalendarMonth
+                            Size=@Size.Small Class="mr-1" />
+                    Calendar
                     
                     <MudIcon Icon=@Icons.Material.Filled.Lock
                             Size=@Size.Small Class="ml-1"
