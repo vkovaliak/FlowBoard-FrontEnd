@@ -1,0 +1,109 @@
+@using MudBlazor
+
+<MudPaper Elevation="0" 
+          Class="pa-5"
+          Style="border: 2px solid #edeff2; 
+                 border-radius: 12px; 
+                 height: 100%;">
+
+    <MudText Typo=@Typo.h6 
+             Style="font-weight: 700;" 
+             Class="mb-4">
+        Tasks by List
+    </MudText>
+
+    @if (_data.Length == 0)
+    {
+        <MudText Typo=@Typo.body2 
+                 Color=@Color.Secondary>
+            No tasks yet
+        </MudText>
+    }
+    else
+    {
+        <div class="d-flex align-center" 
+             style="gap: 32px; flex-wrap: wrap;">
+
+            <div style="position: relative; 
+                        width: 200px; 
+                        height: 200px;">
+
+                <MudChart T="double"
+                          ChartType="ChartType.Donut"
+                          ChartSeries="@_data.AsChartDataSet()"
+                          ChartLabels="_labels"
+                          Width="200px"
+                          Height="200px"
+                          Class="dashboard-donut" />
+
+                <div style="position: absolute; 
+                            top: 0; left: 0;
+                            width: 200px; 
+                            height: 200px;
+                            display: flex; 
+                            flex-direction: column;
+                            align-items: center; 
+                            justify-content: center;
+                            pointer-events: none;">
+
+                    <MudText Style="font-size: 36px; 
+                                    font-weight: 800;
+                                    line-height: 1; color: #1E293B;">
+                        @((int)_data.Sum())
+                    </MudText>
+
+                    <MudText Style="font-size: 14px; 
+                                    font-weight: 500;
+                                    color: #94A3B8;">
+                        Total
+                    </MudText>
+                    
+                </div>
+
+            </div>
+
+            <MudStack Spacing="3" 
+                      Style="flex-grow: 1; 
+                             min-width: 160px;">
+                             
+                @for (var i = 0; i < _labels.Length; i++)
+                {
+                    var idx = i;
+                    var count = (int)_data[idx];
+                    var percent = _total > 0 ? count * 100 / _total : 0;
+
+                    <div class="d-flex align-center" 
+                         style="gap: 10px;">
+
+                        <span style=@($"width: 12px; height: 12px; " +
+                                      $"border-radius: 50%; flex-shrink: 0;" +
+                                      $"background-color: {GetColor(idx)};")>
+                        </span>
+
+                        <MudText Typo=@Typo.body1
+                                 Style="flex-grow: 1; 
+                                        font-weight: 500;">
+                            @_labels[idx]
+                        </MudText>
+
+                        <MudText Typo=@Typo.body1 
+                                 Style="font-weight: 600;">
+                            @count
+                        </MudText>
+
+                        <MudText Typo=@Typo.body2 
+                                 Color=@Color.Secondary
+                                 Style="width: 42px; 
+                                        text-align: right;">
+                            (@percent%)
+                        </MudText>
+
+                    </div>
+                }
+                
+            </MudStack>
+
+        </div>
+    }
+
+</MudPaper>

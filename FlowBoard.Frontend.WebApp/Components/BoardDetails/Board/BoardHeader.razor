@@ -75,6 +75,15 @@
                             Size=@Size.Small Class="mr-1" />
                     Calendar
                 </button>
+
+                <button class="board-tab 
+                        @(ActiveTab == BoardViewTab.Dashboard ? "board-tab-active" : "")"
+                        @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Dashboard))>
+
+                    <MudIcon Icon=@Icons.Material.Outlined.Dashboard 
+                             Size=@Size.Small Class="mr-1" />
+                    Dashboard
+                </button>
             }
             else
             {

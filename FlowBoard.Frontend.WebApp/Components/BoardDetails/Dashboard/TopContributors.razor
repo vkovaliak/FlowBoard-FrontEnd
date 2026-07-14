@@ -1,0 +1,57 @@
+@using FlowBoard.Frontend.WebApp.Components.Common;
+
+<MudPaper Elevation="0" 
+          Class="pa-5"
+          Style="border: 2px solid #edeff2; 
+                 border-radius: 12px;">
+
+    <MudText Typo=@Typo.h6 
+             Style="font-weight: 700;" 
+             Class="mb-3">
+        Top Contributors
+    </MudText>
+
+    @if (_contributors.Count == 0)
+    {
+        <MudText Typo=@Typo.body2 
+                 Color=@Color.Secondary>
+            No assigned tasks
+        </MudText>
+    }
+    else
+    {
+        @foreach (var c in _contributors)
+        {
+            <div class="d-flex align-center mb-3" 
+                 style="gap: 12px;">
+
+                <UserAvatar UserName=@c.UserName
+                            AvatarUrl=@c.AvatarUrl
+                            Size=@Size.Small
+                            SizeStyle="width: 36px; 
+                                       height: 36px; 
+                                       font-size: 15px;" />
+
+                <div style="flex-grow: 1; 
+                            min-width: 0;">
+
+                    <MudText Typo=@Typo.body2 
+                             Style="font-weight: 500;">
+                        @c.UserName
+                    </MudText>
+
+                    <MudProgressLinear Color=@Color.Primary
+                                       Value=@GetPercent(c.Count)
+                                       Style="height: 6px; border-radius: 3px;" />
+                </div>
+
+                <MudText Typo=@Typo.body2 
+                         Color=@Color.Secondary>
+                    @c.Count tasks
+                </MudText>
+                
+            </div>
+        }
+    }
+
+</MudPaper>

@@ -4,5 +4,7 @@ public enum BoardViewTab
 {
     Board,
     Table, 
-    Calendar
+    Calendar, 
+    Dashboard
+
 }
