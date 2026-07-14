@@ -490,3 +490,11 @@ html body .mud-main-content:has(.flowboard-details-page) .mud-container {
 .dashboard-donut .mud-donut-text {
     display: none !important;
 }
+
+.card-side-panel .mud-dialog-content {
+    padding: 10px !important;
+}
+
+.card-side-panel .mud-dialog-title {
+    padding: 0 !important;
+}
