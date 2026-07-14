@@ -1,0 +1,58 @@
+@using System.Globalization
+
+<MudPaper Elevation="0" Class="pa-5"
+          Style="border: 2px solid #edeff2; 
+                 border-radius: 12px; 
+                 height: 100%;">
+
+    <MudText Typo=@Typo.h6 
+             Style="font-weight: 700;" 
+             Class="mb-3">
+        Upcoming Deadlines
+    </MudText>
+
+    @if (_deadlines.Count == 0)
+    {
+        <MudText Typo=@Typo.body2 
+                 Color=@Color.Secondary>
+            No upcoming deadlines
+        </MudText>
+    }
+    else
+    {
+        @foreach (var card in _deadlines)
+        {
+            <div class="d-flex align-center"
+                 style="gap: 15px; padding: 10px 8px; 
+                        cursor: pointer;
+                        border-radius: 8px;"
+                 @onclick=@(() => OnCardClick.InvokeAsync(card))
+                 onmouseover="this.style.backgroundColor='#F1F3F5'"
+                 onmouseout="this.style.backgroundColor='transparent'">
+
+                <span style=@($"width: 20px; height: 20px;" +
+                              $"border-radius: 50%;" +
+                              $"flex-shrink: 0; background-color: " +
+                              $"{(card.Labels.Count > 0 
+                                ? card.Labels[0].Color : "#ADB5BD")};")>
+                </span>
+
+                <MudText Typo=@Typo.body2
+                         Style="flex-grow: 1; font-weight: 500; 
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;">
+                    @card.Name
+                </MudText>
+
+                <MudChip T=@string Size=@Size.Small
+                         Color=@GetColor(card)>
+                    @card.DueDate!.Value.ToString(
+                        "MMM d", CultureInfo.InvariantCulture)
+                </MudChip>
+                
+            </div>
+        }
+    }
+
+</MudPaper>

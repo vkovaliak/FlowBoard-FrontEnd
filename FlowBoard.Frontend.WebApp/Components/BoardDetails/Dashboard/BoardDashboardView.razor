@@ -1,0 +1,34 @@
+<div style="padding: 24px; height: 100%; overflow-y: auto;
+            background-color: #F8F9FB;">
+
+    <DashboardStatCards TotalCount=@TotalCount
+                        InProgressCount=@InProgressCount
+                        CompletedCount=@CompletedCount
+                        OverdueCount=@OverdueCount />
+
+    <MudGrid Spacing="4" Class="mb-4">
+        
+        <MudItem xs="12" md="6">
+            <TasksByStatusChart Board=@Board />
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <UpcomingDeadlines Board=@Board 
+                               OnCardClick=@OpenCardAsync />
+        </MudItem>
+
+    </MudGrid>
+
+    <MudGrid Spacing="4">
+
+        <MudItem xs="12" md="6">
+            <TopContributors Board=@Board />
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <LabelsDistribution Board=@Board />
+        </MudItem>
+
+    </MudGrid>
+
+</div>

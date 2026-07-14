@@ -482,3 +482,11 @@ html body .mud-main-content:has(.flowboard-details-page) .mud-container {
     max-width: 100% !important;
     margin: 0 !important;
 }
+
+.dashboard-donut .mud-chart-legend {
+    display: none !important;
+}
+
+.dashboard-donut .mud-donut-text {
+    display: none !important;
+}

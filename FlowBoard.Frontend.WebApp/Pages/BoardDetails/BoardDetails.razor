@@ -2,6 +2,7 @@
 @namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails
 @using FlowBoard.Frontend.Domain.Authorization
 @using FlowBoard.Frontend.Domain.Enums;
+@using FlowBoard.Frontend.WebApp.Components.BoardDetails.Dashboard
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails.Table;
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails.Calendar;
 
@@ -102,6 +103,12 @@ else
         {
             <BoardCalendarView Board=@_board
                             OnCardUpdated=@HandleTableCardUpdatedAsync />
+        }
+
+        else if (_activeTab == BoardViewTab.Dashboard)
+        {
+            <BoardDashboardView Board=@_board
+                                OnCardUpdated=@HandleTableCardUpdatedAsync />
         }
     </div>
 }
