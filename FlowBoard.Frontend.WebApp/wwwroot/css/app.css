@@ -271,6 +271,28 @@ body.is-dragging .board-lists-container {
     justify-content: flex-end !important;
 }
 
+.board-filter-panel{
+    width: 420px !important;
+    max-width: 95vw !important;
+    height: 680px;
+    margin: 0 !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    border-radius: 8px !important;
+}
+
+.board-filter-panel .mud-dialog-content {
+    overflow-y: auto !important;
+    max-height: calc(90vh - 64px) !important;
+}
+
+.mud-dialog-container:has(.board-filter-panel) {
+    padding: 190px 0px 0px 0px !important;
+    margin: 0 !important;
+    align-items: stretch !important;
+    justify-content: flex-end !important;
+}
+
 .edit-card-toprow {
     display: grid;
     grid-template-columns: 0.35fr 0.8fr 0.65fr;

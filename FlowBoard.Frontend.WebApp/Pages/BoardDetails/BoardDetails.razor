@@ -38,7 +38,9 @@ else
                      OnInviteClick=@OpenInviteDialogAsync
                      OnToggleFavorite=@ToggleFavoriteAsync
                      OnMembersChanged=@HandleMembersChangedAsync 
-                     OnArchiveClick=@ArchiveBoardAsync/>
+                     OnArchiveClick=@ArchiveBoardAsync
+                     FilterCount=@_filter.ActiveCount
+                     OnFilterClick=@OpenFilterAsync/>
 
         @if (_activeTab == BoardViewTab.Board)
         {
@@ -77,7 +79,8 @@ else
                                           OnCreateCard=@HandleCreateCardAsync
                                           OnUpdateCard=@HandleUpdateCardAsync
                                           OnDeleteCard=@HandleDeleteCardAsync
-                                          OnToggleCardComplete=@HandleToggleCardCompleteAsync />
+                                          OnToggleCardComplete=@HandleToggleCardCompleteAsync 
+                                          CardFilter=@CardMatchesFilter/>
                             </div>
                         }
 

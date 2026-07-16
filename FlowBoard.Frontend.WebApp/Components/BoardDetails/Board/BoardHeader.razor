@@ -131,6 +131,19 @@
 
         <MudSpacer />
 
+        <MudBadge Content=@FilterCount
+                  Visible=@(FilterCount > 0)
+                  Color=@Color.Primary
+                  Overlap=@true>
+
+            <MudIconButton Icon=@Icons.Material.Outlined.FilterList
+                           Variant=@Variant.Outlined
+                           Size=@Size.Large
+                           Class="mr-4"
+                           Style="border: 2px solid #F1F5F9;;"
+                           OnClick=@(() => OnFilterClick.InvokeAsync()) />
+        </MudBadge>
+
         <BoardMembers Members=@Members
                       BoardId=@BoardId
                       CreatedBy=@CreatedBy

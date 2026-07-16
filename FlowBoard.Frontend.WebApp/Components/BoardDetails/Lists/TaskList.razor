@@ -19,7 +19,7 @@
 
         @if (List.Cards != null && List.Cards.Any())
         {
-            @foreach (var card in List.Cards.OrderBy(c => c.Position))
+            @foreach (var card in FilteredCards)
             {
                 <div data-card-id="@card.Id" style="width: 100%;">
                     <CardItem Card=@card

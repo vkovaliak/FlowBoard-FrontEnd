@@ -1,0 +1,25 @@
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px;
+    border-bottom: 1px solid #edeff2;
+}
+
+.filter-body {
+    padding: 8px 15px;
+    overflow-y: auto;
+}
+
+.filter-section-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1E293B;
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-top: 1px solid #edeff2;
+}
