@@ -149,4 +149,17 @@ public class CardService : ICardService
             ? response.Content
             : [];
     }
+
+    public async Task<OperationResult<Guid>> DuplicateAsync(
+        Guid boardId, Guid cardId)
+    {
+        var response = await _cardApi.DuplicateAsync(boardId, cardId);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult<Guid>.Ok(response.Content);
+        }
+
+        return OperationResult<Guid>.Fail(response.GetErrorMessage());
+    }
 }

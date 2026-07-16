@@ -40,4 +40,7 @@ public interface ICardApi
 
     [Get("/api/my-tasks")]
     Task<ApiResponse<List<MyCardDto>>> GetMyTasksAsync();
+
+    [Post("/api/boards/{boardId}/cards/{cardId}/duplicate")]
+    Task<ApiResponse<Guid>> DuplicateAsync(Guid boardId, Guid cardId);
 }
