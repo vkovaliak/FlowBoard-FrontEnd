@@ -5,6 +5,7 @@ public enum BoardViewTab
     Board,
     Table, 
     Calendar, 
-    Dashboard
+    Dashboard,
+    TimeLine
 
 }

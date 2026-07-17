@@ -8,3 +8,9 @@
 .edit-card-body {
     padding: 0 24px 24px 24px;
 }
+
+.edit-card-dates {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

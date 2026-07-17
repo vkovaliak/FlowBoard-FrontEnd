@@ -7,6 +7,7 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.StartDate
 
 @if (_card != null)
 {
@@ -56,12 +57,21 @@
                                           Assignees=@_card.Assignees
                                           BoardMembers=@_board!.Members
                                           CanEdit=@CanEdit />
+                    
+                    <div class="edit-card-dates">
 
-                    <CardDueDatePicker BoardId=@BoardId
-                                       CardId=@CardId
-                                       DueDate=@_card.DueDate
-                                       IsCompleted=@_card.IsCompleted
-                                       CanEdit=@CanEdit />
+                        <CardDueDatePicker BoardId=@BoardId
+                                           CardId=@CardId
+                                           DueDate=@_card.DueDate
+                                           IsCompleted=@_card.IsCompleted
+                                           CanEdit=@CanEdit />
+                        
+                        <CardStartDatePicker BoardId=@BoardId
+                                             CardId=@CardId
+                                             StartTime=@_card.StartTime
+                                             CanEdit=@CanEdit />
+                    
+                    </div>
 
                     <CardListSelector BoardId=@BoardId
                                       CardId=@CardId

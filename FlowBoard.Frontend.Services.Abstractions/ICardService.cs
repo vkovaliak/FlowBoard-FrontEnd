@@ -18,4 +18,5 @@ public interface ICardService
     Task<OperationResult> SetDueDateAsync(Guid boardId, Guid cardId, SetCardDueDateDto dto);
     Task<List<MyCardDto>> GetMyTasksAsync();
     Task<OperationResult<Guid>> DuplicateAsync(Guid boardId, Guid cardId);
+    Task<OperationResult> SetStartTimeAsync(Guid boardId, Guid cardId, SetCardStartTimeDto dto);
 }

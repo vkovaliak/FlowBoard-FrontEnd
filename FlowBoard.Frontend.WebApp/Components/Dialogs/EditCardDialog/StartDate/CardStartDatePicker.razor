@@ -1,0 +1,49 @@
+@using System.Globalization
+<MudStack Spacing="1">
+
+    <MudStack Row=@true
+              AlignItems=@AlignItems.Center
+              Justify=@Justify.SpaceBetween>
+
+        <MudText Typo=@Typo.subtitle2
+                 Color=@Color.Default
+                 Class="ml-1"
+                 Style="font-weight: 500">
+            Start date
+        </MudText>
+
+        <MudCheckBox T=@bool
+                     Value=@_isEnabled
+                     ValueChanged=@OnToggleEnabledAsync
+                     Color=@Color.Primary
+                     Dense=@true
+                     Disabled=@(!CanEdit)
+                     Size=@Size.Small />
+
+    </MudStack>
+
+    @if (_isEnabled)
+    {
+        <MudStack Row=@true
+                  AlignItems=@AlignItems.Center
+                  Spacing="2">
+
+            <MudDatePicker Date=@_date
+                           DateChanged=@OnDateChangedAsync
+                           Color=@Color.Primary
+                           Variant=@Variant.Outlined
+                           Margin=@Margin.Dense
+                           Editable=@CanEdit
+                           Clearable=@false
+                           ReadOnly=@(!CanEdit)
+                           PickerVariant=@PickerVariant.Dialog
+                           DateFormat="MMM dd, yyyy"
+                           Culture=@CultureInfo.InvariantCulture
+                           Placeholder="Select start date"
+                           AdornmentIcon=@Icons.Material.Filled.CalendarToday
+                           Style="flex-grow: 1;" />
+
+        </MudStack>
+    }
+
+</MudStack>

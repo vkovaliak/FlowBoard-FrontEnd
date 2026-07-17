@@ -1,0 +1,147 @@
+@using System.Globalization
+@using FlowBoard.Frontend.WebApp.Components.Common
+
+<div class="timeline-view">
+
+    @if (_rows.Count == 0)
+    {
+        <div class="timeline-empty">
+
+            <MudIcon Icon=@Icons.Material.Outlined.Timeline
+                     Size=@Size.Large
+                     Style="font-size: 48px; color: #CBD5E1;" />
+
+            <MudText Typo=@Typo.h6 
+                     Style="color: #64748B;">
+                No scheduled cards
+            </MudText>
+
+            <MudText Typo=@Typo.body2 
+                     Style="color: #94A3B8;">
+                Cards with both a start date and a due date appear here.
+            </MudText>
+
+        </div>
+    }
+    else
+    {
+        <div class="timeline-scroll">
+
+            <div class="timeline-header">
+
+                <div class="timeline-task-col-head">
+                    Task / Assignee
+                </div>
+
+                <div class="timeline-grid-head"
+                     style=@($"width: {_totalWidth}px;")>
+
+                    @foreach (var col in _columns)
+                    {
+                        <div class="timeline-col-head"
+                             style=@($"width: {ColumnWidth}px;")>
+                            @col.ToString(
+                                "MMM dd", CultureInfo.InvariantCulture)
+                        </div>
+                    }
+
+                    @if (_todayOffset >= 0)
+                    {
+                        <div class="timeline-today-line"
+                             style=@($"left: {_todayOffset}px;")>
+
+                            <span class="timeline-today-label">
+                                Today
+                            </span>
+
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+            <div class="timeline-body">
+
+                @foreach (var row in _rows)
+                {
+                    <div class="timeline-row">
+
+                        <div class="timeline-task-col"
+                             @onclick=@(() => OpenCardAsync(row))>
+
+                            <span class="timeline-task-name">
+                                @row.Card.Name
+                            </span>
+
+                            @if (row.Card.Assignees.Any())
+                            {
+                                <div class="tbl-assignees">
+
+                                    @foreach (var a in row.Card.Assignees.Take(3))
+                                    {
+                                        <UserAvatar UserName=@a.UserName
+                                                    AvatarUrl=@a.AvatarUrl
+                                                    Size=@Size.Small
+                                                    SizeStyle="width: 32px; height: 32px;
+                                                               font-size: 12px;
+                                                               border: 2px solid white;" />
+                                    }
+                                    @if (row.Card.Assignees.Count > 3)
+                                    {
+                                        <MudAvatar Style="width: 32px; height: 32px;
+                                                          font-size: 12px;
+                                                          background-color: #6b778c;
+                                                          color: white;
+                                                          border: 2px solid white;">
+                                            +@(row.Card.Assignees.Count - 3)
+                                        </MudAvatar>
+                                    }
+
+                                </div>
+                            }
+
+                        </div>
+
+                        <div class="timeline-grid-row"
+                             style=@($"width: {_totalWidth}px;")>
+
+                            @foreach (var col in _columns)
+                            {
+                                <div class="timeline-grid-cell"
+                                     style=@($"width: {ColumnWidth}px;")>
+                                </div>
+                            }
+
+                            @if (_todayOffset >= 0)
+                            {
+                                <div class="timeline-today-line-row"
+                                     style=@($"left: {_todayOffset}px;")>
+                                </div>
+                            }
+
+                            <div class="timeline-bar"
+                                 style=@GetBarStyle(row.Card)
+                                 @onclick=@(() => OpenCardAsync(row))
+                                 title="@row.Card.Name">
+                                 
+                                <span class="timeline-bar-label">
+                                    @row.Card.StartTime!.Value.ToString(
+                                        "MMM d", CultureInfo.InvariantCulture)
+                                    –
+                                    @row.Card.DueDate!.Value.ToString(
+                                        "MMM d", CultureInfo.InvariantCulture)
+                                </span>
+
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+
+</div>

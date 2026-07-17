@@ -43,4 +43,8 @@ public interface ICardApi
 
     [Post("/api/boards/{boardId}/cards/{cardId}/duplicate")]
     Task<ApiResponse<Guid>> DuplicateAsync(Guid boardId, Guid cardId);
+
+    [Put("/api/boards/{boardId}/cards/{cardId}/start-time")]
+    Task<ApiResponse<bool>> SetStartTimeAsync(
+        Guid boardId, Guid cardId, [Body] SetCardStartTimeDto dto);
 }

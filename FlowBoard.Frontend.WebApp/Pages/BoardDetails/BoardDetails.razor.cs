@@ -185,7 +185,23 @@ public partial class BoardDetails : IAsyncDisposable
 
     private void OpenMeeting()
     {
-        JsRuntime.InvokeVoidAsync("openInNewTab", MeetingOptions.Value.Url);
+        if (_board == null)
+        {
+            return;
+        }
+
+        var me = _board.Members
+            .FirstOrDefault(m => m.UserId == _currentUserId);
+
+        var username = me?.UserName ?? "Guest";
+
+        var roomId = _board.Id.ToString();
+
+        var baseUrl = MeetingOptions.Value.Url.TrimEnd('/');
+        var encodedName = Uri.EscapeDataString(username);
+        var url = $"{baseUrl}/call/{roomId}?name={encodedName}";
+
+        JsRuntime.InvokeVoidAsync("openInNewTab", url);
     }
 
     private async Task ArchiveBoardAsync()

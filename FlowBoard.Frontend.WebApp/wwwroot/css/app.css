@@ -260,7 +260,7 @@ body.is-dragging .board-lists-container {
 
 .card-side-panel .mud-dialog-content {
     overflow-y: auto !important;
-    max-height: calc(90vh - 64px) !important;
+    max-height: 100vh !important;
     padding: 24px !important;
 }
 
