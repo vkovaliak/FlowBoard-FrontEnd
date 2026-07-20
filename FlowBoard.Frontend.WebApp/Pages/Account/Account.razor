@@ -209,92 +209,95 @@
 
         </MudPaper>
 
-        <MudPaper Elevation="0" 
-                  Outlined=@true 
-                  Class="pa-6" 
-                  Style="border-radius:12px;">
-
-            <MudStack Row=@true 
-                      Justify=@Justify.SpaceBetween 
-                      AlignItems=@AlignItems.Center>
-
-                <div>
-                    <MudText Typo=@Typo.subtitle1 
-                             Style="font-weight:600;">
-                        Security
-                    </MudText>
-
-                    <MudText Typo=@Typo.body2 
-                             Color=@Color.Secondary>
-                        Manage your account password
-                    </MudText>
-                </div>
-
-                @if (!_showPasswordForm)
-                {
-                    <MudButton Variant=@Variant.Outlined
-                               Color=@Color.Primary
-                               StartIcon=@Icons.Material.Filled.Lock
-                               OnClick=@(() => _showPasswordForm = true)>
-                        Change Password
-                    </MudButton>
-                }
-            </MudStack>
-
-            @if (_showPasswordForm)
-            {
-                <MudDivider Class="my-4" />
-
-                <MudTextField @bind-Value=@_currentPassword
-                              Label="Current Password"
-                              Variant=@Variant.Outlined
-                              Margin=@Margin.Dense
-                              InputType=@(_showCurrent ? InputType.Text : InputType.Password)
-                              Adornment=@Adornment.End
-                              AdornmentIcon=@(_showCurrent ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
-                              OnAdornmentClick=@(() => _showCurrent = !_showCurrent)
-                              Class="mb-3" />
-
-                <MudTextField @bind-Value=@_newPassword
-                              Label="New Password"
-                              Variant=@Variant.Outlined
-                              Margin=@Margin.Dense
-                              InputType=@(_showNew ? InputType.Text : InputType.Password)
-                              Adornment=@Adornment.End
-                              AdornmentIcon=@(_showNew ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
-                              OnAdornmentClick=@(() => _showNew = !_showNew)
-                              Class="mb-3" />
-
-                <MudTextField @bind-Value=@_confirmPassword
-                              Label="Confirm New Password"
-                              Variant=@Variant.Outlined
-                              Margin=@Margin.Dense
-                              InputType=@InputType.Password
-                              Error=@(!string.IsNullOrEmpty(_confirmPassword) && _newPassword != _confirmPassword)
-                              ErrorText="Passwords do not match"
-                              Class="mb-4" />
+        @if(_user.HasPassword)
+        {
+            <MudPaper Elevation="0" 
+                    Outlined=@true 
+                    Class="pa-6" 
+                    Style="border-radius:12px;">
 
                 <MudStack Row=@true 
-                          Justify=@Justify.FlexEnd 
-                          Spacing="2">
+                        Justify=@Justify.SpaceBetween 
+                        AlignItems=@AlignItems.Center>
 
-                    <MudButton Variant=@Variant.Text 
-                               Color=@Color.Secondary
-                               OnClick=@CancelPasswordChange>
-                        Cancel
-                    </MudButton>
+                    <div>
+                        <MudText Typo=@Typo.subtitle1 
+                                Style="font-weight:600;">
+                            Security
+                        </MudText>
 
-                    <MudButton Variant=@Variant.Filled
-                               Color=@Color.Primary
-                               Disabled=@(!CanChangePassword || _changingPassword)
-                               OnClick=@ChangePasswordAsync>
-                        @(_changingPassword ? "Changing..." : "Change Password")
-                    </MudButton>
+                        <MudText Typo=@Typo.body2 
+                                Color=@Color.Secondary>
+                            Manage your account password
+                        </MudText>
+                    </div>
 
+                    @if (!_showPasswordForm)
+                    {
+                        <MudButton Variant=@Variant.Outlined
+                                Color=@Color.Primary
+                                StartIcon=@Icons.Material.Filled.Lock
+                                OnClick=@(() => _showPasswordForm = true)>
+                            Change Password
+                        </MudButton>
+                    }
                 </MudStack>
-            }
 
-        </MudPaper>
+                @if (_showPasswordForm)
+                {
+                    <MudDivider Class="my-4" />
+
+                    <MudTextField @bind-Value=@_currentPassword
+                                Label="Current Password"
+                                Variant=@Variant.Outlined
+                                Margin=@Margin.Dense
+                                InputType=@(_showCurrent ? InputType.Text : InputType.Password)
+                                Adornment=@Adornment.End
+                                AdornmentIcon=@(_showCurrent ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                                OnAdornmentClick=@(() => _showCurrent = !_showCurrent)
+                                Class="mb-3" />
+
+                    <MudTextField @bind-Value=@_newPassword
+                                Label="New Password"
+                                Variant=@Variant.Outlined
+                                Margin=@Margin.Dense
+                                InputType=@(_showNew ? InputType.Text : InputType.Password)
+                                Adornment=@Adornment.End
+                                AdornmentIcon=@(_showNew ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)
+                                OnAdornmentClick=@(() => _showNew = !_showNew)
+                                Class="mb-3" />
+
+                    <MudTextField @bind-Value=@_confirmPassword
+                                Label="Confirm New Password"
+                                Variant=@Variant.Outlined
+                                Margin=@Margin.Dense
+                                InputType=@InputType.Password
+                                Error=@(!string.IsNullOrEmpty(_confirmPassword) && _newPassword != _confirmPassword)
+                                ErrorText="Passwords do not match"
+                                Class="mb-4" />
+
+                    <MudStack Row=@true 
+                            Justify=@Justify.FlexEnd 
+                            Spacing="2">
+
+                        <MudButton Variant=@Variant.Text 
+                                Color=@Color.Secondary
+                                OnClick=@CancelPasswordChange>
+                            Cancel
+                        </MudButton>
+
+                        <MudButton Variant=@Variant.Filled
+                                Color=@Color.Primary
+                                Disabled=@(!CanChangePassword || _changingPassword)
+                                OnClick=@ChangePasswordAsync>
+                            @(_changingPassword ? "Changing..." : "Change Password")
+                        </MudButton>
+
+                    </MudStack>
+                }
+
+            </MudPaper>
+        }
     }
 
 </MudContainer>
