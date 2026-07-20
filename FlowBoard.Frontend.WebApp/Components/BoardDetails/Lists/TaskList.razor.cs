@@ -26,6 +26,7 @@ public partial class TaskList
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, UpdateCardDto Dto)> OnUpdateCard { get; set; }
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, string CardName)> OnDeleteCard { get; set; }
     [Parameter] public EventCallback<CardDto> OnToggleCardComplete { get; set; }
+    [Parameter]public EventCallback<CardDto> OnDuplicate { get; set; }
 
     private CreateCardForm _createCardForm = default!;
 
@@ -52,6 +53,9 @@ public partial class TaskList
 
     private async Task ToggleCardCompleteAsync(CardDto card)
         => await OnToggleCardComplete.InvokeAsync(card);
+    
+    private async Task DuplicateCardClickAsync(CardDto card)
+        => await OnDuplicate.InvokeAsync(card);
 
     private async Task OpenCardDetailsAsync(CardDto card)
     {

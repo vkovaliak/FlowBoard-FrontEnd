@@ -18,6 +18,9 @@ public partial class CardItem
     [Parameter]
     public EventCallback<CardDto> OnToggleComplete { get; set; }
 
+    [Parameter]
+    public EventCallback<CardDto> OnDuplicate { get; set; }
+
     [Parameter] 
     public bool CanEdit { get; set; } = true;
 

@@ -72,4 +72,18 @@ public partial class BoardDetails
         }
         TasksState.NotifyChanged();
     }
+
+    private async Task HandleDuplicateCardAsync(CardDto card)
+    {
+        if (_board == null)
+        {
+            return;
+        }
+
+        var result = await CardService.DuplicateAsync(_board.Id, card.Id);
+
+        ShowResult(result.Success,
+            "Card duplicated!",
+            result.Error ?? "Failed");
+    }
 }
