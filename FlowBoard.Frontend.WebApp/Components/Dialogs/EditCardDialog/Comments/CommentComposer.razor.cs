@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
 using FlowBoard.Frontend.Services.Abstractions;
-using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments;
 
@@ -13,15 +13,34 @@ public partial class CommentComposer
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public Func<string, Task<Guid?>> OnCreateComment { get; set; } = default!;
 
-    private AttachmentUploader _uploader = default!;
+    private readonly List<IBrowserFile> _pendingFiles = [];
+    private string? _uploadingFile;
+    private readonly string _inputId = $"comment-file-{Guid.NewGuid():N}";
+
     private string _message = string.Empty;
     private bool _useRichEditor;
     private bool _isSubmitting;
 
-    private void Cancel()
+    private void OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        _pendingFiles.AddRange(e.GetMultipleFiles());
+    }
+
+    private void RemoveFile(IBrowserFile file)
+    {
+        _pendingFiles.Remove(file);
+    }
+
+    private void ClearAll()
     {
         _message = string.Empty;
-        _uploader?.Clear();
+        _pendingFiles.Clear();
+        _uploadingFile = null;
+    }
+
+    private void ToggleRichEditor()
+    {
+        _useRichEditor = !_useRichEditor;
     }
 
     private async Task SubmitAsync()
@@ -43,35 +62,43 @@ public partial class CommentComposer
                 return;
             }
 
-            if (_uploader.HasPendingFiles)
+            foreach (var file in _pendingFiles.ToList())
             {
-                await _uploader.UploadAllAsync(
-                    file => UploadToCommentAsync(commentId.Value, file));
+                _uploadingFile = file.Name;
+                StateHasChanged();
+
+                await UploadToCommentAsync(commentId.Value, file);
             }
 
-            Cancel();
+            ClearAll();
         }
         finally
         {
             _isSubmitting = false;
             StateHasChanged();
-        }        
+        }
     }
 
-    private async Task UploadToCommentAsync(Guid commentId, IBrowserFile file)
+    private async Task UploadToCommentAsync(
+        Guid commentId, IBrowserFile file)
     {
-        await using var stream = file.OpenReadStream(50 * 1024 * 1024);
+        await using var stream = file.OpenReadStream(
+            50 * 1024 * 1024);
+
         await AttachmentService.UploadCommentAttachmentAsync(
-            BoardId, CardId, commentId, stream, file.Name, file.ContentType);
+            BoardId, CardId, commentId, stream, 
+            file.Name, file.ContentType);
     }
 
-    private void EnableRichEditor()
-    {
-        _useRichEditor = true;
-    }
+    private static string GetFileIcon(string contentType) =>
+        contentType.StartsWith("image/")
+            ? Icons.Material.Filled.Image
+            : Icons.Material.Filled.InsertDriveFile;
 
-    private void DisableRichEditor()
+    private static string FormatSize(long bytes) => bytes switch
     {
-        _useRichEditor = false;
-    }
+        < 1024 => $"{bytes} B",
+        < 1024 * 1024 => $"{bytes / 1024.0:F1} KB",
+        _ => $"{bytes / (1024.0 * 1024):F1} MB"
+    };
 }
