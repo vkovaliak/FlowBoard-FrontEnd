@@ -102,7 +102,11 @@
     else
     {
         <MudText Typo=@Typo.body2 Class="mt-1" 
-                 Style="white-space: pre-wrap;">
+                 Style="white-space: pre-wrap;
+                        word-wrap: break-word;
+                        overflow-wrap: anywhere;
+                        word-break: break-word;
+                        max-width: 100%;">
             @((MarkupString)Comment.Message)
         </MudText>
 

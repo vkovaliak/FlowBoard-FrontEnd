@@ -1,61 +1,114 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 
-<MudStack Spacing="2">
+<div class="comment-composer">
 
     @if (_useRichEditor)
     {
         <RichTextEditor @bind-Value=@_message />
+
+        <div class="composer-actions-row">
+
+            <label for=@_inputId 
+                   class="composer-attach-btn" 
+                   title="Attach files">
+
+                <MudIcon Icon=@Icons.Material.Outlined.AttachFile 
+                         Size=@Size.Small />
+            </label>
+
+            <MudIconButton Icon=@Icons.Material.Outlined.TextFields
+                           OnClick=@ToggleRichEditor
+                           Size=@Size.Small  />
+
+            <MudSpacer />
+
+            <MudIconButton Icon=@Icons.Material.Filled.Send
+                           Color=@Color.Primary
+                           Size=@Size.Small
+                           Disabled=@(string.IsNullOrWhiteSpace(_message) || _isSubmitting)
+                           OnClick=@SubmitAsync />
+        </div>
     }
     else
     {
-        <MudTextField T=@string
-                      @bind-Value=@_message
-                      Placeholder="Write a comment..."
-                      Variant=@Variant.Outlined
-                      Lines="1"
-                      Immediate=@true />
+        <div class="composer-input-row">
+
+            <div class="composer-field">
+
+                <MudTextField T=@string
+                              @bind-Value=@_message
+                              Placeholder="Write a comment..."
+                              Variant=@Variant.Outlined
+                              Immediate=@true
+                              Lines="2"
+                              Margin=@Margin.Dense
+                              Class="composer-textfield" />
+            </div>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Send
+                           Class="mb-3"
+                           Color=@Color.Primary
+                           Size=@Size.Medium
+                           Disabled=@(string.IsNullOrWhiteSpace(_message) || _isSubmitting)
+                           OnClick=@SubmitAsync />
+        </div>
+
+        <div class="composer-actions-row">
+
+            <label for=@_inputId 
+                   class="composer-attach-btn" 
+                   title="Attach files">
+
+                <MudIcon Icon=@Icons.Material.Outlined.AttachFile 
+                         Size=@Size.Small />
+            </label>
+
+            <MudIconButton Icon=@Icons.Material.Outlined.EditAttributes
+                           OnClick=@ToggleRichEditor
+                           Size=@Size.Small />
+        </div>
     }
 
-    <AttachmentUploader @ref=@_uploader />
+    <InputFile OnChange=@OnFilesSelected
+               multiple
+               id=@_inputId
+               style="display: none;" />
 
-    <MudStack Row=@true
-              Justify=@Justify.FlexEnd
-              AlignItems=@AlignItems.Center >
-                
+    @if (_pendingFiles.Any())
+    {
+        <div class="composer-attachments">
 
-        <MudStack Row=@true Spacing="3">
-
-            @if (!_useRichEditor)
+            @foreach (var file in _pendingFiles)
             {
-                <MudIconButton Icon=@Icons.Material.Outlined.EditAttributes
-                               OnClick=@EnableRichEditor
-                               Size=@Size.Medium/>
+                <div class="composer-attach-chip">
+
+                    <MudIcon Icon=@GetFileIcon(file.ContentType)
+                             Size=@Size.Small 
+                             Class="mr-1" />
+
+                    <span class="composer-attach-name">
+                        @file.Name
+                    </span>
+
+                    <span class="composer-attach-size">
+                        @FormatSize(file.Size)
+                    </span>
+
+                    @if (_uploadingFile == file.Name)
+                    {
+                        <MudProgressCircular Size=@Size.Small
+                                             Indeterminate=@true Class="ml-2" />
+                    }
+                    else
+                    {
+                        <MudIconButton Icon=@Icons.Material.Filled.Close
+                                       Size=@Size.Small
+                                       Color=@Color.Error
+                                       OnClick=@(() => RemoveFile(file)) />
+                    }
+                </div>
             }
-            else
-            {
-                <MudIconButton Icon=@Icons.Material.Outlined.TextFields
-                               OnClick=@DisableRichEditor>
-                </MudIconButton>
-            }
+        </div>
+    }
 
-            <MudButton Variant=@Variant.Filled
-                       Size=@Size.Medium
-                       Color=@Color.Primary
-                       Disabled=@(string.IsNullOrWhiteSpace(_message) || _isSubmitting)
-                       OnClick=@SubmitAsync>
-
-                @if (_isSubmitting)
-                {
-                    <MudProgressCircular Size=@Size.Small
-                                         Indeterminate=@true
-                                         Class="mr-2" />
-                }
-
-                Add
-            </MudButton>
-
-        </MudStack>
-
-    </MudStack>
-
-</MudStack>
+</div>

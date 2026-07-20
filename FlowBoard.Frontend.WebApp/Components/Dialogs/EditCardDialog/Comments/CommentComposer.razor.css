@@ -1,0 +1,75 @@
+.comment-composer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.composer-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    width: 100%;
+}
+
+.composer-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.composer-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-left: 2px;
+}
+
+.composer-attach-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748B;
+    padding: 6px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.composer-attach-btn:hover {
+    background: #F1F5F9;
+    color: #3B82F6;
+}
+
+.composer-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.composer-attach-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.composer-attach-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #1E293B;
+    font-weight: 500;
+}
+
+.composer-attach-size {
+    color: #94A3B8;
+    font-size: 12px;
+    white-space: nowrap;
+}
