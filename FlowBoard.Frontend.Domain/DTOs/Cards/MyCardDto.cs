@@ -10,6 +10,7 @@ public record MyCardDto(
     string BoardName,
     string Name,
     string? Description,
+    DateTime? StartTime,
     DateTime? DueDate,
     bool IsCompleted,
     List<LabelDto> Labels,

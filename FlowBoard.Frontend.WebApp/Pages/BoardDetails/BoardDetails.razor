@@ -5,6 +5,7 @@
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails.Dashboard
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails.Table;
 @using FlowBoard.Frontend.WebApp.Components.BoardDetails.Calendar;
+@using FlowBoard.Frontend.WebApp.Components.BoardDetails.Timeline
 
 
 @if (_isNotFound)
@@ -113,6 +114,12 @@ else
         {
             <BoardDashboardView Board=@_board
                                 OnCardUpdated=@HandleTableCardUpdatedAsync />
+        }
+
+        else if (_activeTab == BoardViewTab.TimeLine)
+        {
+            <TimelineView Board=@_board
+                          OnCardUpdated=@HandleTableCardUpdatedAsync />
         }
     </div>
 }

@@ -59,6 +59,15 @@
             @if (IsPro)
             {
                 <button class="board-tab 
+                        @(ActiveTab == BoardViewTab.TimeLine ? "board-tab-active" : "")"
+                        @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.TimeLine))>
+
+                    <MudIcon Icon=@Icons.Material.Outlined.ClearAll
+                            Size=@Size.Small Class="mr-1" />
+                    Timeline
+                </button>
+
+                <button class="board-tab 
                         @(ActiveTab == BoardViewTab.Table ? "board-tab-active" : "")"
                         @onclick=@(() => OnTabChanged.InvokeAsync(BoardViewTab.Table))>
 
@@ -87,6 +96,20 @@
             }
             else
             {
+
+                <button class="board-tab board-tab-locked"
+                        @onclick=@UpgradeAsync
+                        title="Upgrade to Pro to unlock more views">
+
+                    <MudIcon Icon=@Icons.Material.Outlined.ClearAll
+                            Size=@Size.Small Class="mr-1" />
+                    Timeline
+                    
+                    <MudIcon Icon=@Icons.Material.Filled.Lock
+                            Size=@Size.Small Class="ml-1"
+                            Style="font-size: 14px; opacity: 0.6;" />
+                </button>
+
                 <button class="board-tab board-tab-locked"
                         @onclick=@UpgradeAsync
                         title="Upgrade to Pro to unlock more views">

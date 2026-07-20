@@ -162,4 +162,18 @@ public class CardService : ICardService
 
         return OperationResult<Guid>.Fail(response.GetErrorMessage());
     }
+
+    public async Task<OperationResult> SetStartTimeAsync(
+        Guid boardId, Guid cardId, SetCardStartTimeDto dto)
+    {
+        var response = await _cardApi.SetStartTimeAsync(
+            boardId, cardId, dto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
+    }
 }

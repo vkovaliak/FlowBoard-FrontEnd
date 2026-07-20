@@ -10,6 +10,7 @@ public record CardDto(
     string Name,
     string? Description,
     int Position,
+    DateTime? StartTime,
     DateTime? DueDate,
     bool IsCompleted,
     List<AttachmentResponseDto> Attachments,
