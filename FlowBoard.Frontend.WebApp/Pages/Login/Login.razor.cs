@@ -1,6 +1,7 @@
 using FlowBoard.Frontend.Domain.DTOs.Auth;
 using FlowBoard.Frontend.Domain.Models.Auth;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Services.State;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -11,6 +12,7 @@ public partial class Login
     [Inject] public IAuthService AuthService { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
+    [Inject] public UserState UserState { get; set; } = default!;
 
     private LoginModel Model { get; set; } = new();
     private bool _showPassword;
@@ -27,6 +29,7 @@ public partial class Login
 
         if (result.Success)
         {
+            await UserState.LoadAsync();
             Snackbar.Add("Login success!", Severity.Success);
             NavigationManager.NavigateTo("/");
         }
@@ -47,6 +50,7 @@ public partial class Login
             
             if (result.Success)
             {
+                await UserState.LoadAsync();
                 Snackbar.Add("Microsoft login success!", Severity.Success);
                 NavigationManager.NavigateTo("/");
             }
