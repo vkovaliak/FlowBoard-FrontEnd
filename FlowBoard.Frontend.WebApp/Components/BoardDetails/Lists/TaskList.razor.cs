@@ -18,7 +18,7 @@ public partial class TaskList
     [Parameter] public List<BoardMemberDto> BoardMembers { get; set; } = [];
     [Parameter] public bool CanEdit { get; set; } = true;
     [Parameter] public bool HasBackground { get; set; }
-
+    [Parameter] public Func<CardDto, bool>? CardFilter { get; set; }
 
     [Parameter] public EventCallback<(Guid ListId, string NewName)> OnRenameList { get; set; }
     [Parameter] public EventCallback<(Guid ListId, string ListName)> OnDeleteList { get; set; }
@@ -79,4 +79,9 @@ public partial class TaskList
             await OnUpdateCard.InvokeAsync((List.Id, card.Id, updateDto));
         }
     }
+
+    private IEnumerable<CardDto> FilteredCards =>(
+        List.Cards ?? [])
+            .Where(c => CardFilter?.Invoke(c) ?? true)
+            .OrderBy(c => c.Position);
 }

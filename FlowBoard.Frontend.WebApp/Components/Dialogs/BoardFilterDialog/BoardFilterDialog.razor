@@ -1,0 +1,196 @@
+@using FlowBoard.Frontend.Domain.Enums
+
+<MudDialog Class="board-filter-panel">
+
+    <DialogContent>
+
+        <div class="filter-header">
+
+            <MudText Typo=@Typo.h6 
+                     Style="font-weight: 700;">
+                Filters
+            </MudText>
+
+            <MudIconButton Icon=@Icons.Material.Filled.Close
+                           Size=@Size.Small
+                           OnClick=@Cancel />
+        </div>
+
+        <div class="filter-body">
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="filter-section-title">
+                Assignee
+            </MudText>
+
+            <MudRadioGroup T="AssigneeFilter" 
+                           @bind-Value=@_filter.Assignee>
+
+                <div class="d-column align-center" 
+                     style="gap: 8px;">
+                     
+                    <MudRadio T="AssigneeFilter" 
+                            Value=@AssigneeFilter.Any 
+                            Size=@Size.Small>
+                        Any
+                    </MudRadio>
+
+                    <MudRadio T="AssigneeFilter" 
+                            Color=@Color.Primary 
+                            Value=@AssigneeFilter.AssignedToMe 
+                            Size=@Size.Small>
+                        Assigned to me
+                    </MudRadio>
+
+                    <MudRadio T="AssigneeFilter" 
+                            Color=@Color.Primary 
+                            Value=@AssigneeFilter.Unassigned 
+                            Size=@Size.Small>
+                        Unassigned
+                    </MudRadio>
+
+                </div>
+
+            </MudRadioGroup>
+
+            <MudDivider Class="my-3" />
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="filter-section-title">
+                Status
+            </MudText>
+
+            <MudRadioGroup T="StatusFilter" 
+                           @bind-Value=@_filter.Status>
+
+                <div class="d-column align-center" 
+                     style="gap: 8px;">
+
+                    <MudRadio T="StatusFilter" 
+                            Value=@StatusFilter.Any 
+                            Size=@Size.Small>
+                        Any
+                    </MudRadio>
+
+                    <MudRadio T="StatusFilter" 
+                            Color=@Color.Primary 
+                            Value=@StatusFilter.Active 
+                            Size=@Size.Small>
+                        Active
+                    </MudRadio>
+
+                    <MudRadio T="StatusFilter" 
+                            Color=@Color.Primary 
+                            Value=@StatusFilter.Completed 
+                            Size=@Size.Small>
+                        Completed
+                    </MudRadio>
+
+                </div>
+
+            </MudRadioGroup>
+
+            <MudDivider Class="my-3" />
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="filter-section-title">
+                Due date
+            </MudText>
+
+            <MudRadioGroup T="DueDateFilter" 
+                           @bind-Value=@_filter.DueDate>
+
+                <div class="d-column align-center" 
+                     style="gap: 8px;">
+
+                    <MudRadio T="DueDateFilter" 
+                            Value=@DueDateFilter.Any 
+                            Size=@Size.Small>
+                        Any
+                    </MudRadio>
+
+                    <MudRadio T="DueDateFilter" 
+                            Color=@Color.Primary 
+                            Value=@DueDateFilter.NoDueDate 
+                            Size=@Size.Small>
+                        No due date
+                    </MudRadio>
+
+                    <MudRadio T="DueDateFilter" 
+                            Color=@Color.Primary 
+                            Value=@DueDateFilter.Overdue 
+                            Size=@Size.Small>
+                        Overdue
+                    </MudRadio>
+
+                    <MudRadio T="DueDateFilter" 
+                            Color=@Color.Primary 
+                            Value=@DueDateFilter.DueNextWeek 
+                            Size=@Size.Small>
+                        Due next week
+                    </MudRadio>
+
+                </div>
+
+            </MudRadioGroup>
+
+            <MudDivider Class="my-3" />
+
+            <MudText Typo=@Typo.subtitle2 
+                     Class="filter-section-title">
+                Labels
+            </MudText>
+
+            @if (Labels.Count == 0)
+            {
+                <MudText Typo=@Typo.body2 
+                         Color=@Color.Secondary>
+                    No labels
+                </MudText>
+            }
+            else
+            {
+                @foreach (var label in Labels)
+                {
+                    <div class="d-flex align-center" 
+                         style="gap: 8px;">
+                         
+                        <MudCheckBox T="bool"
+                                    Color=@Color.Primary
+                                     Value=@_filter.LabelIds.Contains(label.Id)
+                                     ValueChanged=@(v => ToggleLabel(label.Id, v))
+                                     Size=@Size.Small />
+
+                        <span style=@($"width: 14px; height: 14px;" +
+                                      $" border-radius: 4px;" +
+                                      $"background-color: {label.Color};")>
+                        </span>
+
+                        <MudText Typo=@Typo.body2>
+                            @label.Name
+                        </MudText>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+        <div class="filter-actions">
+
+            <MudButton Variant=@Variant.Text
+                       OnClick=@ResetFilter>
+                Clear all
+            </MudButton>
+
+            <MudButton Variant=@Variant.Filled
+                       Color=@Color.Primary
+                       OnClick=@Apply>
+                Apply
+            </MudButton>
+            
+        </div>
+
+    </DialogContent>
+
+</MudDialog>

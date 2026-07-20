@@ -10,6 +10,10 @@ using FlowBoard.Frontend.Domain.Authorization;
 using FlowBoard.Frontend.Domain.Enums;
 using Microsoft.Extensions.Options;
 using FlowBoard.Frontend.Services.Configurations;
+using FlowBoard.Frontend.Domain.Models.Cards;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.BoardFilterDialog;
+using FlowBoard.Frontend.Domain.DTOs.Cards;
+using FlowBoard.Frontend.Services.Helpers;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -31,6 +35,8 @@ public partial class BoardDetails : IAsyncDisposable
     [Inject] public IJSRuntime JsRuntime { get; set; } = default!;
     [Inject] public IBoardHubService BoardHub { get; set; } = default!;
     [Inject] public FavoritesState FavoritesState { get; set; } = default!;
+
+    private CardFilterModel _filter = new();
 
     private BoardDetailsDto? _board;
     private bool _isNotFound = false;
@@ -212,4 +218,41 @@ public partial class BoardDetails : IAsyncDisposable
             Snackbar.Add(result.Error ?? "Failed", Severity.Error);
         }
     }
+
+    private async Task OpenFilterAsync()
+    {
+        var labels = _board!.Lists
+            .SelectMany(l => l.Cards ?? [])
+            .SelectMany(c => c.Labels)
+            .DistinctBy(l => l.Id)
+            .OrderBy(l => l.Name)
+            .ToList();
+            
+        var parameters = new DialogParameters<BoardFilterDialog>
+        {
+            { x => x.Filter, _filter },
+            { x => x.Labels, labels }
+        };
+
+        var options = new DialogOptions
+        {
+            Position = DialogPosition.CenterRight,
+            FullWidth = false,
+            CloseButton = false,
+            NoHeader = true
+        };
+
+        var dialog = await DialogService.ShowAsync<BoardFilterDialog>(
+            null, parameters, options);
+        var result = await dialog.Result;
+
+        if (!result!.Canceled && result.Data is CardFilterModel applied)
+        {
+            _filter = applied;
+            StateHasChanged();
+        }
+    }
+
+    private bool CardMatchesFilter(CardDto card)
+        => CardFilterHelper.Matches(card, _filter, _currentUserId);
 }

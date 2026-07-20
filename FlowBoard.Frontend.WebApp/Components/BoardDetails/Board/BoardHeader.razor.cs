@@ -20,6 +20,8 @@ public partial class BoardHeader : IDisposable
     [Parameter] public Guid CurrentUserId { get; set; }
     [Parameter] public BoardRole CurrentUserRole { get; set; }
     [Parameter] public BoardViewTab ActiveTab { get; set; }
+    [Parameter] public int FilterCount { get; set; }
+
     [Parameter] public EventCallback<BoardViewTab> OnTabChanged { get; set; }
     [Parameter] public EventCallback OnMembersChanged { get; set; }
     [Parameter] public bool IsFavorite { get; set; }
@@ -27,6 +29,7 @@ public partial class BoardHeader : IDisposable
     [Parameter] public EventCallback OnInviteClick { get; set; }
     [Parameter] public EventCallback OnMeetClick { get; set; }
     [Parameter] public EventCallback OnArchiveClick { get; set; }
+    [Parameter] public EventCallback OnFilterClick { get; set; }
 
     private bool IsOwner => CurrentUserRole == BoardRole.Owner;
 
