@@ -8,6 +8,8 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.StartDate
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Activity
+
 
 @if (_card != null)
 {
@@ -122,9 +124,31 @@
 
                             <MudDivider />
 
-                            <CardCommentsSection BoardId=@BoardId
-                                                 CardId=@CardId
-                                                 CanEdit=@CanEdit />
+                            <MudTabs Elevation="0"
+                                     Rounded=@false
+                                     Centered=@true
+                                     ApplyEffectsToContainer=@true
+                                     @bind-ActivePanelIndex=@_activeTab
+                                     Class="card-tabs"
+                                     TabPanelsClass="card-tab-panel">
+
+                                <MudTabPanel Text="Comments"
+                                             Style="padding: 0px;">
+
+                                    <CardCommentsSection BoardId=@BoardId
+                                                         CardId=@CardId
+                                                         CanEdit=@CanEdit />
+                                </MudTabPanel>
+
+                                <MudTabPanel Text="Activity">
+                                    @if (_activeTab == 1)
+                                    {
+                                        <CardActivitySection BoardId=@BoardId
+                                                             CardId=@CardId />
+                                    }
+                                </MudTabPanel>
+
+                            </MudTabs>
 
                         </MudStack>
                         

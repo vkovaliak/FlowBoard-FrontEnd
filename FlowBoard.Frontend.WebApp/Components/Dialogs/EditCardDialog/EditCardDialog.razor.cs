@@ -20,6 +20,7 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
 
     private BoardDetailsDto? _board;
     private CardDto? _card;
+    private int _activeTab = 0;
 
     private bool CanEdit => _board is not null
         && BoardPermissions.CanModifyContent(_board.UserRole);

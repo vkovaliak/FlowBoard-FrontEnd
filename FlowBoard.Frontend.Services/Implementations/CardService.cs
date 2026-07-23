@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.DTOs.Activities;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.Models.Common;
 using FlowBoard.Frontend.Services.Abstractions;
@@ -175,5 +176,14 @@ public class CardService : ICardService
         }
 
         return OperationResult.Fail(response.GetErrorMessage());
+    }
+
+    public async Task<List<ActivityDto>> GetCardActivitiesAsync(Guid boardId, Guid cardId)
+    {
+        var response = await _cardApi.GetCardActivitiesAsync(boardId, cardId);
+
+        return response.IsSuccessStatusCode && response.Content != null
+            ? response.Content
+            : [];
     }
 }
