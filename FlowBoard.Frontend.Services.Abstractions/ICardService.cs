@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.DTOs.Activities;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.Models.Common;
 
@@ -19,4 +20,5 @@ public interface ICardService
     Task<List<MyCardDto>> GetMyTasksAsync();
     Task<OperationResult<Guid>> DuplicateAsync(Guid boardId, Guid cardId);
     Task<OperationResult> SetStartTimeAsync(Guid boardId, Guid cardId, SetCardStartTimeDto dto);
+    Task<List<ActivityDto>> GetCardActivitiesAsync(Guid boardId, Guid cardId);
 }

@@ -1,0 +1,55 @@
+@using FlowBoard.Frontend.Domain.DTOs.Activities
+@using FlowBoard.Frontend.WebApp.Components.Common
+
+@if (_isLoading)
+{
+    <MudProgressCircular Indeterminate=@true 
+                         Size=@Size.Small />
+}
+else if (_activities.Count == 0)
+{
+    <MudText Typo=@Typo.body2 
+             Color=@Color.Secondary
+             Class="mud-text-secondary mt-4 ml-20">
+        No activity yet
+    </MudText>
+}
+else
+{
+    <MudList T=@ActivityDto 
+             Dense=@true 
+             Gutters=@false>
+
+        @foreach (var activity in _activities)
+        {
+            <MudListItem T=@ActivityDto>
+
+                <div style="display: flex; gap: 12px; 
+                            align-items: flex-start;">
+                    
+                    <UserAvatar UserName=@activity.UserName
+                                AvatarUrl=@activity.AvatarUrl
+                                SizeStyle="width: 32px; height: 32px;
+                                           font-size: 13px;
+                                           border: 2px solid white;" />
+
+                    <div style="flex-grow: 1;">
+
+                        <MudText Typo=@Typo.body2>
+                            @activity.Description
+                        </MudText>
+                        
+                        <MudText Typo=@Typo.caption 
+                                 Class="mud-text-secondary">
+                            @FormatDate(activity.CreatedAt)
+                        </MudText>
+
+                    </div>
+
+                </div>
+
+            </MudListItem>
+        }
+
+    </MudList>
+}

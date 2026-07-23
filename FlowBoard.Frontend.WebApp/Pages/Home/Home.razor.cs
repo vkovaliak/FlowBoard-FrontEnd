@@ -151,7 +151,8 @@ public partial class Home
             {
                 Snackbar.Add(
                     $"Board '{board.Name}' deleted", Severity.Success);
-                _boards = await BoardService.GetMyBoardsAsync();
+                _archivedBoards = await BoardService.GetArchivedBoardsAsync();
+                await LoadStatsAsync();
             }
             else
             {
@@ -182,6 +183,8 @@ public partial class Home
                 Severity.Info);
 
             _archivedBoards = await BoardService.GetArchivedBoardsAsync();
+            _boards = await BoardService.GetMyBoardsAsync();
+            await LoadStatsAsync();
         }
         else
         {
@@ -205,6 +208,7 @@ public partial class Home
             {
                 Snackbar.Add($"Board '{board.Name}' archived", Severity.Success);
                 _boards = await BoardService.GetMyBoardsAsync();
+                await LoadStatsAsync();
             }
             else
             {

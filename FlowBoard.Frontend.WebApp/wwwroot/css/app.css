@@ -520,3 +520,35 @@ html body .mud-main-content:has(.flowboard-details-page) .mud-container {
 .card-side-panel .mud-dialog-title {
     padding: 0 !important;
 }
+
+.card-tabs {
+    width: 100%;
+}
+
+.card-tabs .mud-tabs-tabbar {
+    width: 100%;
+}
+
+.mud-tab .mud-tab-content {
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.card-tabs .mud-tab {
+    flex: 1 1 auto;          
+    min-width: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-transform: none;
+}
+
+.card-tabs .mud-tabs-scroll-button {
+    display: none !important;
+}
+
+.card-tab-panel {
+    min-height: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-top: 16px;
+}

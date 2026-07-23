@@ -1,3 +1,4 @@
+using FlowBoard.Frontend.Domain.DTOs.Activities;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using Refit;
 
@@ -47,4 +48,8 @@ public interface ICardApi
     [Put("/api/boards/{boardId}/cards/{cardId}/start-time")]
     Task<ApiResponse<bool>> SetStartTimeAsync(
         Guid boardId, Guid cardId, [Body] SetCardStartTimeDto dto);
+    
+    [Get("/api/boards/{boardId}/cards/{cardId}/activities")]
+    Task<ApiResponse<List<ActivityDto>>> GetCardActivitiesAsync(
+        Guid boardId, Guid cardId);
 }
