@@ -1,10 +1,10 @@
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Search;
 using FlowBoard.Frontend.Domain.Enums;
-using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Services.Handlers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.InviteBoardDialog;
@@ -14,10 +14,15 @@ public partial class InviteMemberDialog
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
     [Inject] private ISearchService SearchService { get; set; } = default!;
     [Inject] private UpgradeHandler UpgradeHandler { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+    [Inject] private ISnackbar Snackbar { get; set; } = default!;
 
     [Parameter] public List<BoardRole> AvailableRoles { get; set; } = [];
     [Parameter] public int CurrentMembersCount { get; set; }
     [Parameter] public bool IsOwnerPro { get; set; }
+    [Parameter] public Guid BoardId { get; set; }
+    [Parameter] public bool IsPublic { get; set; }
 
     private const int FreeMaxMembers = 5;
 
@@ -78,4 +83,15 @@ public partial class InviteMemberDialog
     };
 
     private string RoleToString(BoardRole role) => role.ToString();
+
+    private string BoardLink =>
+        $"{Navigation.BaseUri.TrimEnd('/')}/boards/{BoardId}";
+    
+    private async Task CopyLinkAsync()
+    {
+        await JsRuntime.InvokeVoidAsync(
+            "navigator.clipboard.writeText", BoardLink);
+            
+        Snackbar.Add("Link copied to clipboard!", Severity.Success);
+    }
 }
