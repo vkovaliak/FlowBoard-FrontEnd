@@ -17,7 +17,9 @@ public partial class BoardDetails
         {
             { x => x.AvailableRoles, [.. assignable] },
             { x => x.CurrentMembersCount, _board.Members.Count },
-            { x => x.IsOwnerPro, _isOwnerPro }
+            { x => x.IsOwnerPro, _isOwnerPro },
+            { x => x.BoardId, _board.Id },
+            { x => x.IsPublic, _board.IsPublic }
         };
 
         var options = new DialogOptions

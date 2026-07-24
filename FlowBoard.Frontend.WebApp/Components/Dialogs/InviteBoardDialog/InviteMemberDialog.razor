@@ -142,6 +142,53 @@
             @GetRoleDescription(_role)
         </MudText>
 
+        @if (IsPublic)
+        {
+            <MudDivider Class="my-2" />
+
+            <MudText Typo=@Typo.subtitle1
+                     Class="mb-2"
+                     Style="font-weight: 600;">
+                Share link
+            </MudText>
+
+            <MudText Typo=@Typo.caption
+                     Color=@Color.Secondary
+                     Class="mb-3 d-block">
+                Anyone with this link can view the board.
+            </MudText>
+
+            <MudStack Row=@true Spacing="2" 
+                      AlignItems=@AlignItems.Center>
+
+                <MudTextField Value=@BoardLink
+                              ReadOnly=@true
+                              Variant=@Variant.Outlined
+                              Margin=@Margin.Dense
+                              Adornment=@Adornment.Start
+                              AdornmentIcon=@Icons.Material.Filled.Link
+                              Class="flex-grow-1" />
+
+                <MudButton Color=@Color.Primary
+                           Variant=@Variant.Filled
+                           StartIcon=@Icons.Material.Filled.ContentCopy
+                           OnClick=@CopyLinkAsync
+                           Style="text-transform: none;">
+                    Copy
+                </MudButton>
+
+            </MudStack>
+        }
+        else
+        {
+            <MudAlert Severity=@Severity.Info 
+                      Dense=@true>
+                This board is private. Only invited members can access it.
+            </MudAlert>
+        }
+
+        <MudDivider Class="mb-5" />
+
     </DialogContent>
 
     <DialogActions>
