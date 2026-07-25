@@ -10,6 +10,8 @@ public enum ActivityAction
     CardUncomleted = 5,
     CardDuplicated = 6,
     CardDescriptionUpdated = 7,
+    CardAttachmentsAdded = 8,
+    CardAttachmentsRemoved = 9,
 
     DueDateSet = 10,
     DueDateRemoved = 11,

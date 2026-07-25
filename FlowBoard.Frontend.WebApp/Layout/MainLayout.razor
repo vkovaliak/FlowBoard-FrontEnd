@@ -1,5 +1,6 @@
 ﻿@using FlowBoard.Frontend.WebApp.Components.Common
 @using FlowBoard.Frontend.WebApp.Components.Chat
+@using FlowBoard.Frontend.WebApp.Components.Notifications;
 @inherits LayoutComponentBase
 
 <MudLayout>
@@ -48,10 +49,18 @@
         @if(UserState.IsPro)
         {
             <MudIconButton Icon=@Icons.Material.Filled.Chat
-               Color=@Color.Inherit
-               OnClick=@ToggleChat
-               Class="mr-6" />
+                           Color=@Color.Inherit
+                           OnClick=@ToggleChat
+                           Class="mr-3" />
         }
+
+        <AuthorizeView>
+            <Authorized>
+                <MudStack Class="mr-6">
+                    <NotificationBell />
+                </MudStack>
+            </Authorized>
+        </AuthorizeView>
 
         @if (_currentUser != null)
         {

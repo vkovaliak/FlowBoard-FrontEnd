@@ -9,7 +9,7 @@ public interface ICommentApi
     Task<ApiResponse<IEnumerable<CommentDto>>> GetByCardIdAsync(Guid boardId, Guid cardId);
 
     [Post("/api/boards/{boardId}/cards/{cardId}/comments")]
-    Task<ApiResponse<Guid>> CreateAsync(Guid boardId, Guid cardId, [Body] CreateCommentDto dto);
+    Task<ApiResponse<CreateCommentResultDto>> CreateAsync(Guid boardId, Guid cardId, [Body] CreateCommentDto dto);
 
     [Put("/api/boards/{boardId}/cards/{cardId}/comments/{commentId}")]
     Task<ApiResponse<bool>> UpdateAsync(Guid boardId, Guid cardId, Guid commentId, [Body] UpdateCommentDto dto);
