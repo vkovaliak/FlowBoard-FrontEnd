@@ -1,0 +1,12 @@
+.presence-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-sizing: border-box;
+}
+.presence-dot.online { background-color: #22C55E; }
+.presence-dot.offline { background-color: #CBD5E1; }

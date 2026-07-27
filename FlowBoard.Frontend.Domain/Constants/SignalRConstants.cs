@@ -12,6 +12,10 @@ public static class HubMethods
     public const string CommentUpdated = "CommentUpdated";
     public const string BoardUpdated = "BoardUpdated";
     public const string NotificationReceived = "NotificationReceived";
+
+    public const string UserOnline = "UserOnline";
+    public const string UserOffline = "UserOffline";
+    public const string OnlineUsers = "OnlineUsers";
 }
 
 public static class HubClientMethods
