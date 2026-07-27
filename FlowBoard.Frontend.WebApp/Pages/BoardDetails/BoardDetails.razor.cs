@@ -26,7 +26,7 @@ public partial class BoardDetails : IAsyncDisposable
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] public IOptions<MeetingOptions> MeetingOptions { get; set; } = default!;
-
+    [Inject] public PresenceState PresenceState { get; set; } = default!;
     [Inject] public IBoardService BoardService { get; set; } = default!;
     [Inject] public ICardService CardService { get; set; } = default!;
     [Inject] public IListService ListService { get; set; } = default!;
@@ -57,6 +57,12 @@ public partial class BoardDetails : IAsyncDisposable
         if (_loadedBoardId != Guid.Empty)
         {
             BoardHub.OnBoardUpdated -= HandleBoardHubUpdate;
+            BoardHub.OnUserOnline -= HandleUserOnline;
+            BoardHub.OnUserOffline -= HandleUserOffline;
+            BoardHub.OnOnlineUsers -= HandleOnlineUsers;
+            PresenceState.OnChanged -= StateChanged;
+            PresenceState.Clear();
+
             await BoardHub.LeaveBoardAsync(_loadedBoardId);
             _objRef?.Dispose();
             _objRef = null;
@@ -78,6 +84,11 @@ public partial class BoardDetails : IAsyncDisposable
         else
         {
             BoardHub.OnBoardUpdated += HandleBoardHubUpdate;
+            BoardHub.OnUserOnline += HandleUserOnline;
+            BoardHub.OnUserOffline += HandleUserOffline;
+            BoardHub.OnOnlineUsers += HandleOnlineUsers;
+            PresenceState.OnChanged += StateChanged;
+
             await BoardHub.ConnectAsync();
             await BoardHub.JoinBoardAsync(Id);
         }
@@ -102,6 +113,15 @@ public partial class BoardDetails : IAsyncDisposable
             await InvokeAsync(StateHasChanged);
         }
     }
+
+    private void HandleUserOnline(Guid id) => PresenceState.Add(id);
+
+    private void HandleUserOffline(Guid id) => PresenceState.Remove(id);
+
+    private void HandleOnlineUsers(IReadOnlyCollection<Guid> users)
+        => PresenceState.SetOnline(users);
+        
+    private void StateChanged() => InvokeAsync(StateHasChanged);
 
     private async Task RefreshBoardAsync()
     {
@@ -141,8 +161,12 @@ public partial class BoardDetails : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _objRef?.Dispose();
-        
         BoardHub.OnBoardUpdated -= HandleBoardHubUpdate;
+        BoardHub.OnUserOnline -= HandleUserOnline;
+        BoardHub.OnUserOffline -= HandleUserOffline;
+        BoardHub.OnOnlineUsers -= HandleOnlineUsers;
+        PresenceState.OnChanged -= StateChanged;
+        PresenceState.Clear();
         await BoardHub.LeaveBoardAsync(Id);
     }
 

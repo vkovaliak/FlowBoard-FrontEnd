@@ -6,6 +6,7 @@ using FlowBoard.Frontend.Domain.Enums;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.ChangeRoleDialog;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.TransferOwnershipDialog;
+using FlowBoard.Frontend.Services.State;
 
 namespace FlowBoard.Frontend.WebApp.Components.BoardDetails.Board;
 
@@ -21,6 +22,7 @@ public partial class BoardMembers
     [Inject] private IBoardService BoardService { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private IDialogService DialogService { get; set; } = default!;
+    [Inject] private PresenceState PresenceState { get; set; } = default!;
 
     private bool _isOpen;
 

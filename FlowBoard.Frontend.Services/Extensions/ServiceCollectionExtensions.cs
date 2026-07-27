@@ -41,6 +41,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<FavoritesState>();
         services.AddScoped<NotificationState>();
+        services.AddScoped<PresenceState>();
         services.AddScoped<TasksState>();
         services.AddScoped<UserState>();
 
