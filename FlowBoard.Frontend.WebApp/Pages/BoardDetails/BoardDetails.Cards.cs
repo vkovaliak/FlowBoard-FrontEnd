@@ -1,6 +1,8 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Services.State;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
@@ -8,6 +10,7 @@ namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 public partial class BoardDetails
 {
     [Inject] public TasksState TasksState { get; set; } = default!;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
     private async Task HandleCreateCardAsync(CreateCardDto dto)
     {
         if (_board == null)
@@ -62,13 +65,29 @@ public partial class BoardDetails
             result.Error ?? "Failed");
     }
 
-    private async Task HandleToggleCardCompleteAsync(CardDto card)
+    private async Task HandleToggleCardCompleteAsync((CardDto Card, MouseEventArgs Args) args)
     {
+        var card = args.Card;
+        var eventArgs = args.Args;
+
+        var wasCompleted = card.IsCompleted;
         var result = await CardService.ToggleCompletionAsync(Id, card.Id);
 
         if (!result.Success)
         {
             Snackbar.Add(result.Error ?? "Failed", Severity.Error);
+        }
+
+        if (!wasCompleted)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync(
+                    "flowConfetti.burstAt", eventArgs.ClientX, eventArgs.ClientY);
+            }
+            catch
+            {
+            }
         }
         TasksState.NotifyChanged();
     }

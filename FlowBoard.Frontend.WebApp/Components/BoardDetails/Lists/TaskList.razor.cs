@@ -4,6 +4,7 @@ using FlowBoard.Frontend.Domain.DTOs.Lists;
 using FlowBoard.Frontend.WebApp.Components.BoardDetails.Cards;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.BoardDetails.Lists;
@@ -25,7 +26,7 @@ public partial class TaskList
     [Parameter] public EventCallback<CreateCardDto> OnCreateCard { get; set; }
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, UpdateCardDto Dto)> OnUpdateCard { get; set; }
     [Parameter] public EventCallback<(Guid ListId, Guid CardId, string CardName)> OnDeleteCard { get; set; }
-    [Parameter] public EventCallback<CardDto> OnToggleCardComplete { get; set; }
+    [Parameter] public EventCallback<(CardDto Card, MouseEventArgs Args)> OnToggleCardComplete { get; set; }
     [Parameter]public EventCallback<CardDto> OnDuplicate { get; set; }
 
     private CreateCardForm _createCardForm = default!;
@@ -50,9 +51,6 @@ public partial class TaskList
 
     private async Task DeleteCardClickAsync(CardDto card)
         => await OnDeleteCard.InvokeAsync((List.Id, card.Id, card.Name));
-
-    private async Task ToggleCardCompleteAsync(CardDto card)
-        => await OnToggleCardComplete.InvokeAsync(card);
     
     private async Task DuplicateCardClickAsync(CardDto card)
         => await OnDuplicate.InvokeAsync(card);

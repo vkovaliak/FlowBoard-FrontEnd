@@ -1,5 +1,6 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 
 namespace FlowBoard.Frontend.WebApp.Components.BoardDetails.Cards;
@@ -16,13 +17,18 @@ public partial class CardItem
     public EventCallback<CardDto> OnDelete { get; set; }
 
     [Parameter]
-    public EventCallback<CardDto> OnToggleComplete { get; set; }
+    public EventCallback<(CardDto Card, MouseEventArgs Args)> OnToggleComplete { get; set; }
 
     [Parameter]
     public EventCallback<CardDto> OnDuplicate { get; set; }
 
     [Parameter] 
     public bool CanEdit { get; set; } = true;
+
+    private async Task ToggleCompleteAsync(MouseEventArgs e)
+    {
+        await OnToggleComplete.InvokeAsync((Card, e));
+    }
 
     private string GetTitleStyle()
     {

@@ -33,7 +33,7 @@
                                     ? Color.Primary : Color.Default)
                                 Size=@Size.Small
                                 Style="padding: 2px;"
-                                OnClick=@(() => OnToggleComplete.InvokeAsync(Card)) />
+                                OnClick=@ToggleCompleteAsync />
                 </div>
 
                 <div @onclick:stopPropagation="true">
