@@ -10,13 +10,14 @@
 
     <DialogContent>
 
-        <EditForm Model="@Model">
+        <EditForm Model="@_editContext">
 
             <DataAnnotationsValidator />
 
             <MudTextField Label="Board Name"
                           Variant=@Variant.Outlined
                           Margin=@Margin.Dense
+                          Immediate=@true
                           @bind-Value=@Model.Name
                           For=@(() => Model.Name) />
 
@@ -70,7 +71,7 @@
                 }
                 else
                 {
-                    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 18px;">
 
                         <div @onclick=@(() => SelectBackground(null))
                             style=@GetTileStyle(IsSelected(null))
@@ -115,7 +116,13 @@
                     </div>
                 }
             }
-
+            @if (!IsEditMode)
+            {
+                <MudStack Class="mt-5">
+                    <BoardTemplateComponent @bind-Value=@Model.BoardTemplate/>
+                </MudStack>
+            }
+            
         </EditForm>
 
     </DialogContent>
@@ -127,7 +134,8 @@
         <MudButton Color=@Color.Primary 
                    ButtonType=@ButtonType.Submit
                    Variant=@Variant.Filled 
-                   OnClick=@Submit>
+                   OnClick=@Submit
+                   Disabled=@(string.IsNullOrWhiteSpace(Model.Name))>
             @(IsEditMode ? "Save Changes" : "Create")
         </MudButton>
 
@@ -147,7 +155,7 @@
             : $"background-image: url('{imageUrl}'); " +
               "background-size: cover; background-position: center;";
 
-        return "position: relative; width: 104px; height: 68px; " +
+        return "position: relative; width: 124px; height: 80px; " +
                "border-radius: 8px; cursor: pointer; overflow: hidden; " +
                "transition: border-color 0.15s; " +
                border + bg;

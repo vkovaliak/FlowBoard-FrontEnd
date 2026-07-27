@@ -88,7 +88,10 @@ public partial class MainLayout : IDisposable
         }
 
         var createModel = new CreateBoardDto(
-            model.Name, model.IsPublic, model.Background);
+            model.Name, 
+            model.IsPublic, 
+            model.Background, 
+            model.BoardTemplate);
 
         var createResult = await BoardService.CreateAsync(createModel);
 

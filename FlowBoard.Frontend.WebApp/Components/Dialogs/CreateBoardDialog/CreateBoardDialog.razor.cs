@@ -4,6 +4,7 @@ using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Services.State;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 
@@ -19,10 +20,9 @@ public partial class CreateBoardDialog : ComponentBase
     [Inject] private UserState UserState { get; set; } = default!;
 
     public CreateBoardModel Model { get; set; } = new();
-
+    private EditContext _editContext = default!; 
     public bool IsEditMode => CurrentBoard != null;
     private bool CanUseBackground => UserState.IsPro;
-
     private List<BoardBackgroundDto> _backgrounds = [];
     private bool _isLoadingBackgrounds = true;
 
@@ -38,6 +38,8 @@ public partial class CreateBoardDialog : ComponentBase
                 ? null
                 : CurrentBoard.Background;
         }
+
+        _editContext = new EditContext(Model);
 
         if (CanUseBackground)
         {
@@ -56,7 +58,10 @@ public partial class CreateBoardDialog : ComponentBase
 
     public void Submit()
     {
-        MudDialog.Close(DialogResult.Ok(Model));
+        if (_editContext.Validate())
+        {
+            MudDialog.Close(DialogResult.Ok(Model));
+        }
     }
 
     public void Cancel()

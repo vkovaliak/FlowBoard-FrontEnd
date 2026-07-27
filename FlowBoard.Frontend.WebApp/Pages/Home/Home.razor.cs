@@ -75,7 +75,7 @@ public partial class Home
         { 
             CloseOnEscapeKey = true, 
             FullWidth = true,
-            MaxWidth = MaxWidth.ExtraSmall 
+            MaxWidth = MaxWidth.Small
         };
 
         var parameters = new DialogParameters<CreateBoardDialog>();
@@ -102,7 +102,8 @@ public partial class Home
                 var createDto = new CreateBoardDto(
                     Name: model.Name, 
                     IsPublic: model.IsPublic,
-                    Background: model.Background);
+                    Background: model.Background,
+                    Template: model.BoardTemplate);
 
                 isSuccess = await BoardService.CreateAsync(createDto);
                 successMessage = "Board created!";

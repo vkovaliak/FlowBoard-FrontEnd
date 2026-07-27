@@ -1,0 +1,36 @@
+@using FlowBoard.Frontend.Domain.Constants
+
+<MudText Typo=@Typo.subtitle2>
+         Template
+</MudText>
+
+<div class="template-grid">
+
+    @foreach (var option in BoardTemplateOptions.All)
+    {
+        <div class="template-card 
+                        @(Value == option.Template 
+                                 ? "selected" : "")"
+             @onclick=@(() => SelectTemplateAsync(option.Template))>
+
+            <MudIcon Icon=@GetIcon(option.Icon)
+                     Size=@Size.Medium
+                     Class="template-icon" />
+
+            <div class="template-title">
+                @option.Title
+            </div>
+
+            <div class="template-desc">
+                @option.Description
+            </div>
+
+            @if (option.Columns.Length > 0)
+            {
+                <div class="template-columns">
+                    @string.Join(" · ", option.Columns)
+                </div>
+            }
+        </div>
+    }
+</div>
