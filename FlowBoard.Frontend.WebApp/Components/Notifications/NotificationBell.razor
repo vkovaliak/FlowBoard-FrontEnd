@@ -1,0 +1,103 @@
+@using FlowBoard.Frontend.Services.State
+
+<MudBadge Content=@NotificationState.UnreadCount
+          Color=@Color.Error
+          Overlap=@true
+          Bordered=@true
+          Visible=@(NotificationState.UnreadCount > 0)>
+
+    @if (NotificationState.UnreadCount > 0)
+    {
+        <MudIconButton Icon=@Icons.Material.Filled.Notifications
+                       Color=@Color.Inherit
+                       Style="padding: 5px;"
+                       Size=@Size.Medium
+                       OnClick=@OpenDrawer />
+    }
+    else 
+    {
+        <MudIconButton Icon=@Icons.Material.Outlined.Notifications
+                       Color=@Color.Inherit
+                       Style="padding: 5px;"
+                       Size=@Size.Medium
+                       OnClick=@OpenDrawer />
+    }
+    
+</MudBadge>
+
+<MudDrawer Open=@_isOpen
+           OpenChanged=@OnDrawerOpenChanged
+           Anchor=@Anchor.Right
+           Elevation="4"
+           Variant=@DrawerVariant.Temporary
+           Width="420px"
+           Style="background-color: #FFFFFF; 
+                  color: #0F172A;">
+
+    <div class="notif-container">
+
+        <div class="notif-header">
+
+            <div class="notif-header-title">
+
+                <MudIcon Icon=@Icons.Material.Outlined.Notifications
+                         Size=@Size.Medium />
+
+                <span>
+                    Notifications
+                </span>
+
+            </div>
+
+            <div class="notif-header-actions">
+
+                @if (NotificationState.UnreadCount > 0)
+                {
+                    <MudButton Size=@Size.Small
+                               Variant=@Variant.Text
+                               OnClick=@MarkAllReadAsync
+                               Style="text-transform: none; color: #3B82F6;">
+                        Mark all read
+                    </MudButton>
+                }
+
+                <MudIconButton Icon=@Icons.Material.Filled.Close
+                               Size=@Size.Small
+                               OnClick=@Close />
+            </div>
+        </div>
+
+        <div class="notif-list">
+
+            @if (NotificationState.Notifications.Count == 0)
+            {
+                <div class="notif-empty">
+                    <MudIcon Icon=@Icons.Material.Outlined.NotificationsNone
+                             Size=@Size.Large />
+                             
+                    <p>No notifications yet</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var n in NotificationState.Notifications)
+                {
+                    <div class="notif-item @(n.IsRead ? "" : "unread")"
+                         @onclick=@(() => HandleClickAsync(n))>
+
+                        <div class="notif-item-message">
+                            @n.Message
+                        </div>
+
+                        <div class="notif-item-time">
+                            @n.CreatedAt.ToLocalTime().ToString("g")
+                        </div>
+
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+
+</MudDrawer>

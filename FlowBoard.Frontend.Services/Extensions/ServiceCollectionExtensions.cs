@@ -31,6 +31,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILabelService, LabelService>();
         services.AddScoped<IListService, ListService>();
         services.AddScoped<IMicrosoftAuthService, MicrosoftAuthService>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<INotificationHubService, NotificationHubService>();
         services.AddScoped<CustomAuthStateProvider>();
         services.AddScoped<ISearchService, SearchService>();
         services.AddScoped<ISubscriptionService, SubscriptionService>();
@@ -38,6 +40,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<FavoritesState>();
+        services.AddScoped<NotificationState>();
         services.AddScoped<TasksState>();
         services.AddScoped<UserState>();
 
@@ -89,6 +92,7 @@ public static class ServiceCollectionExtensions
         AddAuthenticatedRefitClient<ICommentApi>();
         AddAuthenticatedRefitClient<IListApi>();
         AddAuthenticatedRefitClient<ILabelApi>();
+        AddAuthenticatedRefitClient<INotificationApi>();
         AddAuthenticatedRefitClient<ISearchApi>();
         AddAuthenticatedRefitClient<ISubscriptionApi>();
         AddAuthenticatedRefitClient<IUserApi>();
