@@ -1,4 +1,5 @@
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+@using FlowBoard.Frontend.WebApp.Components.Common
 
 <div class="comment-composer">
 
@@ -33,16 +34,37 @@
     {
         <div class="composer-input-row">
 
-            <div class="composer-field">
+            <div class="composer-field" style="position: relative;">
 
                 <MudTextField T=@string
-                              @bind-Value=@_message
+                              Value=@_message
+                              ValueChanged=@OnMessageChanged
                               Placeholder="Write a comment..."
                               Variant=@Variant.Outlined
                               Immediate=@true
                               Lines="2"
                               Margin=@Margin.Dense
                               Class="composer-textfield" />
+                
+                @if (_showMentions)
+                {
+                    <div class="mention-dropdown">
+                        @foreach (var member in _filteredMembers)
+                        {
+                            <div class="mention-item"
+                                @onclick=@(() => SelectMention(member))>
+
+                                <UserAvatar UserName=@member.UserName
+                                            AvatarUrl=@member.AvatarUrl
+                                            Size=@Size.Small
+                                            SizeStyle="width:24px; height:24px;
+                                                    font-size:11px;" />
+                                                    
+                                <span>@member.UserName</span>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
 
             <MudIconButton Icon=@Icons.Material.Filled.Send

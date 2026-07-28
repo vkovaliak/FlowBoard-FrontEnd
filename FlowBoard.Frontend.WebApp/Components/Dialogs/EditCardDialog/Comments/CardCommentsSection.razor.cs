@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using FlowBoard.Frontend.Domain.DTOs.Comments;
 using FlowBoard.Frontend.Services.Abstractions;
 using MudBlazor;
+using FlowBoard.Frontend.Domain.DTOs.Boards;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments;
 
@@ -16,6 +17,7 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
     [Parameter] public bool CanEdit { get; set; } = true;
+    [Parameter] public List<BoardMemberAvatarDto> Members { get; set; } = [];
 
     private IEnumerable<CommentDto> _comments = [];
     private bool _isLoading;
@@ -44,10 +46,12 @@ public partial class CardCommentsSection : ComponentBase, IAsyncDisposable
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task<Guid?> CreateCommentAsync(string message)
+    private async Task<Guid?> CreateCommentAsync(
+        string message, Guid? mentionedUserId)
     {
         var result = await CommentService.CreateAsync(
-            BoardId, CardId, new CreateCommentDto(message));
+            BoardId, CardId, 
+            new CreateCommentDto(message, mentionedUserId));
 
         if (!result.Success)
         {
