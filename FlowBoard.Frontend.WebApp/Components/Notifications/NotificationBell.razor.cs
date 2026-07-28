@@ -14,18 +14,30 @@ public partial class NotificationBell : IDisposable
     protected override async Task OnInitializedAsync()
     {
         NotificationState.OnChange += StateChanged;
+        NotificationState.OnOpenChanged += StateChanged;
         await NotificationState.InitializeAsync();
     }
 
     private void StateChanged() 
         => InvokeAsync(StateHasChanged);
 
-    private void OpenDrawer() => _isOpen = true;
+    private void OpenDrawer() 
+        => NotificationState.Open();
 
-    private void Close() => _isOpen = false;
+    private void Close() 
+        => NotificationState.Close();
 
-    private void OnDrawerOpenChanged(bool value) 
-        => _isOpen = value;
+    private void OnDrawerOpenChanged(bool value)
+    {
+        if (value)
+        {
+            NotificationState.Open();
+        }
+        else
+        {
+            NotificationState.Close();
+        }
+    }
 
     private async Task HandleClickAsync(NotificationDto notification)
     {
@@ -48,5 +60,6 @@ public partial class NotificationBell : IDisposable
     public void Dispose()
     {
         NotificationState.OnChange -= StateChanged;
+        NotificationState.OnOpenChanged -= StateChanged;
     }
 }
