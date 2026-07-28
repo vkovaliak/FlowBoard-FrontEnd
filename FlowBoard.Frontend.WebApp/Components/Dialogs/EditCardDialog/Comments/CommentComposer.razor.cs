@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using FlowBoard.Frontend.Services.Abstractions;
+using FlowBoard.Frontend.Domain.DTOs.Boards;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments;
 
@@ -11,7 +12,8 @@ public partial class CommentComposer
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
-    [Parameter] public Func<string, Task<Guid?>> OnCreateComment { get; set; } = default!;
+    [Parameter] public Func<string, Guid?, Task<Guid?>> OnCreateComment { get; set; } = default!;
+    [Parameter] public List<BoardMemberAvatarDto> Members { get; set; } = [];
 
     private readonly List<IBrowserFile> _pendingFiles = [];
     private string? _uploadingFile;
@@ -20,6 +22,12 @@ public partial class CommentComposer
     private string _message = string.Empty;
     private bool _useRichEditor;
     private bool _isSubmitting;
+    private bool _showMentions;
+    private string _mentionQuery = string.Empty;
+    private int _mentionStartIndex = -1;
+    private List<BoardMemberAvatarDto> _filteredMembers = [];
+
+    private Guid? _mentionedUserId;
 
     private void OnFilesSelected(InputFileChangeEventArgs e)
     {
@@ -36,6 +44,8 @@ public partial class CommentComposer
         _message = string.Empty;
         _pendingFiles.Clear();
         _uploadingFile = null;
+        _mentionedUserId = null;
+        _showMentions = false;
     }
 
     private void ToggleRichEditor()
@@ -55,7 +65,9 @@ public partial class CommentComposer
 
         try
         {
-            var commentId = await OnCreateComment(_message);
+            var (html, userId) = BuildMessage();
+
+            var commentId = await OnCreateComment(html, userId);
 
             if (commentId is null)
             {
@@ -101,4 +113,80 @@ public partial class CommentComposer
         < 1024 * 1024 => $"{bytes / 1024.0:F1} KB",
         _ => $"{bytes / (1024.0 * 1024):F1} MB"
     };
+
+    private void OnMessageChanged(string value)
+    {
+        _message = value;
+        DetectMention();
+    }
+
+    private void DetectMention()
+    {
+        var lastAt = _message.LastIndexOf('@');
+
+        if (lastAt < 0)
+        {
+            _showMentions = false;
+            return;
+        }
+
+        var afterAt = _message.Substring(lastAt + 1);
+
+        if (afterAt.Contains(' ') || afterAt.Contains('\n'))
+        {
+            _showMentions = false;
+            return;
+        }
+
+        _mentionStartIndex = lastAt;
+        _mentionQuery = afterAt;
+
+        _filteredMembers = Members
+            .Where(m => m.UserName.Contains(
+                _mentionQuery, StringComparison.OrdinalIgnoreCase))
+            .Take(6)
+            .ToList();
+
+        _showMentions = _filteredMembers.Count > 0;
+    }
+
+    private void SelectMention(BoardMemberAvatarDto member)
+    {
+        var before = _message.Substring(0, _mentionStartIndex);
+        var mentionText = $"@{member.UserName}";
+
+        _message = $"{before}{mentionText} ";
+
+        _mentionedUserId = member.UserId;
+
+        _showMentions = false;
+    }
+
+    private (string Html, Guid? UserId) BuildMessage()
+    {
+        if (_mentionedUserId is null)
+        {
+            return (_message, null);
+        }
+
+        var member = Members.FirstOrDefault(
+            m => m.UserId == _mentionedUserId);
+
+        if (member is null)
+        {
+            return (_message, null);
+        }
+
+        var mentionText = $"@{member.UserName}";
+
+        if (!_message.Contains(mentionText))
+        {
+            return (_message, null);
+        }
+
+        var html = _message.Replace(
+            mentionText, $"<b>{mentionText}</b>");
+
+        return (html, _mentionedUserId);
+    }
 }
