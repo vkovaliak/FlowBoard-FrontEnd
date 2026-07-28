@@ -1,4 +1,5 @@
 using FlowBoard.Frontend.Domain.DTOs.Notifications;
+using FlowBoard.Frontend.Domain.Enums;
 using FlowBoard.Frontend.Services.State;
 using Microsoft.AspNetCore.Components;
 
@@ -47,6 +48,11 @@ public partial class NotificationBell : IDisposable
         }
 
         _isOpen = false;
+
+        if (notification.Type == NotificationType.RemovedFromBoard)
+        {
+            return;
+        }
 
         if (notification.BoardId.HasValue)
         {

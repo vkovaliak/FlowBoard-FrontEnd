@@ -132,6 +132,10 @@ public partial class MainLayout : IAsyncDisposable
 
     private void ToggleChat()
     {
+        if (!UserState.IsPro)
+        {
+            return;
+        }
         _isChatOpen = !_isChatOpen;
     }
 
