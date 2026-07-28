@@ -1,3 +1,5 @@
+@using FlowBoard.Frontend.Services.State
+@inject UserState UserState
 <MudDialog>
 
     <TitleContent>
@@ -21,7 +23,7 @@
                         Hover=@true 
                         Bordered=@false>
             <tbody>
-                @foreach (var (key, desc) in _shortcuts)
+                @foreach (var (key, desc) in VisibleShortcuts)
                 {
                     <tr>
                         <td style="width: 120px;">
@@ -58,6 +60,11 @@
         ("Esc", "Close open panels / dialogs"),
         ("?", "Show this help"),
     };
+
+    private IEnumerable<(string Key, string Desc)> VisibleShortcuts =>
+        UserState.IsPro
+            ? _shortcuts
+            : _shortcuts.Where(s => s.Key != "a");
 
     private void Close() => MudDialog.Close();
 }
