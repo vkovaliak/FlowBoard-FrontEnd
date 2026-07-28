@@ -7,25 +7,30 @@ using FlowBoard.Frontend.WebApp.Components.Dialogs.CreateBoardDialog;
 using FlowBoard.Frontend.Domain.Models.Boards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Handlers;
+using Microsoft.JSInterop;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.HotkeysHelpDialog;
 
 namespace FlowBoard.Frontend.WebApp.Layout;
 
-public partial class MainLayout : IDisposable
+public partial class MainLayout : IAsyncDisposable
 {
     [Inject] public IAuthService AuthService { get; set; } = default!;
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public IUserService UserService { get; set; } = default!;
     [Inject] public UserState UserState { get; set; } = default!;
     [Inject] private UpgradeHandler UpgradeHandler { get; set; } = default!;
-
+    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
     [Inject] public IDialogService DialogService { get; set; } = default!;
     [Inject] public IBoardService BoardService { get; set; } = default!;
     [Inject] public ISnackbar Snackbar { get; set; } = default!;
+    [Inject] public NotificationState NotificationState { get; set; } = default!;
 
     private UserDto? _currentUser;
     private bool _isUserMenuOpen;
-
     private bool _isChatOpen;
+    private bool _drawerOpen = true;
+    private DotNetObjectReference<MainLayout>? _hotkeyRef;
+    private bool _isHelpOpen;
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,8 +38,15 @@ public partial class MainLayout : IDisposable
         _currentUser = await UserService.GetMeAsync();
         await UserState.EnsureLoadedAsync();
     }
-
-    private bool _drawerOpen = true;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _hotkeyRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync(
+                "hotkeys.register", _hotkeyRef);
+        }
+    }
 
     private void ToggleDrawer()
     {
@@ -107,9 +119,15 @@ public partial class MainLayout : IDisposable
         NavigationManager.NavigateTo($"/boards/{createResult.Value}");
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         UserState.OnChanged -= HandleUserChanged;
+
+        if (_hotkeyRef is not null)
+        {
+            await JSRuntime.InvokeVoidAsync("hotkeys.unregister");
+            _hotkeyRef.Dispose();
+        }
     }
 
     private void ToggleChat()
@@ -119,4 +137,89 @@ public partial class MainLayout : IDisposable
 
     private async Task Upgrade() 
         => await UpgradeHandler.StartUpgradeAsync();
+    
+    private async Task FocusSearchAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("hotkeys.focusSearch");
+    }
+
+    private void ToggleNotifications() 
+        => NotificationState.Toggle();
+    
+    private async Task HandleEscape()
+    {
+        var searchFocused = await JSRuntime.InvokeAsync<bool>(
+            "hotkeys.isSearchFocused");
+        
+        if(searchFocused)
+        {
+            await JSRuntime.InvokeVoidAsync("hotkeys.unFocusSearch");
+        }
+
+        if (_isHelpOpen)
+        {
+            _isHelpOpen = false;
+            return;
+        }
+
+        if (_isUserMenuOpen)
+        {
+            _isUserMenuOpen = false;
+            return;
+        }
+
+        if (NotificationState.IsOpen)
+        {
+            NotificationState.Close();
+            return;
+        }
+
+        if (_isChatOpen)
+        {
+            _isChatOpen = false;
+            return;
+        }
+    }
+
+    private async Task ShowHelpAsync()
+    {
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraSmall,
+            FullWidth = true,
+            CloseButton = true
+        };
+
+        await DialogService.ShowAsync<HotkeysHelpDialog>(
+            null, options);
+    }
+    
+    [JSInvokable]
+    public async Task OnHotkey(string action)
+    {
+        switch (action)
+        {
+            case "Search":
+                await FocusSearchAsync();
+                break;
+
+            case "Notifications":
+                ToggleNotifications();
+                break;
+
+            case "Escape":
+                await HandleEscape();
+                break;
+            
+            case "Help":
+                await ShowHelpAsync();
+                break;
+            
+            case "Chat":
+                ToggleChat();
+                break;
+        }
+
+        StateHasChanged();
+    }
 }

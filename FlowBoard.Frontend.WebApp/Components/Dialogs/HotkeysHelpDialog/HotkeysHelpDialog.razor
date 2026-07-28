@@ -1,0 +1,76 @@
+<MudDialog>
+
+    <TitleContent>
+
+        <MudStack Row=@true 
+                  AlignItems=@AlignItems.Center 
+                  Spacing="2">
+
+            <MudIcon Icon=@Icons.Material.Outlined.Keyboard />
+
+            <MudText Typo=@Typo.h6>
+                Keyboard Shortcuts
+            </MudText>
+
+        </MudStack>
+
+    </TitleContent>
+
+    <DialogContent>
+        <MudSimpleTable Dense=@true 
+                        Hover=@true 
+                        Bordered=@false>
+            <tbody>
+                @foreach (var (key, desc) in _shortcuts)
+                {
+                    <tr>
+                        <td style="width: 120px;">
+                            <kbd class="hotkey-kbd">
+                                @key
+                            </kbd>
+                        </td>
+
+                        <td>@desc</td>
+                    </tr>
+                }
+            </tbody>
+
+        </MudSimpleTable>
+
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick=@Close>
+            Close
+        </MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private readonly List<(string Key, string Desc)> _shortcuts = new()
+    {
+        ("/", "Focus search"),
+        ("n", "Open notifications"),
+        ("a", "Open chat assistant"),
+        ("Esc", "Close open panels / dialogs"),
+        ("?", "Show this help"),
+    };
+
+    private void Close() => MudDialog.Close();
+}
+
+<style>
+    .hotkey-kbd {
+        background: #F1F5F9;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-family: monospace;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+    }
+</style>

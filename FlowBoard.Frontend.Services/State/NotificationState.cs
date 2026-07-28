@@ -12,6 +12,10 @@ public class NotificationState
     public int UnreadCount { get; private set; }
 
     public event Action? OnChange;
+    
+    private bool _isOpen;
+    public bool IsOpen => _isOpen;
+    public event Action? OnOpenChanged;
 
     public NotificationState(
         INotificationService service,
@@ -54,5 +58,23 @@ public class NotificationState
     {
         await _service.MarkAllAsReadAsync();
         await ReloadAsync();
+    }
+
+    public void Open()
+    {
+        _isOpen = true;
+        OnOpenChanged?.Invoke();
+    }
+
+    public void Close()
+    {
+        _isOpen = false;
+        OnOpenChanged?.Invoke();
+    }
+
+    public void Toggle()
+    {
+        _isOpen = !_isOpen;
+        OnOpenChanged?.Invoke();
     }
 }
