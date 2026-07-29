@@ -1,5 +1,6 @@
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Services.State;
+using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -11,6 +12,9 @@ public partial class BoardDetails
 {
     [Inject] public TasksState TasksState { get; set; } = default!;
     [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private Guid? _openedCardId;
+
     private async Task HandleCreateCardAsync(CreateCardDto dto)
     {
         if (_board == null)
@@ -104,5 +108,79 @@ public partial class BoardDetails
         ShowResult(result.Success,
             "Card duplicated!",
             result.Error ?? "Failed");
+    }
+
+    private async Task TryOpenCardFromQueryAsync()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        var cardId = GetCardIdFromQuery(uri.Query);
+
+        if (cardId is null)
+        {
+            return;
+        }
+
+        if (_openedCardId == cardId)
+        {
+            return;
+        }
+
+        var card = _board?.Lists
+            .SelectMany(l => l.Cards ?? [])
+            .FirstOrDefault(c => c.Id == cardId);
+
+        if (card is null)
+        {
+            ClearCardQuery();
+            return;
+        }
+
+        _openedCardId = cardId;
+        await OpenCardDialogAsync(card);
+    }
+
+    private static Guid? GetCardIdFromQuery(string queryString)
+    {
+        if (string.IsNullOrEmpty(queryString))
+        {
+            return null;
+        }
+
+        var parsed = System.Web.HttpUtility.ParseQueryString(queryString);
+        var raw = parsed["card"];
+
+        return Guid.TryParse(raw, out var id) ? id : null;
+    }
+
+    private async Task OpenCardDialogAsync(CardDto card)
+    {
+        var parameters = new DialogParameters<EditCardDialog>
+        {
+            { x => x.BoardId, Id },
+            { x => x.CardId, card.Id }
+        };
+
+        var options = new DialogOptions
+        {
+            Position = DialogPosition.CenterRight,
+            MaxWidth = MaxWidth.False,
+            FullWidth = false,
+            CloseButton = false,
+            NoHeader = false
+        };
+
+        var dialog = await DialogService.ShowAsync<EditCardDialog>(
+            null, parameters, options);
+
+        await dialog.Result;
+
+        _openedCardId = null;
+        ClearCardQuery();
+    }
+
+    private void ClearCardQuery()
+    {
+        NavigationManager.NavigateTo($"/boards/{Id}", replace: true);
     }
 }

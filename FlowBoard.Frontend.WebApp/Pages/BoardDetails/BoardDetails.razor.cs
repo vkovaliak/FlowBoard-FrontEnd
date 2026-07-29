@@ -14,6 +14,7 @@ using FlowBoard.Frontend.Domain.Models.Cards;
 using FlowBoard.Frontend.WebApp.Components.Dialogs.BoardFilterDialog;
 using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Services.Helpers;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace FlowBoard.Frontend.WebApp.Pages.BoardDetails;
 
@@ -91,7 +92,14 @@ public partial class BoardDetails : IAsyncDisposable
 
             await BoardHub.ConnectAsync();
             await BoardHub.JoinBoardAsync(Id);
+
+            await TryOpenCardFromQueryAsync();
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += HandleLocationChanged;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -167,6 +175,7 @@ public partial class BoardDetails : IAsyncDisposable
         BoardHub.OnOnlineUsers -= HandleOnlineUsers;
         PresenceState.OnChanged -= StateChanged;
         PresenceState.Clear();
+        NavigationManager.LocationChanged -= HandleLocationChanged;
         await BoardHub.LeaveBoardAsync(Id);
     }
 
@@ -294,5 +303,15 @@ public partial class BoardDetails : IAsyncDisposable
     }
 
     private bool CardMatchesFilter(CardDto card)
-        => CardFilterHelper.Matches(card, _filter, _currentUserId);
+            => CardFilterHelper.Matches(card, _filter, _currentUserId);
+        
+    private async void HandleLocationChanged(
+        object? sender, LocationChangedEventArgs e)
+    {
+        if (_board is not null)
+        {
+            await TryOpenCardFromQueryAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
 }
