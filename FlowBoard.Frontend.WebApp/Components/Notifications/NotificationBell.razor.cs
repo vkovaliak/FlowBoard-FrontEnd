@@ -10,8 +10,6 @@ public partial class NotificationBell : IDisposable
     [Inject] NotificationState NotificationState { get; set; } = default!;
     [Inject] NavigationManager Navigation { get; set; } = default!;
 
-    private bool _isOpen;
-
     protected override async Task OnInitializedAsync()
     {
         NotificationState.OnChange += StateChanged;
@@ -47,17 +45,23 @@ public partial class NotificationBell : IDisposable
             await NotificationState.MarkAsReadAsync(notification.Id);
         }
 
-        _isOpen = false;
+        NotificationState.Close();
 
         if (notification.Type == NotificationType.RemovedFromBoard)
         {
             return;
         }
 
-        if (notification.BoardId.HasValue)
+        if (!notification.BoardId.HasValue)
         {
-            Navigation.NavigateTo($"/boards/{notification.BoardId}");
+            return;
         }
+
+        var url = notification.CardId.HasValue
+            ? $"/boards/{notification.BoardId}?card={notification.CardId}"
+            : $"/boards/{notification.BoardId}";
+
+        Navigation.NavigateTo(url);
     }
 
     private async Task MarkAllReadAsync()
