@@ -214,7 +214,13 @@ body.is-dragging .board-lists-container {
 }
 
 .card-item.card-completed .card-complete-toggle {
-    opacity: 1;
+    opacity: 1 !important;
+}
+
+.card-item.card-completed .card-complete-toggle .mud-icon-root
+{
+    color: #0389f6 !important; 
+    opacity: 1 !important;
 }
 
 .card-label {

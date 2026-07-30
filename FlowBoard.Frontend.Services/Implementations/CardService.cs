@@ -186,4 +186,18 @@ public class CardService : ICardService
             ? response.Content
             : [];
     }
+
+    public async Task<OperationResult> SetCoverAsync(
+        Guid boardId, Guid cardId, SetCardCoverDto dto)
+    {
+        var response = await _cardApi.SetCoverAsync(
+            boardId, cardId, dto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return OperationResult.Ok();
+        }
+
+        return OperationResult.Fail(response.GetErrorMessage());
+    }
 }

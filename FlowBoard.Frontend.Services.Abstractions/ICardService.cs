@@ -21,4 +21,5 @@ public interface ICardService
     Task<OperationResult<Guid>> DuplicateAsync(Guid boardId, Guid cardId);
     Task<OperationResult> SetStartTimeAsync(Guid boardId, Guid cardId, SetCardStartTimeDto dto);
     Task<List<ActivityDto>> GetCardActivitiesAsync(Guid boardId, Guid cardId);
+    Task<OperationResult> SetCoverAsync(Guid boardId, Guid cardId, SetCardCoverDto dto);
 }

@@ -1,5 +1,4 @@
 using FlowBoard.Frontend.Domain.DTOs.Labels;
-using FlowBoard.Frontend.Domain.Enums;
 using FlowBoard.Frontend.Domain.Models.Cards;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

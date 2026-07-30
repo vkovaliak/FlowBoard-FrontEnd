@@ -1,0 +1,110 @@
+@using FlowBoard.Frontend.Domain.Enums
+@namespace FlowBoard.Frontend.WebApp.Components.Dialogs
+
+<MudDialog>
+
+    <TitleContent>
+        <MudText Typo=@Typo.h6>
+            Card Cover
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+
+        <MudText Typo=@Typo.subtitle2 
+                 Class="mb-2">
+            Colors
+        </MudText>
+
+        <div class="cover-color-grid mb-4">
+            @foreach (var color in _presetColors)
+            {
+                <div class=@($"cover-color-swatch {(_selectedColor == color ? "selected" : "")}")
+                     style=@($"background-color: {color};")
+                     @onclick=@(() => SelectColor(color))>
+
+                    @if (_selectedColor == color)
+                    {
+                        <MudIcon Icon=@Icons.Material.Filled.Check
+                                 Style="color: white; font-size: 18px;" />
+                    }
+                </div>
+            }
+        </div>
+
+        @if (_selectedColor is not null)
+        {
+            <MudText Typo=@Typo.subtitle2 
+                     Class="mb-2">
+                Display
+            </MudText>
+
+            <MudStack Row=@true 
+                      Spacing="2" 
+                      Class="mb-2">
+
+                <div class=@($"cover-mode-option {(
+                    _selectedMode == CardCoverMode.Strip ? "selected" : "")}")
+                     @onclick=@(() => _selectedMode = CardCoverMode.Strip)>
+
+                    <div class="cover-mode-preview">
+
+                        <div class="cover-mode-strip"
+                             style=@($"background-color: {_selectedColor};")>
+                        </div>
+
+                        <div class="cover-mode-lines"></div>
+
+                    </div>
+
+                    <MudText Typo=@Typo.caption>
+                        Strip
+                    </MudText>
+                </div>
+
+                <div class=@($"cover-mode-option {(
+                    _selectedMode == CardCoverMode.Full ? "selected" : "")}")
+                     @onclick=@(() => _selectedMode = CardCoverMode.Full)>
+
+                    <div class="cover-mode-preview">
+
+                        <div class="cover-mode-full"
+                             style=@($"background-color: {_selectedColor};")>
+                        </div>
+
+                    </div>
+
+                    <MudText Typo=@Typo.caption>
+                        Full
+                    </MudText>
+
+                </div>
+
+            </MudStack>
+        }
+
+    </DialogContent>
+
+    <DialogActions>
+
+        <MudButton OnClick=@RemoveCover
+                   StartIcon=@Icons.Material.Filled.Delete
+                   Color=@Color.Error
+                   Variant=@Variant.Text>
+            Remove
+        </MudButton>
+
+        <MudButton OnClick=@Cancel>
+            Cancel
+        </MudButton>
+
+        <MudButton OnClick=@Save
+                   Color=@Color.Primary
+                   Variant=@Variant.Filled
+                   Disabled=@(_selectedColor is null)>
+            Save
+        </MudButton>
+
+    </DialogActions>
+    
+</MudDialog>
