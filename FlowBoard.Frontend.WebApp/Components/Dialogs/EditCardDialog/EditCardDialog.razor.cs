@@ -5,6 +5,7 @@ using FlowBoard.Frontend.Domain.DTOs.Cards;
 using FlowBoard.Frontend.Domain.DTOs.Boards;
 using FlowBoard.Frontend.Services.Abstractions;
 using FlowBoard.Frontend.Services.Providers;
+using FlowBoard.Frontend.Domain.Models.Cards;
 
 namespace FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog;
 
@@ -16,6 +17,8 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
     [Inject] CustomAuthStateProvider AuthStateProvider { get; set; } = default!;
 
     [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
+    [Inject] public IDialogService DialogService { get; set; } = default!;
+    [Inject] public ICardService CardService { get; set; } = default!;
 
     [Parameter] public Guid BoardId { get; set; }
     [Parameter] public Guid CardId { get; set; }
@@ -74,6 +77,37 @@ public partial class EditCardDialog : ComponentBase, IAsyncDisposable
     {
         await AttachmentService.DeleteCardAttachmentAsync(
             BoardId, CardId, attachmentId);
+    }
+
+    private async Task OpenCoverDialogAsync()
+    {
+        if (_card is null) return;
+
+        var parameters = new DialogParameters<CardCoverDialog>
+        {
+            { x => x.CurrentColor, _card.CoverColor },
+            { x => x.CurrentMode, _card.CoverMode }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraSmall,
+            FullWidth = true,
+            CloseButton = false
+        };
+
+        var dialog = await DialogService.ShowAsync<CardCoverDialog>(
+            null, parameters, options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled
+            && result.Data is CardCoverResult cover)
+        {
+            var request = new SetCardCoverDto(cover.Color, cover.Mode);
+            
+            await CardService.SetCoverAsync(
+                BoardId, CardId, request);
+        }
     }
 
     private void Close() => MudDialog.Cancel();

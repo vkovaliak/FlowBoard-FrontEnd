@@ -5,7 +5,7 @@ public enum ActivityAction
     CardCreated = 0,
     CardRenamed = 1,
     CardMoved = 2,
-    CardDeleted = 3,
+    SetCardCover = 3,
     CardCompleted = 4,
     CardUncomleted = 5,
     CardDuplicated = 6,

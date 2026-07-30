@@ -52,4 +52,9 @@ public interface ICardApi
     [Get("/api/boards/{boardId}/cards/{cardId}/activities")]
     Task<ApiResponse<List<ActivityDto>>> GetCardActivitiesAsync(
         Guid boardId, Guid cardId);
+    
+    [Put("/api/boards/{boardId}/cards/{cardId}/cover")]
+    Task<ApiResponse<bool>> SetCoverAsync(
+        Guid boardId, Guid cardId, [Body] SetCardCoverDto dto
+    );
 }

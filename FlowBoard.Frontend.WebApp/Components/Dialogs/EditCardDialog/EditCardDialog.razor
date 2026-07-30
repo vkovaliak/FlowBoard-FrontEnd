@@ -1,14 +1,15 @@
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Description
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
+@using FlowBoard.Frontend.Domain.Enums
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Activity
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Assignees
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Comments
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Description
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.DueDate
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Labels
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.ListSelector
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Checklist
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Name
+@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Shared
 @using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.StartDate
-@using FlowBoard.Frontend.WebApp.Components.Dialogs.EditCardDialog.Activity
 
 
 @if (_card != null)
@@ -17,6 +18,14 @@
                ContentClass="edit-card-content">
 
         <DialogContent>
+
+            @if (_card.CoverMode != CardCoverMode.None
+                && !string.IsNullOrEmpty(_card.CoverColor))
+            {
+                <div class="edit-card-cover-banner"
+                    style=@($"background-color: {_card.CoverColor};")>
+                </div>
+            }
 
             <div class="edit-card-header">
 
@@ -34,10 +43,23 @@
                 {
                     <div></div>
                 }
+                <MudStack Row=@true Spacing="3" 
+                          AlignItems=@AlignItems.Center>
+                
+                    @if (CanEdit)
+                    {
+                        <MudButton Variant=@Variant.Text
+                                Size=@Size.Large
+                                StartIcon=@Icons.Material.Outlined.Image
+                                OnClick=@OpenCoverDialogAsync >
+                        </MudButton>
+                    }
 
-                <MudIconButton Icon=@Icons.Material.Filled.Close
-                               Size=@Size.Small
-                               OnClick=@Close />
+                    <MudIconButton Icon=@Icons.Material.Filled.Close
+                                Size=@Size.Medium
+                                OnClick=@Close />
+                </MudStack>
+
             </div>
 
             <div class="edit-card-body">
