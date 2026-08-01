@@ -10,11 +10,21 @@ public partial class TasksByStatusChart
 
     private double[] _data = [];
     private string[] _labels = [];
+    private ChartOptions _chartOptions = new();
+
     private int _total;
 
     private static readonly string[] Palette =
         ["#6366f1", "#f59e0b", "#10b981", 
          "#ef4444", "#8b5cf6", "#06b6d4"];
+        
+    protected override void OnInitialized()
+    {
+        _chartOptions = new ChartOptions
+        {
+            ChartPalette = Palette
+        };
+    }
 
     protected override void OnParametersSet()
     {

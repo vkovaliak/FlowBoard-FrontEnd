@@ -14,12 +14,12 @@
         {
             <MudIcon Icon=@Icons.Material.Filled.CheckCircle
                      Size=@Size.Small
-                     Style="color: #2563EB; font-size: 18px;" />
+                     Style=@($"color: {CheckColor}; font-size: 18px; {TextShadow}") />
         }
         else
         {
             <MudText Typo=@Typo.caption
-                     Style="color: #64748B; min-width: 32px;">
+                     Style=@($"color: {TextColor}; min-width: 32px; {TextShadow}")>
                 @($"{(int)Percentage}%")
             </MudText>
         }

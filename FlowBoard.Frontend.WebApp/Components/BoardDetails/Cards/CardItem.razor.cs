@@ -15,6 +15,8 @@ public partial class CardItem
     [Parameter] public EventCallback<CardDto> OnDuplicate { get; set; }
     [Parameter] public bool CanEdit { get; set; } = true;
 
+    private const string CompletedBlue = "#2563EB";
+
     private bool IsFullCover =>
         Card.CoverMode == CardCoverMode.Full
         && !string.IsNullOrEmpty(Card.CoverColor);
@@ -52,6 +54,13 @@ public partial class CardItem
 
     private string GetContentClass() => "pa-3";
 
+    private string GetMoreVertClass()
+    {
+        return IsFullCover
+            ? "card-morevert card-morevert-oncover"
+            : "card-morevert";
+    }
+
     private string GetTitleStyle()
     {
         var baseStyle = "word-break: break-word;" + 
@@ -61,6 +70,28 @@ public partial class CardItem
         {
             baseStyle += " color: #ffffff;" + 
                          "text-shadow: 0 1px 3px rgba(0,0,0,0.4);";
+        }
+
+        return baseStyle;
+    }
+
+    private Color GetCompleteColor()
+    {
+        return Color.Default;
+    }
+
+    private string GetCompleteIconStyle()
+    {
+        var baseStyle = "padding: 2px; opacity: 1;";
+
+        if (Card.IsCompleted)
+        {
+            var color = IsFullCover ? "#ffffff" : CompletedBlue;
+            baseStyle += $" color: {color};";
+        }
+        else if (IsFullCover)
+        {
+            baseStyle += " color: #ffffff;";
         }
 
         return baseStyle;
@@ -89,19 +120,6 @@ public partial class CardItem
         var shadow = IsFullCover ? " filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));" : "";
         return $"font-size: 16px; color: {color};{shadow}";
     }
-
-    private string GetIconButtonStyle()
-    {
-        var baseStyle = "padding: 2px;";
-        if (IsFullCover)
-        {
-            baseStyle += " color: #ffffff;";
-        }
-        return baseStyle;
-    }
-
-    private Color GetIconColor() 
-        => IsFullCover ? Color.Inherit : Color.Default;
 
     private Color GetDueDateColor()
     {

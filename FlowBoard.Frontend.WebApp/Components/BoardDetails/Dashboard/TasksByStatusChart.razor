@@ -29,9 +29,10 @@
                         height: 200px;">
 
                 <MudChart T="double"
-                          ChartType="ChartType.Donut"
-                          ChartSeries="@_data.AsChartDataSet()"
-                          ChartLabels="_labels"
+                          ChartType=@ChartType.Donut
+                          ChartSeries=@_data.AsChartDataSet()
+                          ChartLabels=@_labels
+                          ChartOptions=@_chartOptions
                           Width="200px"
                           Height="200px"
                           Class="dashboard-donut" />
