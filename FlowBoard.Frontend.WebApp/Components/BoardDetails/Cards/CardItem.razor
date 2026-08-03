@@ -27,63 +27,60 @@
                 @Card.Name
             </MudText>
 
-            <MudStack Row=@true
-                    AlignItems=@AlignItems.Center
-                    Spacing="1">
+            <div class="card-actions" @onclick:stopPropagation="true">
 
-                @if (CanEdit)
-                {
-                    <div class="card-complete-toggle"
-                        @onclick:stopPropagation="true">
-                        <MudIconButton Icon=@(Card.IsCompleted
-                                        ? Icons.Material.Filled.CheckCircle
-                                        : Icons.Material.Outlined.RadioButtonUnchecked)
-                                    Color=@(Card.IsCompleted
-                                        ? Color.Primary : Color.Default)
+                <MudStack Row=@true
+                        AlignItems=@AlignItems.Center
+                        Spacing="2">
+
+                    @if (CanEdit)
+                    {
+                        <div class="card-complete-toggle">
+                            <MudIconButton Icon=@(Card.IsCompleted
+                                            ? Icons.Material.Filled.CheckCircle
+                                            : Icons.Material.Outlined.RadioButtonUnchecked)
+                                        Size=@Size.Small
+                                        Style=@GetCompleteIconStyle()
+                                        OnClick=@ToggleCompleteAsync />
+                        </div>
+
+                        <div class=@GetMoreVertClass()>
+                            <MudMenu Icon=@Icons.Material.Filled.MoreVert
                                     Size=@Size.Small
-                                    Style=@GetIconButtonStyle()
-                                    OnClick=@ToggleCompleteAsync />
-                    </div>
+                                    Dense=@true
+                                    AnchorOrigin=@Origin.BottomRight
+                                    TransformOrigin=@Origin.TopRight>
 
-                    <div @onclick:stopPropagation="true">
-                        <MudMenu Icon=@Icons.Material.Filled.MoreVert
-                                Size=@Size.Small
-                                Dense=@true
-                                IconColor=@GetIconColor()
-                                AnchorOrigin=@Origin.BottomRight
-                                TransformOrigin=@Origin.TopRight>
+                                <MudMenuItem Icon=@Icons.Material.Filled.OpenInFull
+                                            OnClick=@(() => OnEdit.InvokeAsync(Card))>
+                                    Open
+                                </MudMenuItem>
 
-                            <MudMenuItem Icon=@Icons.Material.Filled.OpenInFull
-                                        OnClick=@(() => OnEdit.InvokeAsync(Card))>
-                                Open
-                            </MudMenuItem>
+                                <MudMenuItem Icon=@Icons.Material.Filled.ContentCopy
+                                            OnClick=@(() => OnDuplicate.InvokeAsync(Card))>
+                                    Duplicate
+                                </MudMenuItem>
 
-                            <MudMenuItem Icon=@Icons.Material.Filled.ContentCopy
-                                        OnClick=@(() => OnDuplicate.InvokeAsync(Card))>
-                                Duplicate
-                            </MudMenuItem>
+                                <MudMenuItem Icon=@Icons.Material.Filled.Delete
+                                            IconColor=@Color.Error
+                                            OnClick=@(() => OnDelete.InvokeAsync(Card))>
+                                    Delete
+                                </MudMenuItem>
 
-                            <MudMenuItem Icon=@Icons.Material.Filled.Delete
-                                        IconColor=@Color.Error
-                                        OnClick=@(() => OnDelete.InvokeAsync(Card))>
-                                Delete
-                            </MudMenuItem>
-                            
-                        </MudMenu>
-                        
-                    </div>
-                }
-                else
-                {
-                    <div @onclick:stopPropagation="true">
-                        <MudIconButton Icon=@Icons.Material.Filled.OpenInFull
-                                    Size=@Size.Small
-                                    Style=@GetIconButtonStyle()
-                                    OnClick=@(() => OnEdit.InvokeAsync(Card)) />
-                    </div>
-                }
+                            </MudMenu>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class=@GetMoreVertClass()>
+                            <MudIconButton Icon=@Icons.Material.Filled.OpenInFull
+                                        Size=@Size.Small
+                                        OnClick=@(() => OnEdit.InvokeAsync(Card)) />
+                        </div>
+                    }
 
-            </MudStack>
+                </MudStack>
+            </div>
 
         </MudStack>
 
@@ -167,7 +164,8 @@
         @if (Card.ChecklistItems.Count > 0)
         {
             <ChecklistProgress Items=@Card.ChecklistItems
-                            Class="mt-2" />
+                            Class="mt-2"
+                            OnCover=@IsFullCover />
         }
     </div>
 
